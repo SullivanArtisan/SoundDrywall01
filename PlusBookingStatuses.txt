@@ -1,0 +1,28 @@
+StatusFilter        StatusValue                     color
+--------------------------------------------------------------------
+Unallocated                                         white
+Preallocated        (No Jobs To Display)            white
+Allocated           1/1 or 1/2 or 2/2 Sent          yellow          (same as All Allocated, All In Progress?)
+Completed           Complete                        burgundy
+All Allocated       1/1 or 1/2 or 2/2 Sent          yellow          (same as Allocated, All In Progress?)
+All On Board        (No Jobs To Display)            white
+All In Progress     1/1 or 1/2 or 2/2 Sent          yellow          (same as Allocated, All Allocated?)
+Received            All Sent. Not Started           greyed yellow
+Viewed              (No Jobs To Display)            white
+Accepted            (No Jobs To Display)            white
+En Route Pickup     (No Jobs To Display)            white
+Arrived At Pickup   0/1 or 1/2 or Can # Missing     green
+Gate In Pickup      (No Jobs To Display)            white
+Gate Out Pickup     (No Jobs To Display)            white
+En Route Delivery   (No Jobs To Display)            white
+Arrived Delivery    (No Jobs To Display)            white
+Gate In Delivery    (No Jobs To Display)            white
+Cancelled           Cancelled                       black
+
+
+Event Status Column Value of Container              When
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sent To Dispatc                                     The 1st movement's Pickup Date is filled, the "Send to Dispatch" right-click popup menu is selected, and the operation is saved.
+
+Abbriviations:
+OBL --  Original Bill of Lading (Loading)

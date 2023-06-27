@@ -1,0 +1,111 @@
+Customer Surcharge Types
+-------------------------------------------------------------------------------------------------------------
+Administration Fee
+Back Haul
+Barge (駁船) Charge
+Bobtail
+CBSA Additional Container Shuttle
+CBSA Additional Labour Services
+CBSA All Other Services
+CBSA Dangours Cargo Accessorial Charge
+CBSA Free Time
+CBSA From CENTERM
+CBSA From CA
+CBSA From CP
+CBSA From DeltaPort
+CBSA From FSD
+CBSA From VANTERM
+CBSA Fuel Surcharge
+CBSA HAZARDOUS
+CBSA HCVM Scanning
+CBSA Monitoring Temperature Reefer (冷藏箱) Containers
+CBSA Overwidth/Overheight
+CBSA Payments Made by Credit Card
+CBSA Port Reservatin Fee
+CBSA Power For Reefer (冷藏箱) Containers
+CBSA Preparation Custom Documents
+CBSA Reefer
+CBSA Reefer Surcharge
+CBSA Storage
+CBSA Supply And Affix Container Seal
+CBSA To CENTERM
+CBSA To CN
+CBSA To CP
+CBSA To DeltaPort
+CBSA To FSD
+CBSA To VANTERM
+CBSA Ventilation
+CBSA VFPA Container Fee
+CBSA Warehouse 20' Examination Greater Than 10'
+CBSA Warehouse 20' Partial Examination (Up To 10')
+CBSA Warehouse 40' Examination Greater Than 10'
+CBSA Warehouse 40' Partial Examination (Up To 10')
+CBSA Warehouse 40'/45' HC Examination Greater Than 10'
+CBSA Warehouse 40'/45 HC Partial Examination (Up To 10')
+CBSA Warehouse 53' All Examination
+CHASSIS Per DIEM Charge
+Chassi Rental
+Container Wash
+Container Washes-Shoreside
+Cross Dock Charges
+Cross Dock Charges - HLC
+Dangours Cargo Surcharges
+Dead Run (空驶运输) - Highway
+Dead Run (空驶运输) - Local
+Demurrage (滯期費) Terminal Storage
+Driver Waiting Time - Highway
+Driver Waiting Time - Local
+Drop and Pick
+Extra Mileage
+Flex Charge
+Fuel Surcharge
+Gate Charge - Whelled
+Gate Charge Empty - Shoreside
+Gate Surcharges Load - HLC
+Gate Charge - Port or Rail
+Gate Charges Empty - HLC
+Gate Charges-Load-Shoreside
+Genset Refuel
+Genset Rental
+GST
+Labour Cost
+Lay-Overs
+Missed Reservation
+Other
+Other-HWY
+Permit
+PLACARD Charges
+PMR Fee
+Prepull To HLC - Highway
+Prepull To HLC - Local
+Re-Manifest Charge - Highway
+Re-Manifest Charge - Local
+Re-Delivery Charge - Highway
+Re-Delivery Charge - Local
+Reefer Plug In
+Reefer Plug In - Shoreside
+Reloading
+Reservation Fee
+Reservation Fee - CT
+Residential Surcharge
+Scalling Fees
+Scalling HLC Fees
+SSL Per DIEM / Detention (拘留)
+Step Deck Work
+Stop Off Charge (中途停车费) - Highway
+Stop Off Charge (中途停车费) - Local
+Storage at HLC
+Storage at Port or Rail
+Storage - Shoreside
+Storage - TW
+Swamper Charges
+Temporary Surcharge
+Toll Charge
+Transload
+Transloading-TW
+TW Commercial Documentation Fees
+TW Commercial Move Fees
+TW Commercial Storage Fees
+TW Commercial Other
+Vancouver TLS Levy (徵收)
+Yard Shunt（场内搬运）

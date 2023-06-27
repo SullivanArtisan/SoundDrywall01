@@ -1,0 +1,8 @@
+Job Types           Start Movement                  Finish Movement         Movements
+-------------------------------------------------------------------------------------------------------------
+Import              Port Pickup                     Customer Drop           4 movements (port p; customer d; customer p; empty return)
+Export              Customer Pickup                 Port Drop               4 movements (empty p; customer d; customer p; port d)
+Empty Repo          Container Pickup                Container Drop          2 movements
+Yard Move                                                                   2 movements
+Other               Customer Pickup                 Port Drop               2 movements
+CBSA                                                                        2 movements
