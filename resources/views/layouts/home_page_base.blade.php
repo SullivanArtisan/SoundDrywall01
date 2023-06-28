@@ -45,7 +45,7 @@
                 <li>
                     <a href="#adminSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">DB Management</a>
                     <ul class="collapse list-unstyled" id="adminSubmenu">
-                        <li> <a href="{{route('system_user_main')}}">Staffs</a> </li>
+                        <li> <a href="{{route('staff_main')}}">Staffs</a> </li>
                         <li> <a href="#materialsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Material</a> </li>
 							<ul class="collapse list-unstyled mx-4" id="materialsSubmenu">
                                 <li><a href="#">Drywall Boards</a></li>
