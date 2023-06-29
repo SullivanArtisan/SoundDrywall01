@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\MailController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ContainerController;
 use App\Models\Staff;
+use App\Models\Provider;
 use App\Models\User;
 use App\Models\UserSysDetail;
 use App\Models\PowerUnit;
@@ -187,6 +189,35 @@ Route::get('/staff_delete', function () {
 		return redirect()->route('op_result.staff')->with('status', 'The staff, <span style="font-weight:bold;font-style:italic;color:blue">'.$staffName.'</span>, has been deleted successfully.');	
 	}
 })->middleware(['auth'])->name('staff_delete');
+
+//////////////////////////////// For Providers ////////////////////////////////
+Route::get('/provider_main', function () {
+    return view('provider_main');
+})->middleware(['auth'])->name('provider_main');
+
+Route::get('provider_selected', function (Request $request) {
+    return view('provider_selected');
+})->middleware(['auth'])->name('provider_selected');
+
+Route::get('provider_condition_selected', function (Request $request) {
+    return view('provider_condition_selected');
+})->middleware(['auth'])->name('provider_condition_selected');
+
+Route::get('/provider_add', function () {
+    return view('provider_add');
+})->middleware(['auth'])->name('provider_add');
+
+Route::get('/provider_delete', function () {
+	$id = $_GET['id'];
+	$provider = Provider::where('id', $id)->first();
+	$providerName = $provider->pvdr_name;
+	$res = $provider->delete();
+	if (!$res) {
+		return redirect()->route('op_result.provider')->with('status', 'The provider, <span style="font-weight:bold;font-style:italic;color:red">'.$providerName.'</span>, cannot be deleted for some reason.');	
+	} else {
+		return redirect()->route('op_result.provider')->with('status', 'The provider, <span style="font-weight:bold;font-style:italic;color:blue">'.$providerName.'</span>, has been deleted successfully.');	
+	}
+})->middleware(['auth'])->name('provider');
 
 //////////////////////////////// For System Users ////////////////////////////////
 Route::get('/system_user_main', function () {
@@ -717,6 +748,10 @@ Route::name('op_result.')->group(function () {
 		return view('op_result')->withOprand('staff');
 	})->middleware(['auth'])->name('staff');
 
+	Route::get('op_result_provider', function () {
+		return view('op_result')->withOprand('provider');
+	})->middleware(['auth'])->name('provider');
+
 	Route::get('op_result_user', function () {
 		return view('op_result')->withOprand('user');
 	})->middleware(['auth'])->name('user');
@@ -768,6 +803,9 @@ Route::name('op_result.')->group(function () {
 
 	Route::post('/staff_result', [StaffController::class, 'store'])->name('staff_add');
 	Route::post('/staff_update', [StaffController::class, 'update'])->name('staff_update');
+
+	Route::post('/provider_result', [ProviderController::class, 'store'])->name('provider_add');
+	Route::post('/provider_update', [ProviderController::class, 'update'])->name('provider_update');
 
 	Route::post('/system_user_result', [UserController::class, 'store'])->name('system_user_add');
 	Route::post('/system_user_update', [UserController::class, 'update'])->name('system_user_update');

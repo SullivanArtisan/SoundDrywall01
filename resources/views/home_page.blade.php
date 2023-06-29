@@ -22,6 +22,7 @@
                             <div class="card-body">
                                 <h4 class="mx-2 mb-4 card-title text-center text-info">Common Controls</h4>
                                 <div class="vstack">
+                                    <div><button class="btn btn-outline-secondary btn-block" type="button" style="margin: 6px;"><a href="{{route('provider_main')}}">All Projects</a></button></div>
                                     <div><button class="btn btn-outline-secondary btn-block" type="button" style="margin: 6px;">All Jobs</button></div>
                                     <div><button class="btn btn-outline-secondary btn-block" type="button" style="margin: 6px;">Chat</button></div>
                                     <div><button class="btn btn-outline-secondary btn-block" type="button" style="margin: 6px;">View Histories</button></div>
