@@ -1,31 +1,44 @@
+<?php
+	use App\Models\Customer;
+	use App\Models\Project;
+	use Illuminate\Support\Facades\Session;
+
+    $proj_notes = "";
+    $cstmr_name = "";
+
+    if (isset($_GET['projId'])) {
+		$proj_id = $_GET['projId'];
+        $project = Project::where('id', $proj_id)->first();
+        $customer = Customer::where('id', $project->proj_cstmr_id)->first();
+
+		$jobs = \App\Models\Job::where('job_proj_id', $proj_id)->where('job_status', '<>', 'DELETED')->get();
+
+        if ($project && $customer) {
+            $proj_notes = $project->proj_notes;
+            $cstmr_name = $customer->cstm_account_name;
+        }
+    } else {
+        $proj_id = "";
+    }
+
+    if (isset($_GET['projAddFailed'])) {
+        alert('For some reason, we failed to create the project.\n\rPlease try again later.');
+    }
+?>
+
 @extends('layouts.home_page_base')
 <style>
 .my-text-height {height:75%;}
 </style>
 
 @section('goback')
-	<a class="text-primary" href="{{route('booking_main')}}" style="margin-right: 10px;">Back</a>
+	<a class="text-primary" href="{{route('home_page')}}" style="margin-right: 10px;">Back</a>
 @show
 
 @section('function_page')
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 	<div>
-		<?php
-		if (isset($_GET['bookingResult'])) {
-			$booking_result = $_GET['bookingResult'];
-		} else {
-			$booking_result = '';
-		}
-		?>
-		<div class="row"><div class="col-3"><h2 class="text-muted pl-2 mb-2">Enter a New Job</h2></div><div class="col-9 mt-2"><?php echo $booking_result;?></div></div>
+		<h2 id="page_headline" class="text-muted pl-2 mb-2">Add a New Project</h2>
 	</div>
-	<!--
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-	-->
-	
-    <link rel="stylesheet" href="css/all_tabs_for_customers.css">
-
     <div>
 		@if ($errors->any())
 			<div class="alert alert-danger">
@@ -36,108 +49,168 @@
 				</ul>
 			</div>
 		@endif
+        <?php
+        // // Title Line
+        // $outContents = "<div id=\"jobs_div\" class=\"container mw-100\">";
+        // $outContents .= "<div class=\"row bg-info text-white fw-bold mb-2\">";
+        //     $outContents .= "<div class=\"col mt-1 align-middle\">";
+        //         $outContents .= "Job Name";
+        //     $outContents .= "</div>";
+        //     $outContents .= "<div class=\"col mt-1 align-middle\">";
+        //         $outContents .= "Job Type";
+        //     $outContents .= "</div>";
+        //     $outContents .= "<div class=\"col mt-1 align-middle\">";
+        //         $outContents .= "Location";
+        //     $outContents .= "</div>";
+        //     $outContents .= "<div class=\"col mt-1 align-middle\">";
+        //         $outContents .= "Status";
+        //     $outContents .= "</div>";
+        // $outContents .= "</div>";
+        // echo $outContents;
 
-		<?php
-			if (isset($_GET['bookingTab'])) {
-				$booking_tab = $_GET['bookingTab'];
-			} else {
-				$booking_tab = '';
-			}
+        // // Body Lines
+        // $selected_job	 = "";
+        // $listed_jobs = 0;
 
-			if (isset($_GET['id'])) {
-				$id = $_GET['id'];
-			} else {
-				$id = '';
-			}
-		?>
+        // if (count($jobs) == 0) {
+        //     echo "<div class=\"row\" style=\"background-color:Lavender\"><div class=\"col\"><p class=\"text-info\">There is 0 jobs associated with this project.</p></div></div>";
+        // }
 
-		<div class="col-md-12 mb-4">
-			<form method="post" id="form_booking_old" action="{{route('op_result.booking_add')}}">
-				@csrf
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item">
-						@if ($booking_tab == '')
-                        <a class="nav-link active " id="bookingdetail-tab" data-toggle="tab" href="#bookingdetail" role="tab" aria-controls="bookingdetail" aria-selected="true">Booking Details</a>
-						@else
-                        <a class="nav-link" id="bookingdetail-tab" data-toggle="tab" href="#bookingdetail" role="tab" aria-controls="bookingdetail" aria-selected="false">Booking Details</a>
-						@endif
-                    </li>
-                    <li class="nav-item">
-						@if ($booking_tab == 'containerinfo-tab')
-                        <a class="nav-link active " id="containerinfo-tab" data-toggle="tab" href="#containerinfo" role="tab" aria-controls="containerinfo" aria-selected="true">Container Details</a>
-						@else
-                        <a class="nav-link" id="containerinfo-tab" data-toggle="tab" href="#containerinfo" role="tab" aria-controls="containerinfo" aria-selected="false">Container Details</a>
-						@endif
-                    </li>
-                </ul>
+        // foreach ($jobs as $job) {
+        //     $selected_job = $job->id;
+        //     $listed_jobs++;
+        //     if ($listed_jobs % 2) {
+        //         $outContents = "<div class=\"row\" style=\"background-color:Lavender\">";
+        //     } else {
+        //         $outContents = "<div class=\"row\" style=\"background-color:PaleGreen\">";
+        //     }
+        //     $outContents .= "<div class=\"col\">";
+        //         $outContents .= "<a href=\"".route('job_selected', ['jobId='.$job->id])."\">";
+        //         $outContents .= $job->job_name;
+        //         $outContents .= "</a>";
+        //     $outContents .= "</div>";
+        //     $outContents .= "<div class=\"col\">";
+        //         $outContents .= $job->job_type;
+        //     $outContents .= "</div>";
+        //     $outContents .= "<div class=\"col\">";
+        //         $outContents .= $job->job_location;
+        //     $outContents .= "</div>";
+        //     $outContents .= "<div class=\"col\">";
+        //         $outContents .= $job->job_status;
+        //     $outContents .= "</div>";
+        //     // $outContents .= "<div class=\"col-2\">";
+        //     // $outContents .= "</div>";
+        //     // $outContents .= "<div class=\"col-2\">";
+        //     //     $outContents .= "<button class=\"btn btn-secondary btn-sm my-1\" type=\"button\"><a href=\"".route('movements_selected', ['cntnrId'=>$job->id])."\">Edit Movements</a></button>";
+        //     // $outContents .= "</div>";
+        //     $outContents .= "</div>";
+        //     echo $outContents;
+        // }
+        // echo "</div>";
+        ?>
+        <div class="card my-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <form method="post" action="{{route('op_result.project_add')}}">
+                            @csrf
+                            <div class="row">
+                                <div class="col"><label class="col-form-label">Customer Name:&nbsp;</label></div>
+                                <div class="col">
+                                            <?php
+                                            $tagHead = "<input list=\"proj_cstmr_name\" name=\"proj_cstmr_name\" id=\"projcstmrnameinput\" class=\"form-control mt-1 my-text-height\" ";
+                                            $tagTail = "><datalist id=\"proj_cstmr_name\">";
 
-                <div class="tab-content" id="myTabContent">
-					@if ($booking_tab == '')
-                    <div class="tab-pane fade show active" id="bookingdetail" role="tabpanel" aria-labelledby="bookingdetail-tab">
-					@else
-                    <div class="tab-pane fade" id="bookingdetail" role="tabpanel" aria-labelledby="bookingdetail-tab">
-					@endif
-                        @include('components.booking_tab_details')
-                    </div>
-
-					@if ($booking_tab == 'containerinfo-tab')
-                    <div class="tab-pane fade show active" id="containerinfo" role="tabpanel" aria-labelledby="containerinfo-tab">
-					@else
-                    <div class="tab-pane fade" id="containerinfo" role="tabpanel" aria-labelledby="containerinfo-tab">
-					@endif
-                        @include('components.booking_tab_containers')
+                                            $customers = Customer::all()->sortBy('cstm_account_name');
+                                            foreach($customers as $customer) {
+                                                $tagTail.= "<option value=".str_replace(' ', '&nbsp;', $customer->cstm_account_name).">";
+                                            }
+                                            $tagTail.= "</datalist>";
+                                            // if (isset($_GET['selJobId'])) {
+                                            // 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
+                                            // } else {
+                                                echo $tagHead."placeholder=\"\" value=\"\"".$tagTail;
+                                            // }
+                                            ?>
+                                        </div>
+                                <div class="col"><label class="col-form-label">Total Jobs:&nbsp;</label></div>
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="number" readonly id="proj_total_active_jobs" name="proj_total_active_jobs" value=0></div>
+                            </div>
+                            <div class="row">
+                                <div class="col"><label class="col-form-label">Description:&nbsp;</label></div>
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="proj_notes" name="proj_notes"></div>
+                                <div class="col"><label class="col-form-label">Status:&nbsp;</label></div>
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="proj_status" name="proj_status" value="CREATED"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col"><label class="col-form-label">&nbsp;</label></div>
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" readonly id="proj_my_creation_timestamp" name="proj_my_creation_timestamp" value="{{time()}}"></div>
+                            </div>
+                            <div class="row my-3">
+                                <div class="w-25"></div>
+                                <div class="col">
+                                    <div class="row">
+                                        <button class="btn btn-success mx-4" type="submit" id="btn_save" onclick="addThisProject();">Save</button>
+                                        <button class="btn btn-secondary mx-3" type="button"><a href="{{route('home_page')}}">Cancel</a></button>
+                                    </div>
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-				<div class="row my-3">
-					<div class="w-25"></div>
-					<div class="col">
-						<div class="row">
-							@if ($id == '' && $booking_tab == '')
-							<button class="btn btn-success mx-4" type="submit">Next Step</button>
-							@else
-							<a href="{{route('home_page');}}"><button class="btn btn-success mx-4" type="button">Return</button></a>
-							@endif
-							<!--
-							<button class="btn btn-secondary mx-3" type="button"><a href="{{route('home_page')}}">Cancel</a></button>
-							-->
-						</div>
-					</div>
-					<div class="col"></div>
-				</div>
-			</form>
-		</div>
+            </div>
+        </div>
     </div>
 
-	<script>
-		$(document).ready(function() {
-			$('.nav-tabs a').on('shown.bs.tab', function(event){		// Lock other tabs except the "Booking Details" tab
-				var bookingTab = {!! json_encode($booking_tab) !!};
-
-				if (bookingTab == '') {
-					document.getElementById('bookingdetail-tab').removeAttribute('class');
-					document.getElementById('bookingdetail-tab').classList.add('nav-link');
-					document.getElementById('bookingdetail-tab').classList.add('active');				// <---- active
-					document.getElementById('containerinfo-tab').removeAttribute('class');
-					document.getElementById('containerinfo-tab').classList.add('nav-link');
-
-					document.getElementById('bookingdetail-tab').setAttribute("aria-checked", true);	// <---- active
-					document.getElementById('containerinfo-tab').setAttribute("aria-checked", false);
-
-					document.getElementById('bookingdetail').removeAttribute('class');
-					document.getElementById('bookingdetail').classList.add('tab-pane');
-					document.getElementById('bookingdetail').classList.add('show');
-					document.getElementById('bookingdetail').classList.add('fade');						// <---- active
-					document.getElementById('bookingdetail').classList.add('active');					// <---- active
-
-					document.getElementById('containerinfo').removeAttribute('class');
-					document.getElementById('containerinfo').classList.add('tab-pane');
-					document.getElementById('containerinfo').classList.add('show');
-				}
-			});
-		});
-
-	</script>	
-	<!--
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.0/dist/js.cookie.min.js"></script>
-	-->
+    <script>
+            var projId = {!! json_encode($proj_id) !!}
+            if (projId != "") {
+                var cstmrName = {!! json_encode($cstmr_name) !!}
+                var projNotes = {!! json_encode($proj_notes) !!}
+
+                document.getElementById('projcstmrnameinput').value = cstmrName;
+                document.getElementById('projcstmrnameinput').setAttribute('readonly', true);
+                document.getElementById('proj_notes').value = projNotes;
+                document.getElementById('proj_notes').setAttribute('readonly', true);
+                document.getElementById('btn_save').disabled = true;
+
+                document.getElementById('page_headline').innerHTML = "New Project: ";
+
+                // document.getElementById('jobs_div').style.display = "block";
+            } else {
+                document.getElementById('jobs_div').style.display = "none";
+            }
+
+        function addThisProject() {
+            event.preventDefault();
+
+            $.ajax({
+                url: '/project_add',
+                type: 'POST',
+                data: {
+                    _token:"{{ csrf_token() }}", 
+                    proj_cstmr_name:document.getElementById('projcstmrnameinput').value,
+                    proj_total_active_jobs:document.getElementById('proj_total_active_jobs').value,
+                    proj_status:document.getElementById('proj_status').value, 
+                    proj_notes:document.getElementById('proj_notes').value,
+                    proj_my_creation_timestamp:document.getElementById('proj_my_creation_timestamp').value
+                },    // the _token:token is for Laravel
+                success: function(dataRetFromPHP) {
+                    console.log(dataRetFromPHP);
+                    if(!confirm("The new project is created successfully.\r\nDo you want to add any job to it now?")) {
+                        window.location = './project_main';
+                    } else {
+                        window.location = './project_selected?id='+dataRetFromPHP;
+                    }
+                },
+                error: function(err) {
+                    window.location = './project_add?projAddFailed='+document.getElementById('projcstmrnameinput').value;
+                }
+            });
+        }
+    </script>
+			
 @endsection

@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\ProviderController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\JobController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\MailController;
@@ -20,6 +22,8 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ContainerController;
 use App\Models\Staff;
 use App\Models\Provider;
+use App\Models\Project;
+use App\Models\Job;
 use App\Models\User;
 use App\Models\UserSysDetail;
 use App\Models\PowerUnit;
@@ -189,6 +193,92 @@ Route::get('/staff_delete', function () {
 		return redirect()->route('op_result.staff')->with('status', 'The staff, <span style="font-weight:bold;font-style:italic;color:blue">'.$staffName.'</span>, has been deleted successfully.');	
 	}
 })->middleware(['auth'])->name('staff_delete');
+
+//////////////////////////////// For Projects ////////////////////////////////
+Route::get('/project_main', function () {
+    return view('project_main');
+})->middleware(['auth'])->name('project_main');
+
+Route::get('project_selected', function (Request $request) {
+    return view('project_selected');
+})->middleware(['auth'])->name('project_selected');
+
+Route::get('/project_add', function () {
+    return view('project_add');
+})->middleware(['auth'])->name('project_add');
+
+Route::post('/project_add', function (Request $request) {
+	$cName = str_replace("&nbsp;", " ", $_POST['proj_cstmr_name']);
+	$customer = Customer::where('cstm_account_name', $cName)->first();
+
+	if ($customer) {
+		$project = new Project;
+		if ($project) {
+			$project->proj_cstmr_id 	= $customer->id;
+			$project->proj_total_active_jobs	= $_POST['proj_total_active_jobs'];
+			// $project->proj_total_jobs	= strval($project->proj_total_jobs + 1);
+			$project->proj_status 		= $_POST['proj_status'];
+			$project->proj_notes		= $_POST['proj_notes'];
+			$project->proj_my_creation_timestamp = $_POST['proj_my_creation_timestamp'];
+	
+			$res = $project->save();
+
+			if (!$res) {
+				return "NNOO";
+			} else {
+				$newProj = Project::where('proj_my_creation_timestamp', $_POST['proj_my_creation_timestamp'])->first();
+
+				if ($newProj) {
+					return $newProj->id;
+				} else {
+					return "NNOO";
+				}
+			}
+		}
+	}
+})->middleware(['auth'])->name('project_add');
+
+Route::get('/project_delete', function () {
+	$id = $_GET['id'];
+	$project = Project::where('id', $id)->first();
+	$res = $project->delete();
+	if (!$res) {
+		return redirect()->route('op_result.project')->with('status', 'The project cannot be deleted for some reason.');	
+	} else {
+		return redirect()->route('op_result.project')->with('status', 'The project has been deleted successfully.');	
+	}
+})->middleware(['auth'])->name('project_delete');
+
+//////////////////////////////// For Jobs ////////////////////////////////
+Route::get('job_add', function (Request $request) {
+    return view('job_add');
+})->middleware(['auth'])->name('job_add');
+
+Route::get('job_selected', function (Request $request) {
+    return view('job_selected');
+})->middleware(['auth'])->name('job_selected');
+
+Route::get('/job_delete', function () {
+	$id = $_GET['id'];
+	$job = Job::where('id', $id)->first();
+	$job->job_status    = "DELETED";
+	$project = Project::where('id', $job->job_proj_id)->first();
+	$job_name = $job->job_name;
+	$res = $job->save();
+	if (!$res) {
+		return redirect()->route('op_result.job')->with('status', 'The job cannot be deleted for some reason.');	
+	} else {
+		$project->proj_total_active_jobs = strval($project->proj_total_active_jobs - 1);
+		$res2 = $project->save();
+		if (!$res2) {
+			return redirect()->route('op_result.job')->with('status', "The project's proj_total_active_jobs cannot be decreased.");	
+		} else {
+			return redirect()->route('project_selected', ['id'=>$job->job_proj_id, 'JobDeleteOk'=>$job_name]);
+		}
+	}
+})->middleware(['auth'])->name('job_delete');
+
+Route::post('/job_update', [JobController::class, 'update'])->name('job_update');
 
 //////////////////////////////// For Providers ////////////////////////////////
 Route::get('/provider_main', function () {
@@ -748,6 +838,14 @@ Route::name('op_result.')->group(function () {
 		return view('op_result')->withOprand('staff');
 	})->middleware(['auth'])->name('staff');
 
+	Route::get('op_result_project', function () {
+		return view('op_result')->withOprand('project');
+	})->middleware(['auth'])->name('project');
+
+	Route::get('op_result_job', function () {
+		return view('op_result')->withOprand('job');
+	})->middleware(['auth'])->name('job');
+
 	Route::get('op_result_provider', function () {
 		return view('op_result')->withOprand('provider');
 	})->middleware(['auth'])->name('provider');
@@ -803,6 +901,12 @@ Route::name('op_result.')->group(function () {
 
 	Route::post('/staff_result', [StaffController::class, 'store'])->name('staff_add');
 	Route::post('/staff_update', [StaffController::class, 'update'])->name('staff_update');
+
+	Route::post('/project_result', [ProjectController::class, 'store'])->name('project_add');
+	Route::post('/project_update', [ProjectController::class, 'update'])->name('project_update');
+
+	Route::post('/job_result', [JobController::class, 'store'])->name('job_add');
+	Route::post('/job_update', [JobController::class, 'update'])->name('job_update');
 
 	Route::post('/provider_result', [ProviderController::class, 'store'])->name('provider_add');
 	Route::post('/provider_update', [ProviderController::class, 'update'])->name('provider_update');
