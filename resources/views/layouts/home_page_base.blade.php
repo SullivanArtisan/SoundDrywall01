@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>SoundDrywall Control/Management System</title>
+    <title>TwentyTwenty Contracting Ltd's Control/Management System</title>
 
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
@@ -27,7 +27,9 @@
         <!-- Sidebar  -->
         <nav id="sidebar">
             <div class="sidebar-header">
-                <h3 style="font-family: Georgia; color:LightCyan">SoundDrywall</h3>
+                <!--
+                <h3 style="font-family: Georgia; color:LightCyan">TwentyTwenty Contracting Ltd.</h3>
+                -->
                 <h6 style="font-family: Georgia; color:LightCyan"><?php echo date("m/d/Y l");?></h6>
             </div>
 
@@ -38,8 +40,8 @@
                 <li class="active">
                     <a href="#controlSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Control</a>
                     <ul class="collapse list-unstyled" id="controlSubmenu">
-                        <li> <a href="#">Dispatch</a> </li>
-                        <li> <a href="#">Chat</a> </li>
+                        <li> <a href="{{route('under_construction')}}">Material Association</a> </li>
+                        <li> <a href="{{route('under_construction')}}">Job Dispatch</a> </li>
                     </ul>
                 </li>
                 <li>
@@ -50,11 +52,12 @@
                         <li> <a href="{{route('staff_main')}}">Staffs</a> </li>
                         <li> <a href="#materialsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Materials for Jobs</a> </li>
 							<ul class="collapse list-unstyled mx-4" id="materialsSubmenu">
-                                <li><a href="{{route('drywall_main')}}">Drywall Sheets</a></li>
-                                <li><a href="#">Drywall Joint Compound</a></li>
-                                <li><a href="#">Drywall Joint Tapes</a></li>
-                                <li><a href="#">Drywall Joint Screws</a></li>
-							</ul>						
+                                <li><a href="{{route('under_construction')}}">Drywall Sheets</a></li>
+                                <li><a href="{{route('under_construction')}}">Drywall Joint Compound</a></li>
+                                <li><a href="{{route('under_construction')}}">Drywall Joint Tapes</a></li>
+                                <li><a href="{{route('under_construction')}}">Drywall Joint Screws</a></li>
+							</ul>	
+                        <!--					
                         <li> <a href="#toolsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Tools</a> </li>
                             <ul class="collapse list-unstyled mx-4" id="toolsSubmenu">
                                 <li><a href="#">Drywall Sanders</a></li>
@@ -62,7 +65,8 @@
                                 <li><a href="#">Drywall Knives</a></li>
                                 <li><a href="#">Drywall Saws</a></li>
                                 <li><a href="#">Drywall Screw Guns</a></li>
-                            </ul>						
+                            </ul>
+                        -->						
                     </ul>
                 </li>
             </ul>
@@ -96,8 +100,11 @@
 					-->
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-						<div class="col-md-6">
-							<div><img class="rounded" style="max-width:100%; height:auto" src="assets/img/SoundDrywall.jpg"></div>
+                        <div class="col-md-2">
+							<div><img class="rounded" style="max-width:100%; height:auto" src="assets/img/2020.jpg"></div>
+						</div>
+						<div class="col-md-6 text-muted">
+                            <h2 style="font-family: Georgia;">TwentyTwenty Contracting Ltd.</h3>
 						</div>
                         <ul class="nav navbar-nav ml-auto">
 							@yield('goback')

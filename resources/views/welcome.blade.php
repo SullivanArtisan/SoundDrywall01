@@ -30,14 +30,16 @@
 				<div class="col-md-9 col-lg-12 col-xl-10">
 					<div class="card shadow-lg o-hidden border-0 my-5">
 						<div class="card-body p-0">
-							<div class="row">
-								<div class="col-lg-6 d-none d-lg-flex">
-									<div class="flex-grow-1 bg-login-image" style="background-image: url(&quot;assets/img/SoundDrywall.jpg&quot;);"></div>
+							<div class="row pt-5" style="background-color: #800020;">
+								<div class="col-lg-1">
 								</div>
-								<div class="col-lg-6">
+								<div class="col-lg-3 d-none d-lg-flex d-flex justify-content-center">
+									<div class="flex-grow-1 bg-image" style="background-image: url(&quot;assets/img/2020_wide.jpg&quot;); height: 104px;"></div>
+								</div>
+								<div class="col-lg-8">
 									<div class="p-5">
 										<div class="text-center">
-											<h4 class="text-dark mb-4"><a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Welcome!</a><span style="color:white">NNNNNNNN</span><button style="border:none; outline:none; background:none;"><a href="{{ route('dev_notes') }}" style="color:white">N</a></button></h4>
+											<h5><a href="{{ route('login') }}" class="text-sm text-white" style="text-decoration: none">TwentyTwenty Contracting Ltd. Welcome You!</a><span style="color:#800020">NNNNNNNN</span><button style="border:none; outline:none; background:none;"><a href="{{ route('dev_notes') }}" style="color:#800020">N</a></button></h5>
 										</div>
 										<!-- 
 										<form class="user" action="{{ route('login') }}">

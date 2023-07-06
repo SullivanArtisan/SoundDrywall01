@@ -8,45 +8,39 @@
             -->
         </div>
     </div>
-    <div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="w-25">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="mx-2 mb-4 card-title text-center text-info">Common Controls</h4>
-                                <div class="vstack">
-                                    <div><button class="btn btn-outline-secondary btn-block" type="button" style="margin: 6px;"><a href="{{route('project_main')}}">All Projects</a></button></div>
-                                    <div><button class="btn btn-outline-secondary btn-block" type="button" style="margin: 6px;">All Jobs</button></div>
-                                    <div><button class="btn btn-outline-secondary btn-block" type="button" style="margin: 6px;">Chat</button></div>
-                                    <div><button class="btn btn-outline-secondary btn-block" type="button" style="margin: 6px;">View Histories</button></div>
-                                    <div><button class="btn btn-outline-secondary btn-block" type="button" style="margin: 6px;">View Logs</button></div>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="w-25">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="mx-2 mb-4 card-title text-center text-info">Common DB Access</h4>
-                                <div class="vstack">
-                                    <div><button class="btn btn-outline-secondary btn-block" type="button" style="margin: 6px;">Drywall Boards</button></div>
-                                    <div><button class="btn btn-outline-secondary btn-block" type="button" style="margin: 6px;">Drywall Joint Compound</button></div>
-                                    <div><button class="btn btn-outline-secondary btn-block" type="button" style="margin: 6px;">Drywall Joint Tapes</button></div>
-                                    <div><button class="btn btn-outline-secondary btn-block" type="button" style="margin: 6px;">Drywall Joint Screws</button></div>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="container my-4">
+        <div class="row">
+            <h4 class="mx-2 mb-4 card-title text-info">Frequently Used Functions: </h4>
+        </div>
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <div class="vstack">
+                        <div><button class="btn btn-outline-secondary btn-block" type="button" style="margin: 6px;"><a href="{{route('project_main')}}">All Projects</a></button></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card ml-1">
+                <div class="card-body">
+                    <div class="vstack">
+                        <div><button class="btn btn-outline-secondary btn-block" type="button" style="margin: 6px;"><a href="{{route('under_construction')}}">All Jobs</a></button></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card ml-1">
+                <div class="card-body">
+                    <div class="vstack">
+                        <div><button class="btn btn-outline-secondary btn-block" type="button" style="margin: 6px;"><a href="{{route('under_construction')}}">Associate Material To a Job</a></button></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card ml-1">
+                <div class="card-body">
+                    <div class="vstack">
+                        <div><button class="btn btn-outline-secondary btn-block" type="button" style="margin: 6px;"><a href="{{route('under_construction')}}">Dispatch a Staff To a Job</a></button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

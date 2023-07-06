@@ -56,7 +56,7 @@ use App\Http\Controllers\ContainerController;
     <div class="container text-dark">
         <div>
             <div class="my-2">
-                <div><img class="rounded" style="max-width:100%; height:auto" src="assets/img/SoundDrywall.jpg"></div>
+                <div><img class="rounded" style="max-width:100%; height:auto" src="assets/img/2020.jpg"></div>
             </div>
         </div>
         <div>

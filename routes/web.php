@@ -146,6 +146,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/under_construction', function () {
+    return view('under_construction');
+})->middleware(['auth'])->name('under_construction');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
