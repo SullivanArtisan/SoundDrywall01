@@ -30,7 +30,7 @@
 				</ul>
 			</div>
 		@endif
-        <div class="row">
+        <div class="row mx-1">
             <div class="col">
                 <form method="post" action="{{route('op_result.staff_add')}}">
 					@csrf
@@ -53,6 +53,27 @@
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="postcode" name="postcode"></div>
                     </div>
                     <div class="row">
+                        <div class="col"><label class="col-form-label">Country:&nbsp;</label></div>
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="country" name="country"></div>
+                        <div class="col"><label class="col-form-label">Roll:&nbsp;</label></div>
+						<div class="col">
+							<?php
+							$tagHead = "<input list=\"roll\" name=\"roll\" id=\"rollinput\" class=\"form-control mt-1 my-text-height\" ";
+							$tagTail = "><datalist id=\"roll\">";
+
+							$tagTail.= "<option value=\"ASSISTANT\">";
+							$tagTail.= "<option value=\"DISPATCHER\">";
+							$tagTail.= "<option value=\"ADMINISTRATOR\">";
+							$tagTail.= "</datalist>";
+							// if (isset($_GET['selJobId'])) {
+							// 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
+							// } else {
+								echo $tagHead."placeholder=\"\" value=\"ASSISTANT\"".$tagTail;
+							// }
+							?>
+						</div>
+                    </div>
+                    <div class="row">
                         <div class="col"><label class="col-form-label">Email:&nbsp;</label></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="email" name="email"></div>
                         <div class="col"><label class="col-form-label">Mobile Phone:&nbsp;</label></div>
@@ -63,6 +84,12 @@
                         <div class="col"><input class="form-control mt-1 my-text-height" type="password" id="password" name="password"></div>
                         <div class="col"><label class="col-form-label">Confirm Password:&nbsp;</label></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="password" id="password2" name="password2"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col"><label class="col-form-label">Assigned to Job:&nbsp;</label></div>
+                        <div class="col"><input class="form-control mt-1 my-text-height" readonly type="number" id="assigned_job_id" name="assigned_job_id" value="0"></div>
+                        <div class="col"><label class="col-form-label">&nbsp;</label></div>
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="hidden"></div>
                     </div>
                     <div class="row my-3">
                         <div class="w-25"></div>

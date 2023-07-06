@@ -1,4 +1,5 @@
 <?php
+	use App\Models\Job;
 	use App\Models\Staff;
 	
 	if (Session::get('--userId')) {
@@ -71,13 +72,13 @@
 					</ul>
 				</div>
 			@endif
-			<div class="row">
+			<div class="row mx-1">
 				<div class="col">
 					<form method="post" action="{{url('staff_update')}}">
 						@csrf
 						<div class="row">
 							<div class="col"><label class="col-form-label">First Name:&nbsp;</label></div>
-							<div class="col"><input class="form-control mt-1 my-text-height" type="text" id="f_name" name="f_name" value="{{$staff->l_name}}"></div>
+							<div class="col"><input class="form-control mt-1 my-text-height" type="text" id="f_name" name="f_name" value="{{$staff->f_name}}"></div>
 							<div class="col"><label class="col-form-label">Last Name:&nbsp;</label></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" name="l_name" value="{{$staff->l_name}}"></div>
 						</div>
@@ -94,12 +95,57 @@
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" name="postcode" value="{{$staff->postcode}}"></div>
 						</div>
 						<div class="row">
+							<div class="col"><label class="col-form-label">Country:&nbsp;</label></div>
+							<div class="col"><input class="form-control mt-1 my-text-height" type="text" id="country" name="country" value="{{$staff->country}}"></div>
+							<div class="col"><label class="col-form-label">Roll:&nbsp;</label></div>
+							<div class="col">
+								<?php
+								$tagHead = "<input list=\"roll\" name=\"roll\" id=\"rollinput\" class=\"form-control mt-1 my-text-height\" ";
+								$tagTail = "><datalist id=\"roll\">";
+
+								$tagTail.= "<option value=\"ASSISTANT\">";
+								$tagTail.= "<option value=\"DISPATCHER\">";
+								$tagTail.= "<option value=\"ADMINISTRATOR\">";
+								$tagTail.= "</datalist>";
+								// if (isset($_GET['selJobId'])) {
+								// 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
+								// } else {
+									echo $tagHead."placeholder=\"\" value=\"".$staff->roll."\"".$tagTail;
+								// }
+								?>
+							</div>
+						</div>
+						<div class="row">
                             <div class="col"><label class="col-form-label">Email:&nbsp;</label></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" name="email" value="{{$staff->email}}"></div>
 							<div class="col"><label class="col-form-label">Mobile Phone:&nbsp;</label></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" name="mobile_phone" value="{{$staff->mobile_phone}}"></div>
 						</div>
 						<div class="row">
+                        	<div class="col"><label class="col-form-label">Assigned to Job:&nbsp;</label></div>
+							<div class="col">
+								<?php
+								$tagHead = "<input list=\"assigned_job_id\" name=\"assigned_job_id\" id=\"assignedjobidinput\" class=\"form-control mt-1 my-text-height\" ";
+								$tagTail = "><datalist id=\"assigned_job_id\">";
+
+								if ($staff->mobile_phone > 0) {
+									$selJob = Job::where('id', $staff->assigned_job_id)->first();
+									$jobName = $selJob->job_name;
+								} else {
+									$jobName = "";
+								}
+								$jobs = Job::all()->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'FINISHED')->sortBy('job_name');
+								foreach($jobs as $job) {
+									$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $job->job_name).">";
+								}
+								$tagTail.= "</datalist>";
+								// if (isset($_GET['selJobId'])) {
+								// 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
+								// } else {
+									echo $tagHead."placeholder=\"\" value=\"".$jobName."\"".$tagTail;
+								// }
+								?>
+							</div>
 							<div class="col"><label class="col-form-label">&nbsp;</label></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="hidden" name="id" value="{{$staff->id}}"></div>
 						</div>

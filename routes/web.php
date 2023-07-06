@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\JobController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ContainerController;
 use App\Models\Staff;
+use App\Models\Material;
 use App\Models\Provider;
 use App\Models\Project;
 use App\Models\Job;
@@ -193,6 +195,34 @@ Route::get('/staff_delete', function () {
 		return redirect()->route('op_result.staff')->with('status', 'The staff, <span style="font-weight:bold;font-style:italic;color:blue">'.$staffName.'</span>, has been deleted successfully.');	
 	}
 })->middleware(['auth'])->name('staff_delete');
+
+//////////////////////////////// For Materials ////////////////////////////////
+Route::get('/drywall_main', function () {
+    return view('drywall_main');
+})->middleware(['auth'])->name('drywall_main');
+
+Route::get('drywall_selected', function (Request $request) {
+    return view('drywall_selected');
+})->middleware(['auth'])->name('drywall_selected');
+
+Route::get('/drywall_add', function () {
+    return view('drywall_add');
+})->middleware(['auth'])->name('drywall_add');
+
+Route::get('/drywall_delete', function () {
+ 	$id = $_GET['id'];
+	$material = Material::where('id', $id)->first();
+	$material->mtrl_status    = "DELETED";
+	$materialName = $material->mtrl_name;
+	$res = $material->save();
+	if (!$res) {
+		return redirect()->route('op_result.material', ['materialType'=>'DRYWALL SHEET'])->with('status', 'The material, <span style="font-weight:bold;font-style:italic;color:red">'.$materialName.'</span>, cannot be deleted for some reason.');	
+	} else {
+		return redirect()->route('op_result.material', ['materialType'=>'DRYWALL SHEET'])->with('status', 'The material, <span style="font-weight:bold;font-style:italic;color:blue">'.$materialName.'</span>, has been deleted successfully.');	
+	}
+ })->middleware(['auth'])->name('drywall_delete');
+
+ Route::post('/drywall_update', [MaterialController::class, 'update'])->name('drywall_update');
 
 //////////////////////////////// For Projects ////////////////////////////////
 Route::get('/project_main', function () {
@@ -834,6 +864,10 @@ Route::name('op_result.')->group(function () {
 		return view('op_result')->withOprand('unit');
 	})->middleware(['auth'])->name('unit');
 
+	Route::get('op_result_material', function () {
+		return view('op_result')->withOprand('material');
+	})->middleware(['auth'])->name('material');
+
 	Route::get('op_result_staff', function () {
 		return view('op_result')->withOprand('staff');
 	})->middleware(['auth'])->name('staff');
@@ -901,6 +935,9 @@ Route::name('op_result.')->group(function () {
 
 	Route::post('/staff_result', [StaffController::class, 'store'])->name('staff_add');
 	Route::post('/staff_update', [StaffController::class, 'update'])->name('staff_update');
+
+	Route::post('/material_result', [MaterialController::class, 'store'])->name('drywall_add');
+	Route::post('/material_update', [MaterialController::class, 'update'])->name('drywall_update');
 
 	Route::post('/project_result', [ProjectController::class, 'store'])->name('project_add');
 	Route::post('/project_update', [ProjectController::class, 'update'])->name('project_update');

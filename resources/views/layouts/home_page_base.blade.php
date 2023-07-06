@@ -48,9 +48,9 @@
                         <li> <a href="{{route('customer_main')}}">Customers</a> </li>
                         <li> <a href="{{route('provider_main')}}">Providers</a> </li>
                         <li> <a href="{{route('staff_main')}}">Staffs</a> </li>
-                        <li> <a href="#materialsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Material</a> </li>
+                        <li> <a href="#materialsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Materials for Jobs</a> </li>
 							<ul class="collapse list-unstyled mx-4" id="materialsSubmenu">
-                                <li><a href="#">Drywall Boards</a></li>
+                                <li><a href="{{route('drywall_main')}}">Drywall Sheets</a></li>
                                 <li><a href="#">Drywall Joint Compound</a></li>
                                 <li><a href="#">Drywall Joint Tapes</a></li>
                                 <li><a href="#">Drywall Joint Screws</a></li>
