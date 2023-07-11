@@ -107,7 +107,9 @@
                             <h2 style="font-family: Georgia;">TwentyTwenty Contracting Ltd.</h3>
 						</div>
                         <ul class="nav navbar-nav ml-auto">
+                            <div class="mx-3">
 							@yield('goback')
+                            </div>
 							<form method="POST" action="{{ route('logout') }}" style="cursor: pointer">
 								@csrf
 

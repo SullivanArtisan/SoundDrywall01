@@ -19,7 +19,6 @@ class StaffController extends Controller
 			'roll'   => 'required',
 			'password'  => 'required',
             'password2' => 'required',
-			'assigned_job_id'   => 'required',
 		]);
 		
 		$emailExists = Staff::where('email', $request->email)->first();
@@ -40,7 +39,6 @@ class StaffController extends Controller
 			$staff->work_phone 		= $request->work_phone;
 			$staff->home_phone 		= $request->home_phone;
 			$staff->mobile_phone	= $request->mobile_phone;
-			$staff->assigned_job_id	= $request->assigned_job_id;
 			$saved = $staff->save();
 			
 			if(!$saved) {
@@ -74,18 +72,6 @@ class StaffController extends Controller
 			$staff->work_phone 		= $request->work_phone;
 			$staff->home_phone 		= $request->home_phone;
 			$staff->mobile_phone	= $request->mobile_phone;
-
-			$jobName = $request->assigned_job_id;
-			if (strlen($jobName) == 0) {
-				$staff->assigned_job_id	= 0;
-			} else {
-				$selJob = Job::where('job_name', $jobName)->first();
-				if ($selJob) {
-					$staff->assigned_job_id	= $selJob->id;
-				} else {
-					return redirect()->route('op_result.staff')->with('status', ' <span style="color:red">Staff\'s assigned job cannot NOT Been found!</span>');
-				}
-			}
 
 			$saved = $staff->save();
 			

@@ -30,7 +30,7 @@
 				<div class="col-md-9 col-lg-12 col-xl-10">
 					<div class="card shadow-lg o-hidden border-0 my-5">
 						<div class="card-body p-0">
-							<div class="row pt-5" style="background-color: #800020;">
+							<div class="row pt-5" style="background-color: #800020; opacity: 0.4">
 								<div class="col-lg-1">
 								</div>
 								<div class="col-lg-3 d-none d-lg-flex d-flex justify-content-center">

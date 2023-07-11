@@ -79,7 +79,7 @@
 				$outContents .= "Roll";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2\">";
-				$outContents .= "Assigned Job";
+				$outContents .= "Assigned Jobs";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-3\">";
 				$outContents .= "Email";
@@ -109,13 +109,28 @@
 					$outContents .= "</a>";
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-2\">";
-					if ($staff->assigned_job_id > 0) {
-						$selJob = \App\Models\Job::where('id', $staff->assigned_job_id)->first();
-						$outContents .= "<a href=\"staff_selected?id=$staff->id\">";
-						$outContents .= $selJob->job_name;
-						$outContents .= "</a>";
+					// if ($staff->assigned_job_id > 0) {
+						// $selJob = \App\Models\Job::where('id', $staff->assigned_job_id)->first();
+						// $outContents .= "<a href=\"staff_selected?id=$staff->id\">";
+						// $outContents .= $selJob->job_name;
+						// $outContents .= "</a>";
+					// }
+					$jobs_total = 0;
+					$jobs = \App\Models\JobDispatch::all()->where('jobdsp_staff_id', $staff->id);
+					if ($jobs) {
+						foreach($jobs as $job) {
+							$job_origin = Job::where('id', $job->jobdsp_job_id)->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'FINISHED')->first();
+							
+							if ($job_origin) {
+								$jobs_total++;
+						 		$outContents .= $jobs_total;
+							} else {
+								$err_msg = "Job ID ".$job->jobdsp_job_id."'s object cannot be found from JobDispatch when counting total jobs in staff_main.blade.";
+								Log::Info($err_msg);
+							}
+						}	
 					}
-				$outContents .= "</div>";
+			$outContents .= "</div>";
                 $outContents .= "<div class=\"col-3\">";
 					$outContents .= "<a href=\"staff_selected?id=$staff->id\">";
 					$outContents .= $staff->email;

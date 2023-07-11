@@ -6,6 +6,7 @@ use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\JobDispatchController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\MailController;
@@ -26,6 +27,7 @@ use App\Models\Material;
 use App\Models\Provider;
 use App\Models\Project;
 use App\Models\Job;
+use App\Models\JobDispatch;
 use App\Models\User;
 use App\Models\UserSysDetail;
 use App\Models\PowerUnit;
@@ -163,6 +165,11 @@ Route::get('/home_page', function () {
     return view('home_page');
 })->middleware(['auth'])->name('home_page');
 
+Route::get('/assistant_home_page', function () {
+	session_start();
+    return view('assistant_home_page');
+})->middleware(['auth'])->name('assistant_home_page');
+
 Route::get('/home_page_old', function () {
     return view('home_page_old');
 })->middleware(['auth'])->name('home_page1');
@@ -179,6 +186,50 @@ Route::get('/staff_main', function () {
 Route::get('staff_selected', function (Request $request) {
     return view('staff_selected');
 })->middleware(['auth'])->name('staff_selected');
+
+Route::get('job_combination_staff_selected', function (Request $request) {
+    return view('job_combination_staff_selected');
+})->middleware(['auth'])->name('job_combination_staff_selected');
+
+Route::post('job_combination_msg_to_staff', function (Request $request) {
+	$job_id 	= $_POST['job_id'];
+	$staff_id	= $_POST['staff_id'];
+	$msg		= $_POST['msg'];
+	$association = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->first();
+	$association->jobdsp_msg_from_admin = $msg;
+	$res = $association->save();
+	if (!$res) {
+		return "msgToStaffOK=false";	
+	} else {
+		return "msgToStaffOK=true";	
+	}
+})->middleware(['auth'])->name('job_combination_msg_to_staff');
+
+Route::post('job_combination_msg_to_admin', function (Request $request) {
+	$job_id 	= $_POST['job_id'];
+	$staff_id	= $_POST['staff_id'];
+	$msg		= $_POST['msg'];
+	$association = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->first();
+	$association->jobdsp_msg_from_staff = $msg;
+	$res = $association->save();
+	if (!$res) {
+		return "msgToAdminOK=false";	
+	} else {
+		return "msgToAdminOK=true";	
+	}
+})->middleware(['auth'])->name('job_combination_msg_to_admin');
+
+Route::post('job_combination_staff_remove', function (Request $request) {
+	$job_id 	= $_POST['job_id'];
+	$staff_id	= $_POST['staff_id'];
+	$association = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->first();
+	$res = $association->delete();
+	if (!$res) {
+		return "staffRemoveOK=false";	
+	} else {
+		return "staffRemoveOK=true";	
+	}
+})->middleware(['auth'])->name('job_combination_staff_remove');
 
 Route::get('staff_condition_selected', function (Request $request) {
     return view('staff_condition_selected');
@@ -291,6 +342,14 @@ Route::get('job_add', function (Request $request) {
 Route::get('job_selected', function (Request $request) {
     return view('job_selected');
 })->middleware(['auth'])->name('job_selected');
+
+Route::get('job_combination_main', function (Request $request) {
+    return view('job_combination_main');
+})->middleware(['auth'])->name('job_combination_main');
+
+Route::get('assistant_job_selected', function (Request $request) {
+    return view('assistant_job_selected');
+})->middleware(['auth'])->name('assistant_job_selected');
 
 Route::get('/job_delete', function () {
 	$id = $_GET['id'];

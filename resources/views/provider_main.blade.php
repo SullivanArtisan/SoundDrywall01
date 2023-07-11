@@ -62,7 +62,7 @@
 		// Title Line
 		$outContents = "<div class=\"container mw-100\">";
         $outContents .= "<div class=\"row bg-info text-white fw-bold\">";
-			$outContents .= "<div class=\"col-3 align-middle\">";
+			$outContents .= "<div class=\"col-2 align-middle\">";
 				$sortParms = "?sort_key_provider=name&sort_time=".time();
 				$outContents .= "<a href=\"provider_main".$sortParms."\">";
 				$outContents .= "Provider Name";
@@ -73,9 +73,12 @@
 				}
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-3\">";
+				$outContents .= "Address";
+			$outContents .= "</div>";
+			$outContents .= "<div class=\"col-2\">";
 				$outContents .= "City";
 			$outContents .= "</div>";
-			$outContents .= "<div class=\"col-3\">";
+			$outContents .= "<div class=\"col-2\">";
 				$outContents .= "Contact";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-3\">";
@@ -87,17 +90,22 @@
 		// Body Lines
 		foreach ($providers as $provider) {
             $outContents = "<div class=\"row\">";
-                $outContents .= "<div class=\"col-3\">";
+                $outContents .= "<div class=\"col-2\">";
 					$outContents .= "<a href=\"provider_selected?id=$provider->id\">";
 					$outContents .= $provider->pvdr_name;
 					$outContents .= "</a>";
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-3\">";
 					$outContents .= "<a href=\"provider_selected?id=$provider->id\">";
+					$outContents .= $provider->pvdr_address;
+					$outContents .= "</a>";
+				$outContents .= "</div>";
+                $outContents .= "<div class=\"col-2\">";
+					$outContents .= "<a href=\"provider_selected?id=$provider->id\">";
 					$outContents .= $provider->pvdr_city;
 					$outContents .= "</a>";
 				$outContents .= "</div>";
-                $outContents .= "<div class=\"col-3\">";
+                $outContents .= "<div class=\"col-2\">";
 					$outContents .= "<a href=\"provider_selected?id=$provider->id\">";
 					$outContents .= $provider->pvdr_contact;
 					$outContents .= "</a>";

@@ -85,12 +85,6 @@
                         <div class="col"><label class="col-form-label">Confirm Password:&nbsp;</label></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="password" id="password2" name="password2"></div>
                     </div>
-                    <div class="row">
-                        <div class="col"><label class="col-form-label">Assigned to Job:&nbsp;</label></div>
-                        <div class="col"><input class="form-control mt-1 my-text-height" readonly type="number" id="assigned_job_id" name="assigned_job_id" value="0"></div>
-                        <div class="col"><label class="col-form-label">&nbsp;</label></div>
-                        <div class="col"><input class="form-control mt-1 my-text-height" type="hidden"></div>
-                    </div>
                     <div class="row my-3">
                         <div class="w-25"></div>
                         <div class="col">

@@ -100,11 +100,11 @@
                             </div>
                             <div class="row">
                                 <div class="col"><label class="col-form-label">Job Description:&nbsp;</label></div>
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="job_desc" name="job_desc" value="{{$job->job_desc}}"></div>
+                                <div class="col"><textarea class="form-control mt-1 my-text-height" rows = "5" id="job_desc" name="job_desc" placeholder="{{$job->job_desc}}">{{$job->job_desc}}</textarea></div>
                                 <div class="col"><label class="col-form-label">Job Status:&nbsp;</label></div>
                                 <div class="col">
                                     <?php
-                                    $tagHead = "<input list=\"job_status\" name=\"job_status\" id=\"jobstatusinput\" class=\"form-control mt-1 my-text-height\" value=\"".$job->job_status."\"";
+                                    $tagHead = "<input list=\"job_status\" name=\"job_status\" id=\"jobstatusinput\" class=\"form-control mt-1\" value=\"".$job->job_status."\"";
                                     $tagTail = "><datalist id=\"job_status\">";
 
                                     $statuses = Status::all()->sortBy('status_name');
@@ -129,7 +129,8 @@
                                 <div class="col">
                                     <div class="row">
                                         <button class="btn btn-success mx-4" type="submit" id="btn_save">Save</button>
-                                        <button class="btn btn-secondary mx-3" type="button"><a href="{{route('project_selected', ['id'=>$job->job_proj_id])}}">Cancel</a></button>
+                                        <button class="btn btn-info mx-3 mr-2" type="button" onclick="DoJobCombination();">Job Combination</button>
+                                        <button class="btn btn-secondary mx-3 ml-2" type="button"><a href="{{route('project_selected', ['id'=>$job->job_proj_id])}}">Cancel</a></button>
                                     </div>
                                 </div>
                                 <div class="col"></div>
@@ -145,6 +146,12 @@
 				if(!confirm("Are you sure to delete this job?"))
 				    event.preventDefault();
 			}
+
+            function DoJobCombination() {
+                event.preventDefault();
+                url   = './job_combination_main?jobId='+{!!json_encode($job_id)!!};
+                window.location = url;
+            }
 		</script>
 	@endsection
 }

@@ -87,7 +87,7 @@
                             </div>
                             <div class="row">
                                 <div class="col"><label class="col-form-label">Job Description:&nbsp;</label></div>
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="job_desc" name="job_desc"></div>
+                                <div class="col"><textarea class="form-control mt-1 my-text-height" rows = "5" id="job_desc" name="job_desc"></textarea></div>
                                 <div class="col"><label class="col-form-label">&nbsp;</label></div>
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" readonly id="proj_id" name="proj_id" value="{{$proj_id}}"></div>
                             </div>

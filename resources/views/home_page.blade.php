@@ -1,8 +1,15 @@
 @extends('layouts.home_page_base')
 @section('function_page')
+
+    @if (Auth::user()->roll == 'ASSISTANT')
+        <script type="text/javascript">
+            window.location = './assistant_home_page';//here double curly bracket
+        </script>
+    @endif
+
     <div class="card mx-2 mt-3" style="background-color: #A9DFBF;">
         <div class="card-body">
-            <h3 class="card-title text-primary">Hi, <span style="font-family: 'Times New Roman';font-weight: bold;font-style: italic; color:darkblue !important">{{Auth::user()->f_name}}&nbsp;{{Auth::user()->l_name}}</span>, welcome to Sound Drywall's Home!</h4>
+            <h3 class="card-title text-primary">Hi, <span style="font-family: 'Times New Roman';font-weight: bold;font-style: italic; color:darkblue !important">{{Auth::user()->f_name}}&nbsp;{{Auth::user()->l_name}}</span>, welcome to TwentyTwenty Contracting Ltd's Home!</h4>
             <!--
             <p class="card-text">The functions in this group are good for H/L control options</p>
             -->

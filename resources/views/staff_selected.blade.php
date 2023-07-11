@@ -121,34 +121,6 @@
 							<div class="col"><label class="col-form-label">Mobile Phone:&nbsp;</label></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" name="mobile_phone" value="{{$staff->mobile_phone}}"></div>
 						</div>
-						<div class="row">
-                        	<div class="col"><label class="col-form-label">Assigned to Job:&nbsp;</label></div>
-							<div class="col">
-								<?php
-								$tagHead = "<input list=\"assigned_job_id\" name=\"assigned_job_id\" id=\"assignedjobidinput\" class=\"form-control mt-1 my-text-height\" ";
-								$tagTail = "><datalist id=\"assigned_job_id\">";
-
-								if ($staff->mobile_phone > 0) {
-									$selJob = Job::where('id', $staff->assigned_job_id)->first();
-									$jobName = $selJob->job_name;
-								} else {
-									$jobName = "";
-								}
-								$jobs = Job::all()->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'FINISHED')->sortBy('job_name');
-								foreach($jobs as $job) {
-									$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $job->job_name).">";
-								}
-								$tagTail.= "</datalist>";
-								// if (isset($_GET['selJobId'])) {
-								// 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
-								// } else {
-									echo $tagHead."placeholder=\"\" value=\"".$jobName."\"".$tagTail;
-								// }
-								?>
-							</div>
-							<div class="col"><label class="col-form-label">&nbsp;</label></div>
-							<div class="col"><input class="form-control mt-1 my-text-height" type="hidden" name="id" value="{{$staff->id}}"></div>
-						</div>
 						<div class="row my-3">
 							<div class="w-25"></div>
 							<div class="col">
