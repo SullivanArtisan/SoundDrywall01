@@ -24,8 +24,8 @@
                 $association = JobDispatch::where('jobdsp_job_id', $id)->where('jobdsp_staff_id', $staff_id)->first();
 
                 if (isset($_GET['msgToAdminOK'])) {
-                    $msgToAdminResult = $_GET['msgToAdminOK'];
-                    if ($msgToAdminResult == 'true'){
+                    $result = $_GET['msgToAdminOK'];
+                    if ($result == 'true'){
                         $msg_to_show = 'Assistant '.Auth::user()->f_name.' '.Auth::user()->l_name.' sent a message to administrator successfully.';
                         Log::Info($msg_to_show);
                     }
@@ -37,16 +37,24 @@
         }
     ?>
 
-    <div class="container text-dark" style="background: var(--bs-btn-bg); background-color:beige;">
+    <div class="container pt-5 text-dark" style="background: var(--bs-btn-bg); background-color:beige;">
         <!-- Header Section -->
         <div class="row">
-            <div class="col-md-10 my-2" style="background: var(--bs-success-bg-subtle);">
+            <div class="col-md-9 my-2" style="background: var(--bs-success-bg-subtle);">
                 <h1>Job {{$job->job_name}}'s Details:</h1>
+            </div>
+            <div class="col-md-1 my-4">
+                        <button class="btn btn-secondary text-center" type="button">
+                            <a style="text-decoration:none;"  class="text-white" 
+                                href="{{route('assistant_home_page')}}">
+                                <span style="font-weight:bold !important;">{{ __('Back') }}</span>
+                            </a>
+                        </button>
             </div>
             <div class="col-md-2 my-4" style="background: var(--bs-success-bg-subtle);">
                 <form method="POST" action="{{ route('logout') }}" style="cursor: pointer">
                     @csrf
-                    <a style="text-decoration:none;"  class="text-dark border rounded btn btn-secondary" 
+                    <a style="text-decoration:none;"  class="text-dark border rounded btn btn-dark" 
                         onclick="event.preventDefault(); this.closest('form').submit();">
                         <span style="font-weight:bold !important; color:white">{{ __('Log Out') }}</span>
                     </a>
@@ -62,6 +70,10 @@
         <div class="row" style="max-height: 400px;">
             <div class="col-3"><label class="col-form-label">Job Type:&nbsp;</label></div>
             <div class="col-9"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_type" name="job_type" value="{{$job->job_type}}"></div>
+        </div>
+        <div class="row" style="max-height: 400px;">
+            <div class="col-3"><label class="col-form-label">Status:&nbsp;</label></div>
+            <div class="col-9"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_status" name="job_status" value="{{$job->job_status}}"></div>
         </div>
         <div class="row" style="max-height: 400px;">
             <div class="col-3"><label class="col-form-label">Site Address:&nbsp;</label></div>
@@ -85,8 +97,8 @@
         </div>
 
         <!-- Footage Section -->
-        <div class="row mt-4">
-            <div class="col">
+        <div class="row mt-2">
+            <!--div class="col">
                 <div class="row mb-4">
                     <div class="col text-center" style="background: var(--bs-warning-border-subtle);position: static;padding-top: 11px; display: flex; justify-content: center;">
                         <button class="btn btn-secondary text-center" type="button">
@@ -95,32 +107,29 @@
                                 <span style="font-weight:bold !important;">{{ __('Back') }}</span>
                             </a>
                         </button>
-                        <!--
-                        <button class="btn btn-primary" type="button">
-                            <a class="text-white" style="text-decoration: none !important;" href="{{ route('logout') }}">Log Out</a>
-                        </button>
-                        -->
                     </div>                                        
                 </div>
-            </div>
+            </div-->
         </div>
 
         <!-- Messages Section -->
-        <div class="row text-dark" style="background-color:lightcyan;">
+        <div class="row text-dark" style="background-color:lightsteelblue;">
             <div class="col">
                 <form method="post" action="{{url('job_combination_msg_to_admin')}}">
                     @csrf
                     <div class="row">
                         <div class="col m-1">
                             <div class="row font-weight-bold"><label class="col-form-label">Message From Administrator:&nbsp;</label></div>
-                            <div class="row"><textarea readonly class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$association->jobdsp_msg_from_admin}}</textarea></div>
+                            <div class="row">
+                                <textarea readonly class="form-control mt-1 my-text-height text-white" style="background-color:silver;" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$association->jobdsp_msg_from_admin}}</textarea>
+                            </div>
                         </div>
                         <div class="col m-1">
                             <div class="row font-weight-bold"><label class="col-form-label">Message To  Administrator:&nbsp;</label></div>
                             <div class="row"><textarea class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$association->jobdsp_msg_from_staff}}</textarea></div>
                         </div>
                     </div>
-                    <div class="row mb-4">
+                    <div class="row mb-2">
                         <div class="col text-center" style="background: var(--bs-warning-border-subtle);position: static;padding-top: 11px; display: flex; justify-content: right;">
                             <button class="btn btn-success m-3 rounded" type="submit" onclick="return doSendMsgToAdmin();">Send Message</button>
                         </div>
@@ -128,7 +137,12 @@
                 </form>
             </div>
         </div>
-        <div class="row mt-4">
+        <div class="row mt-2">
+        </div>
+        <div class="row text-dark" style="background-color:lightpink;">
+            <div class="col" style="display: flex; justify-content: center;">
+                <button class="btn m-2 text-white rounded" style="background-color:lightcoral;" onclick="return doCompleteThisJob();">Complete This Job</button>
+            </div>
         </div>
     </div>
 
@@ -159,6 +173,32 @@
                     },
                     error: function(err) {
                         window.location = './assistant_job_selected?id='+jobId+'&msgToAdminOK=false';
+                    }
+                });
+            }
+        }
+
+        function doCompleteThisJob() {
+            if(!confirm("Are you sure to complete this job?")) {
+                //event.preventDefault();
+            } else {
+                var jobId = {!!json_encode($id)!!};
+                var staffId = {!!json_encode($staff_id)!!};
+                $.ajax({
+                    url: '/job_assistants_complete',
+                    type: 'POST',
+                    data: {
+                        _token:"{{ csrf_token() }}", 
+                        job_id:jobId,
+                        staff_id:staffId,
+                    },    // the _token:token is for Laravel
+                    success: function(dataRetFromPHP) {
+                        alert('Job is completed successfully.')
+                        window.location = './assistant_home_page';
+                    },
+                    error: function(err) {
+                        alert('Failed to complete this job.\r\nPlease tyr again.')
+                        window.location = './assistant_job_selected?id='+jobId+'&jobCompleteOK=false';
                     }
                 });
             }

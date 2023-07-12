@@ -67,10 +67,10 @@
 			$outContents .= "<div class=\"col-3 align-middle\">";
 				$outContents .= "Customer Name";
 			$outContents .= "</div>";
-			$outContents .= "<div class=\"col-1\">";
+			$outContents .= "<div class=\"col-2\">";
 				$outContents .= "Status";
 			$outContents .= "</div>";
-			$outContents .= "<div class=\"col-2\">";
+			$outContents .= "<div class=\"col-1\">";
 				$outContents .= "Total Jobs";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2 align-middle\">";
@@ -102,12 +102,12 @@
 					$outContents .= $customer_name;
 					$outContents .= "</a>";
 				$outContents .= "</div>";
-                $outContents .= "<div class=\"col-1\">";
+                $outContents .= "<div class=\"col-2\">";
 					$outContents .= "<a href=\"project_selected?id=$project->id\">";
 					$outContents .= $project->proj_status;
 					$outContents .= "</a>";
 				$outContents .= "</div>";
-                $outContents .= "<div class=\"col-2\">";
+                $outContents .= "<div class=\"col-1\">";
 					$outContents .= "<a href=\"project_selected?id=$project->id\">";
 					$outContents .= $project->proj_total_active_jobs;
 					$outContents .= "</a>";

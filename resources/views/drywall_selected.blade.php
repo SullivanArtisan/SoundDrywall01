@@ -74,7 +74,7 @@
 								$tagTail = "><datalist id=\"job_name\">";
 
 								$selJob = Job::where('id', $material->mtrl_job_id)->first();
-								$jobs = Job::all()->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'FINISHED')->sortBy('job_name');
+								$jobs = Job::all()->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'COMPLETED')->sortBy('job_name');
 								foreach($jobs as $job) {
 									$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $job->job_name).">";
 								}

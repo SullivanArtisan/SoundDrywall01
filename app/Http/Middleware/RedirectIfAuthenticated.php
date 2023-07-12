@@ -22,9 +22,7 @@ class RedirectIfAuthenticated
     {
         $guards = empty($guards) ? [null] : $guards;
 
-        Log::Info("********");
         foreach ($guards as $guard) {
-            Log::Info("--------");
             if (Auth::guard($guard)->check()) {
                 Log::Info("Profile : ".Auth::user()->roll);
                 return redirect(RouteServiceProvider::HOME);

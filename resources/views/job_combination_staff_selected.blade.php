@@ -79,7 +79,7 @@
                                 </div>
                                 <div class="col m-1">
                                     <div class="row"><label class="col-form-label">Message From Assistant:&nbsp;</label></div>
-                                    <div class="row"><textarea readonly class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$association->jobdsp_msg_from_staff}}</textarea></div>
+                                    <div class="row"><textarea readonly class="form-control mt-1 my-text-height text-white" style="background-color:silver;" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$association->jobdsp_msg_from_staff}}</textarea></div>
                                 </div>
                             </div>
                             <div class="row my-3">

@@ -44,7 +44,7 @@
 							$tagHead = "<input list=\"job_name\" name=\"job_name\" id=\"jobnameinput\" class=\"form-control mt-1 my-text-height\" ";
 							$tagTail = "><datalist id=\"job_name\">";
 
-							$jobs = Job::all()->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'FINISHED')->sortBy('job_name');
+							$jobs = Job::all()->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'COMPLETED')->sortBy('job_name');
 							foreach($jobs as $job) {
 								$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $job->job_name).">";
 							}

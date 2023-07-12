@@ -31,6 +31,9 @@ class JobController extends Controller
                 $job->job_address   = $request->job_address;
                 $job->job_city      = $request->job_city;
                 $job->job_province  = $request->job_province;
+                $job->job_total_assistants          = 0;
+                $job->job_total_active_assistants   = 0;
+                $job->job_assistants_complete       = 0;
                 $saved = $job->save();
             } else {
                 $err_msg = "Job or Project object cannot be accessed while adding a new job.";
@@ -45,6 +48,9 @@ class JobController extends Controller
             } else {
                 $project->proj_total_active_jobs = $project->proj_total_active_jobs+1;
                 $project->proj_total_jobs = $project->proj_total_jobs+1;
+                if (strstr($project->proj_status, 'COMPLETED')) {
+                    $project->proj_status = $project->proj_jobs_complete.'/'.$project->proj_total_active_jobs.' COMPLETED';
+                }
                 $saved2 = $project->save();
                 if(!$saved2) {
                     $err_msg = "Project P".$project->id."'s porj_total_jobs of ".$project->proj_total_active_jobs." cannot be increased by 1.";

@@ -219,11 +219,47 @@ Route::post('job_combination_msg_to_admin', function (Request $request) {
 	}
 })->middleware(['auth'])->name('job_combination_msg_to_admin');
 
+Route::post('job_assistants_complete', function (Request $request) {
+	$job_id 	= $_POST['job_id'];
+	$staff_id	= $_POST['staff_id'];
+	$job 		= Job::where('id', $job_id)->first();
+	$job->job_assistants_complete 	= $job->job_assistants_complete + 1;
+	$job->job_status 				= $job->job_assistants_complete.'/'.$job->job_total_active_assistants.' COMPLETED';
+	$res = $job->save();
+	if (!$res) {
+		Log::Info('Failed to update job_assistants_complete for staff '.$staff_id.' and job '.$job_id."!");
+		return "jobCompleteOK=false";	
+	} else {
+		if ($job->job_assistants_complete == $job->job_total_active_assistants) {
+			$project = project::where('id', $job->job_proj_id)->first();
+			$project->proj_jobs_complete = $project->proj_jobs_complete + 1;
+			$project->proj_status = $project->proj_jobs_complete.'/'.$project->proj_total_active_jobs.' COMPLETED';
+			$res = $project->save();
+			if (!$res) {
+				Log::Info('Failed to update proj_jobs_complete for staff '.$staff_id.' and job '.$job_id."!");
+				return "jobCompleteOK=false";	
+			} else {
+				$association = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->first();
+				$association->jobdsp_status = 'COMPLETED';
+				$res = $association->save();
+				if (!$res) {
+					Log::Info('Staff '.$staff_id.' failed to complete the job '.$job_id."!");
+					return "jobCompleteOK=false";	
+				} else {
+					Log::Info('Staff '.$staff_id.' completed the job '.$job_id." successfully.");
+					return "jobCompleteOK=true";	
+				}
+			}
+		}
+	}
+})->middleware(['auth'])->name('job_assistants_complete');
+
 Route::post('job_combination_staff_remove', function (Request $request) {
 	$job_id 	= $_POST['job_id'];
 	$staff_id	= $_POST['staff_id'];
 	$association = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->first();
-	$res = $association->delete();
+	$association->jobdsp_status = 'DELETED';
+	$res = $association->save();
 	if (!$res) {
 		return "staffRemoveOK=false";	
 	} else {

@@ -119,7 +119,7 @@
 					$jobs = \App\Models\JobDispatch::all()->where('jobdsp_staff_id', $staff->id);
 					if ($jobs) {
 						foreach($jobs as $job) {
-							$job_origin = Job::where('id', $job->jobdsp_job_id)->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'FINISHED')->first();
+							$job_origin = Job::where('id', $job->jobdsp_job_id)->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'COMPLETED')->first();
 							
 							if ($job_origin) {
 								$jobs_total++;
