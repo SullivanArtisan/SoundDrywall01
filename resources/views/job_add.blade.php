@@ -96,7 +96,7 @@
                                 <div class="col">
                                     <div class="row">
                                         <button class="btn btn-success mx-4" type="submit" id="btn_save">Save</button>
-                                        <button class="btn btn-secondary mx-3" type="button"><a href="{{route('home_page')}}">Cancel</a></button>
+                                        <button class="btn btn-secondary mx-3" type="button"><a href="{{route('project_selected', ['id'=>$project->id])}}">Cancel</a></button>
                                     </div>
                                 </div>
                                 <div class="col"></div>

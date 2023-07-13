@@ -28,6 +28,7 @@ class StaffController extends Controller
 			$staff = new Staff;
 			$staff->f_name 		= $request->f_name;
 			$staff->l_name 		= $request->l_name;
+			$staff->status 		= 'CREATED';
 			$staff->password 	= password_hash($request->password, PASSWORD_DEFAULT);
 			$staff->address 	= $request->address;
 			$staff->city 		= $request->city;

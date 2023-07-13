@@ -41,7 +41,7 @@
                     <a href="#controlSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Control</a>
                     <ul class="collapse list-unstyled" id="controlSubmenu">
                         <li> <a href="{{route('under_construction')}}">Material Association</a> </li>
-                        <li> <a href="{{route('under_construction')}}">Job Dispatch</a> </li>
+                        <li> <a href="{{route('job_dispatch')}}">Job Dispatch</a> </li>
                     </ul>
                 </li>
                 <li>

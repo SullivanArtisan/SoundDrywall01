@@ -161,11 +161,14 @@
                 // Jobs' Title Line
                 $outContents = "<div class=\"container mw-100 mt-3\">";
                 $outContents .= "<div class=\"row bg-info text-white fw-bold mb-2\">";
-                    $outContents .= "<div class=\"col-2 mt-1 align-middle\">";
+                    $outContents .= "<div class=\"col-1 mt-1 align-middle\">";
                         $outContents .= "Job Name";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-2 mt-1 align-middle\">";
                         $outContents .= "Job Type";
+                    $outContents .= "</div>";
+                    $outContents .= "<div class=\"col-1 mt-1 align-middle\">";
+                        $outContents .= "Assistants#";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-2 mt-1 align-middle\">";
                         $outContents .= "Job Status";
@@ -191,7 +194,7 @@
                     } else {
                         $outContents = "<div class=\"row\" style=\"background-color:PaleGreen\">";
                     }
-                    $outContents .= "<div class=\"col-2\">";
+                    $outContents .= "<div class=\"col-1\">";
                         $outContents .= "<a href=\"".route('job_selected', ['jobId='.$job->id])."\">";
                         $outContents .= $job->job_name;
                         $outContents .= "</a>";
@@ -199,6 +202,11 @@
                     $outContents .= "<div class=\"col-2\">";
                         $outContents .= "<a href=\"".route('job_selected', ['jobId='.$job->id])."\">";
                         $outContents .= $job->job_type;
+                        $outContents .= "</a>";
+                    $outContents .= "</div>";
+                    $outContents .= "<div class=\"col-1\">";
+                        $outContents .= "<a href=\"".route('job_selected', ['jobId='.$job->id])."\">";
+                        $outContents .= $job->job_total_active_assistants;
                         $outContents .= "</a>";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-2\">";
