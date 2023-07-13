@@ -20,7 +20,7 @@
     <div>
         <div class="row m-4">
             <div>
-                <h2 class="text-muted pl-2">Associate a Material with a Job:</h2>
+                <h2 class="text-muted pl-2">Associate Material with a Job:</h2>
             </div>
         </div>
         <div class="row m-4">
