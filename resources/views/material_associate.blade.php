@@ -2,20 +2,9 @@
 	use App\Models\Material;
 	use App\Models\JobDispatch;
 	use App\Models\Job;
-	use App\Models\Staff;
 
+    $materials = Material::where('mtrl_status', '<>', 'DELETED')->orderBy('mtrl_name', 'asc')->get();
     $jobs = Job::all()->where('job_assistants_complete', '=', '0')->where('job_assistants_complete', '<', 'job_total_active_assistants')->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED');
-    $assistants = Staff::where('roll', 'ASSISTANT')->where('status', '<>', 'DELETED')->orderBy('f_name', 'asc')->get();
-
-    // if (isset($_GET['staffRemoveOK'])) {
-    //     $staffRemoveResult = $_GET['staffRemoveOK'];
-    //     $staff_id = $_GET['staffId'];
-    //     if ($staffRemoveResult=='true' && $staff_id) {
-    //         $staff = Staff::where('id', $staff_id)->first();
-    //         $msg_to_show = "Staff ".$staff->f_name." ".$staff->l_name." is successfully removed from job ".$job_id;
-    //         Log::Info($msg_to_show);
-    //     }
-    // }
 ?>
 
 @extends('layouts.home_page_base')
@@ -31,11 +20,60 @@
     <div>
         <div class="row m-4">
             <div>
-                <h2 class="text-muted pl-2">Dispatch a Job to an Assistant:</h2>
+                <h2 class="text-muted pl-2">Associate a Material with a Job:</h2>
             </div>
         </div>
         <div class="row m-4">
             <div class="col-6">
+                <!-- Available Materials Section -->
+                <div class="container">
+                    <div class="row">
+                        <div class="col bg-info text-white"><h5 class="mt-1">Materials:&nbsp;</h5></div>
+                    </div>
+                    <div class="row my-2">
+                    <div class="col">
+                        <div class="row text-white" style="max-height: 400px; background-color:grey; font-weight:bold !important;">
+                            <div class="col-3">Name</div>
+                            <div class="col-5">Type</div>
+                            <div class="col-2">Amount</div>
+                            <div class="col-2">For Job</div>
+                        </div>
+                        <?php 
+                            $listed_items = 0;
+                            foreach ($materials as $material) {
+                                $listed_items++;
+                                if ($listed_items % 2) {
+                                    $bg_color = "Lavender";
+                                } else {
+                                    $bg_color = "PaleGreen";
+                                }
+                                $outContents = "<div class=\"row\" id=\"m_".$material->id."\" onclick=\"MaterialSelected(this.id)\" ondblclick=\"EditMaterial(this.id)\" style=\"background-color:".$bg_color."\">";
+                                $outContents .= "<div class=\"col-3\" style=\"cursor:default\">".$material->mtrl_name."</div>";
+                                $outContents .= "<div class=\"col-5\" style=\"cursor:default\">".$material->mtrl_type."</div>";
+                                $outContents .= "<div class=\"col-2\" style=\"cursor:default\">".intval($material->mtrl_amount_left)."/".intval($material->mtrl_amount)."</div>";
+                                $job = Job::where('id', $material->mtrl_job_id)->first();
+                                if ($job) {
+                                    $outContents .= "<div class=\"col-2\" style=\"cursor:default\">".$job->job_name."</div>";
+                                } else {
+                                    $outContents .= "<div class=\"col-2\" style=\"cursor:default\"></div>";
+                                }
+                                $outContents .= "</div>";
+                                echo $outContents;
+                            }
+                        ?>
+                    </div>
+                    </div>
+                    <!--div class="row d-flex justify-content-center">
+                        <button class="btn-success m-3 rounded">Add Assistant</button>
+                    </div-->
+                </div>
+            </div>
+            <div class="col-1" style="position: relative;">
+                <div style="position: absolute; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%);">
+                    <button class="btn btn-success align-items-center" onclick="doMtrlAssociate()">Associate</button>
+                </div>
+            </div>
+            <div class="col-5">
                 <!-- Available Jobs Section -->
                 <div class="container">
                     <div class="row">
@@ -74,57 +112,16 @@
                     </div-->
                 </div>
             </div>
-            <div class="col-1" style="position: relative;">
-                <div style="position: absolute; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%);">
-                    <button class="btn btn-success align-items-center" onclick="doJobDispatch()">Dispatch</button>
-                </div>
-            </div>
-            <div class="col-5">
-                <!-- Available Asststants Section -->
-                <div class="container">
-                    <div class="row">
-                        <div class="col bg-info text-white"><h5 class="mt-1">Assistants:&nbsp;</h5></div>
-                    </div>
-                    <div class="row my-2">
-                    <div class="col">
-                        <div class="row text-white" style="max-height: 400px; background-color:grey; font-weight:bold !important;">
-                            <div class="col-4">First Name</div>
-                            <div class="col-8">Last Name</div>
-                        </div>
-                        <?php 
-                            $listed_items = 0;
-                            foreach ($assistants as $assistant) {
-                                $staff_origin = Staff::where('id', $assistant->jobdsp_staff_id)->first();
-                                $listed_items++;
-                                if ($listed_items % 2) {
-                                    $bg_color = "Lavender";
-                                } else {
-                                    $bg_color = "PaleGreen";
-                                }
-                                $outContents = "<div class=\"row\" id=\"s_".$assistant->id."\" onclick=\"StaffSelected(this.id)\" ondblclick=\"EditStaff(this.id)\" style=\"background-color:".$bg_color."\">";
-                                $outContents .= "<div class=\"col-4\" style=\"cursor:default\">".$assistant->f_name."</div>";
-                                $outContents .= "<div class=\"col-8\" style=\"cursor:default\">".$assistant->l_name."</div>";
-                                $outContents .= "</div>";
-                                echo $outContents;
-                            }
-                        ?>
-                    </div>
-                    </div>
-                    <!--div class="row d-flex justify-content-center">
-                        <button class="btn-success m-3 rounded">Add Assistant</button>
-                    </div-->
-                </div>
-            </div>
         </div>
     </div>
     
     <script>
         var jobId           = "";
-        var staffId         = "";
+        var mtrlId         = "";
         var oldInputJobId   = "";
-        var oldInputStaffId = "";
+        var oldInputMtrlId = "";
         var oldJobBgColor   = "";
-        var oldStaffBgColor = "";
+        var oldMtrlBgColor = "";
 
         function JobSelected(inputId) {
             // prepare the job data for the ajax post function
@@ -143,42 +140,41 @@
             document.getElementById(inputId).style.backgroundColor = 'pink';
         }
 
-        function StaffSelected(inputId) {
-            // prepare the staff data for the ajax post function
-            staffId = inputId.substring(2, inputId.length);
+        function MaterialSelected(inputId) {
+            // prepare the mtrl data for the ajax post function
+            mtrlId = inputId.substring(2, inputId.length);
 
-            if (oldInputStaffId != "") {
-                // restore old selected staff element's background color
-                document.getElementById(oldInputStaffId).style.backgroundColor = oldStaffBgColor;
+            if (oldInputMtrlId != "") {
+                // restore old selected mtrl element's background color
+                document.getElementById(oldInputMtrlId).style.backgroundColor = oldMtrlBgColor;
             }
 
-            // save the new selected staff element's background color
-            oldInputStaffId = inputId;
-            oldStaffBgColor = document.getElementById(inputId).style.backgroundColor;
+            // save the new selected mtrl element's background color
+            oldInputMtrlId = inputId;
+            oldMtrlBgColor = document.getElementById(inputId).style.backgroundColor;
 
-            // set new background color to the new selected staff element
+            // set new background color to the new selected mtrl element
             document.getElementById(inputId).style.backgroundColor = 'pink';
         }
 
-        function doJobDispatch(inputId) {
-            if (jobId == "" || staffId == "") {
-                alert('Please select Job and Assistant first befor you do the dispatch!')
+        function doMtrlAssociate(inputId) {
+            if (jobId == "" || mtrlId == "") {
+                alert('Please select Material and Job first befor you do the association!')
             } else {
                 $.ajax({
-                    url: '/job_dispatch_to_staff',
+                    url: '/mtrl_associate_with_job',
                     type: 'POST',
                     data: {
                         _token:"{{ csrf_token() }}", 
                         job_id:jobId,
-                        staff_id:staffId,
+                        mtrl_id:mtrlId,
                     },    // the _token:token is for Laravel
                     success: function(dataRetFromPHP) {
-                        alert('Job dispatched successfully.')
-                        window.location = './job_dispatch';
+                        alert('Material associated successfully.')
+                        window.location = './material_associate';
                     },
                     error: function(err) {
-                        alert('Failed to dispatch the job.\r\nPlease try again!')
-                        //window.location = './job_dispatch?jobDispatchOK=false';
+                        alert('Failed to associate the material.\r\nPlease try again!')
                     }
                 });
             }
@@ -189,9 +185,9 @@
             window.location = './job_selected?jobId='+jobId;
         }
 
-        function EditStaff(inputId) {
-            staffId = inputId.substring(2, inputId.length);
-            window.location = './staff_selected?id='+staffId;
+        function EditMaterial(inputId) {
+            mtrlId = inputId.substring(2, inputId.length);
+            window.location = './material_selected?id='+mtrlId;
         }
     </script>
 @endsection

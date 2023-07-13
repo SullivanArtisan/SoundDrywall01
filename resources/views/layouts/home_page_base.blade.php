@@ -40,7 +40,7 @@
                 <li class="active">
                     <a href="#controlSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Control</a>
                     <ul class="collapse list-unstyled" id="controlSubmenu">
-                        <li> <a href="{{route('under_construction')}}">Material Association</a> </li>
+                        <li> <a href="{{route('material_associate')}}">Material Association</a> </li>
                         <li> <a href="{{route('job_dispatch')}}">Job Dispatch</a> </li>
                     </ul>
                 </li>
@@ -50,6 +50,8 @@
                         <li> <a href="{{route('customer_main')}}">Customers</a> </li>
                         <li> <a href="{{route('provider_main')}}">Providers</a> </li>
                         <li> <a href="{{route('staff_main')}}">Staffs</a> </li>
+                        <li> <a href="{{route('material_main')}}">Materials for Jobs</a> </li>
+                        <!--					
                         <li> <a href="#materialsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Materials for Jobs</a> </li>
 							<ul class="collapse list-unstyled mx-4" id="materialsSubmenu">
                                 <li><a href="{{route('under_construction')}}">Drywall Sheets</a></li>
@@ -57,7 +59,6 @@
                                 <li><a href="{{route('under_construction')}}">Drywall Joint Tapes</a></li>
                                 <li><a href="{{route('under_construction')}}">Drywall Joint Screws</a></li>
 							</ul>	
-                        <!--					
                         <li> <a href="#toolsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Tools</a> </li>
                             <ul class="collapse list-unstyled mx-4" id="toolsSubmenu">
                                 <li><a href="#">Drywall Sanders</a></li>

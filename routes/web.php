@@ -324,6 +324,33 @@ Route::get('/staff_delete', function () {
 })->middleware(['auth'])->name('staff_delete');
 
 //////////////////////////////// For Materials ////////////////////////////////
+Route::get('/material_main', function () {
+    return view('material_main');
+})->middleware(['auth'])->name('material_main');
+
+Route::get('/material_add', function () {
+    return view('material_add');
+})->middleware(['auth'])->name('material_add');
+
+Route::get('/material_selected', function () {
+    return view('material_selected');
+})->middleware(['auth'])->name('material_selected');
+
+Route::get('/material_delete', function () {
+	$id = $_GET['id'];
+   $material = Material::where('id', $id)->first();
+   $material->mtrl_status    = "DELETED";
+   $materialName = $material->mtrl_name;
+   $res = $material->save();
+   if (!$res) {
+	   return redirect()->route('op_result.material')->with('status', 'The material, <span style="font-weight:bold;font-style:italic;color:red">'.$materialName.'</span>, cannot be deleted for some reason.');	
+   } else {
+	   return redirect()->route('op_result.material')->with('status', 'The material, <span style="font-weight:bold;font-style:italic;color:blue">'.$materialName.'</span>, has been deleted successfully.');	
+   }
+})->middleware(['auth'])->name('material_delete');
+
+Route::post('/material_update', [MaterialController::class, 'update'])->name('material_update');
+
 Route::get('/drywall_main', function () {
     return view('drywall_main');
 })->middleware(['auth'])->name('drywall_main');
@@ -350,6 +377,32 @@ Route::get('/drywall_delete', function () {
  })->middleware(['auth'])->name('drywall_delete');
 
  Route::post('/drywall_update', [MaterialController::class, 'update'])->name('drywall_update');
+
+ Route::get('/material_associate', function () {
+    return view('material_associate');
+})->middleware(['auth'])->name('material_associate');
+
+ Route::post('mtrl_associate_with_job', function (Request $request) {
+	$job_id 	= $_POST['job_id'];
+	$mtrl_id	= $_POST['mtrl_id'];
+	$job 		= Job::where('id', $job_id)->first();
+	$material 	= Material::where('id', $mtrl_id)->first();
+
+	if ($material) {
+		$material->mtrl_job_id = $job_id;
+		$res = $material->save();
+		if (!$res) {
+			Log::Info('Failed to associate material '.$mtrl_id.' with the job '.$job_id."!");
+			return "mtrlAssociateOK=false";	
+		} else {
+			Log::Info('Successfully associate material '.$mtrl_id.' with the job '.$job_id."!");
+			return "mtrlAssociateOK=true";	
+		}
+	} else {
+		Log::Info('Failed to access the material '.$mtrl_id."!");
+		return "mtrlAssociateOK=false";	
+	}
+})->middleware(['auth'])->name('mtrl_associate_with_job');
 
 //////////////////////////////// For Projects ////////////////////////////////
 Route::get('/project_main', function () {
@@ -1071,8 +1124,11 @@ Route::name('op_result.')->group(function () {
 	Route::post('/staff_result', [StaffController::class, 'store'])->name('staff_add');
 	Route::post('/staff_update', [StaffController::class, 'update'])->name('staff_update');
 
-	Route::post('/material_result', [MaterialController::class, 'store'])->name('drywall_add');
-	Route::post('/material_update', [MaterialController::class, 'update'])->name('drywall_update');
+	Route::post('/material_result', [MaterialController::class, 'store'])->name('material_add');
+	Route::post('/material_update', [MaterialController::class, 'update'])->name('material_update');
+
+	// Route::post('/material_result', [MaterialController::class, 'store'])->name('drywall_add');
+	// Route::post('/material_update', [MaterialController::class, 'update'])->name('drywall_update');
 
 	Route::post('/project_result', [ProjectController::class, 'store'])->name('project_add');
 	Route::post('/project_update', [ProjectController::class, 'update'])->name('project_update');
