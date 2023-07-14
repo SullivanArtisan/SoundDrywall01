@@ -60,7 +60,7 @@
             -->
         </div>
     </div>
-    <div class="container my-4">
+    <div class="container my-5">
         <div class="row">
             <h4 class="mx-2 mb-4 card-title text-info">Frequently Used Functions: </h4>
         </div>
@@ -72,7 +72,7 @@
             </div>
             <div class="card ml-1">
                 <div class="card-body">
-                    <button class="btn-grad" type="button" style="margin: 6px;"><a href="{{route('under_construction')}}">All Jobs</a></button>
+                    <button class="btn-grad" type="button" style="margin: 6px;"><a href="{{route('job_main')}}">All Jobs</a></button>
                 </div>
             </div>
             <div class="card ml-1">

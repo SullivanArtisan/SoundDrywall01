@@ -60,7 +60,7 @@
 		<div>
 			<div class="row m-4">
 				<div>
-					<h2 class="text-muted pl-2">Project (for customer {{$customer->cstm_account_name}}):</h2>
+					<h2 class="text-muted pl-2">Project (for customer <span style="font-family: 'Times New Roman';font-weight: bold;font-style: italic; color:black !important">{{$customer->cstm_account_name}})</span>:</h2>
 				</div>
 				<div class="col my-auto ml-5">
 					<button class="btn btn-danger me-2" type="button"><a href="project_delete?id={{$project->id}}" onclick="return myConfirmation();">Delete</a></button>
@@ -133,12 +133,10 @@
                             <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="proj_my_creation_timestamp" name="proj_my_creation_timestamp" value="{{time()}}"></div>
                         </div>
 						<div class="row my-3">
-							<div class="w-25"></div>
-							<div class="col-3 ml-4">
-								<div class="row">
-									<button class="btn btn-warning mx-4" type="submit">Update</button>
+							<div class="col"></div>
+							<div class="col">
+									<button class="btn btn-warning mx-3" type="submit">Update</button>
 									<button class="btn btn-secondary mx-3" type="button"><a href="{{route('project_main')}}">Cancel</a></button>
-								</div>
 							</div>
 							<div class="col"></div>
 						</div>
@@ -152,9 +150,6 @@
                     <div class="col-3">
                         <h4 class="card-title">Associated Jobs: </h4>
                     </div>
-                    <div class="col-3 my-auto ml-5">
-					    <button class="btn btn-success me-2" type="button"><a href="{{route('job_add', ['projId'=>$project->id])}}">Add a Job</a></button>
-				    </div>
 				</div>
 
                 <?php
@@ -233,6 +228,11 @@
                 echo $outContents;
                 }
                 ?>
+                <div class="row mt-5 d-flex justify-content-center">
+                    <div class="col-3 my-auto ml-5">
+					    <button class="btn btn-success me-2" type="button"><a href="{{route('job_add', ['projId'=>$project->id])}}">Add a Job</a></button>
+				    </div>
+				</div>
             </div>
         </div>
 		

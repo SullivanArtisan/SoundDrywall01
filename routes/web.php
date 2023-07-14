@@ -460,6 +460,10 @@ Route::get('/project_delete', function () {
 })->middleware(['auth'])->name('project_delete');
 
 //////////////////////////////// For Jobs ////////////////////////////////
+Route::get('job_main', function (Request $request) {
+    return view('job_main');
+})->middleware(['auth'])->name('job_main');
+
 Route::get('job_add', function (Request $request) {
     return view('job_add');
 })->middleware(['auth'])->name('job_add');

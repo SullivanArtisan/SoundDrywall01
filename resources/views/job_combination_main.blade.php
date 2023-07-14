@@ -55,7 +55,7 @@
 		<div>
 			<div class="row m-4">
 				<div>
-					<h2 class="text-muted pl-2">Job Combination for {{$job->job_name}}:</h2>
+					<h2 class="text-muted pl-2">Job Combination for <span style="font-family: 'Times New Roman';font-weight: bold;font-style: italic; color:black !important">{{$job->job_name}}</span>:</h2>
 				</div>
 			</div>
             <div>
