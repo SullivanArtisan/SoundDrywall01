@@ -75,23 +75,31 @@
                                 <div class="col bg-info text-white"><h5 class="mt-1">Materials:&nbsp;</h5></div>
                             </div>
                             <div class="row my-2">
-                            <div class="col">
-                                <?php 
-                                    $listed_items = 0;
-                                    foreach ($materials as $material) {
-                                        $listed_items++;
-                                        if ($listed_items % 2) {
-                                            $bg_color = "Lavender";
-                                        } else {
-                                            $bg_color = "PaleGreen";
+                                <div class="col">
+                                    <div class="row text-white" style="max-height: 400px; background-color:grey; font-weight:bold !important;">
+                                        <div class="col">Type</div>
+                                        <div class="col">Name</div>
+                                    </div>
+                                    <?php 
+                                        $listed_items = 0;
+                                        foreach ($materials as $material) {
+                                            $listed_items++;
+                                            if ($listed_items % 2) {
+                                                $bg_color = "Lavender";
+                                            } else {
+                                                $bg_color = "PaleGreen";
+                                            }
+                                            $outContents = "<div class=\"row\" style=\"background-color:".$bg_color."\">";
+                                            $outContents .= "<div class=\"col mt-1\">".$material->mtrl_type."</div>";
+                                            $outContents .= "<div class=\"col mt-1\">".$material->mtrl_name."</div>";
+                                            $outContents .= "</div>";
+                                            echo $outContents;
                                         }
-                                        echo "<div class=\"row\" style=\"background-color:".$bg_color."\"><div class=\"col mt-1\">".$material->mtrl_type."</div></div>";
-                                    }
-                                ?>
-                            </div>
+                                    ?>
+                                </div>
                             </div>
                             <div class="row d-flex justify-content-center">
-                                <button class="btn-success m-3 rounded">Add Material</button>
+                                <button class="btn-success m-3 rounded" onclick="AddMaterial()">Add a New Material to This Job</button>
                             </div>
                         </div>
                     </div>
@@ -101,27 +109,36 @@
                                 <div class="col bg-info text-white"><h5 class="mt-1">Assistants:&nbsp;</h5></div>
                             </div>
                             <div class="row my-2">
-                            <div class="col">
-                                <?php 
-                                    $listed_items = 0;
-                                    foreach ($associations as $association) {
-                                        $staff_origin = Staff::where('id', $association->jobdsp_staff_id)->first();
-                                        $listed_items++;
-                                        if ($listed_items % 2) {
-                                            $bg_color = "Lavender";
-                                        } else {
-                                            $bg_color = "PaleGreen";
+                                <div class="col">
+                                    <div class="row text-white" style="max-height: 400px; background-color:grey; font-weight:bold !important;">
+                                        <div class="col-4">First Name</div>
+                                        <div class="col-8">Last Name</div>
+                                    </div>
+                                    <?php 
+                                        $listed_items = 0;
+                                        foreach ($associations as $association) {
+                                            $staff_origin = Staff::where('id', $association->jobdsp_staff_id)->first();
+                                            $listed_items++;
+                                            if ($listed_items % 2) {
+                                                $bg_color = "Lavender";
+                                            } else {
+                                                $bg_color = "PaleGreen";
+                                            }
+                                            $outContents = "<div class=\"row\" style=\"background-color:".$bg_color."\">";
+                                            $outContents .= "<div class=\"col-4 mt-1\">";
+                                            $outContents .= "<a href=\"job_combination_staff_selected?jobId=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
+                                            $outContents .= $staff_origin->f_name."</a></div>";
+                                            $outContents .= "<div class=\"col-8 mt-1\">";
+                                            $outContents .= "<a href=\"job_combination_staff_selected?jobId=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
+                                            $outContents .= $staff_origin->l_name."</a></div>";
+                                            $outContents .= "</div>";
+                                            echo $outContents;
                                         }
-                                        $outContents = "<div class=\"row\" style=\"background-color:".$bg_color."\"><div class=\"col mt-1\">";
-                                        $outContents .= "<a href=\"job_combination_staff_selected?jobId=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
-                                        $outContents .= $staff_origin->f_name." ".$staff_origin->l_name."</a></div></div>";
-                                        echo $outContents;
-                                    }
-                                ?>
-                            </div>
+                                    ?>
+                                </div>
                             </div>
                             <div class="row d-flex justify-content-center">
-                                <button class="btn-success m-3 rounded">Add Assistant</button>
+                                <button class="btn-success m-3 rounded" onclick="AddAssistant()">Add Another Assistant to This Job</button>
                             </div>
                         </div>
                     </div>
@@ -135,7 +152,16 @@
                 alert(msgToShow);
             }
 
-			function myConfirmation() {
+			function AddMaterial() {
+                jobId = {!!json_encode($job_id)!!};
+                event.preventDefault();
+                window.location = './material_add?jobId='+jobId;
+			}
+
+			function AddAssistant() {
+                jobId = {!!json_encode($job_id)!!};
+                event.preventDefault();
+                window.location = './job_dispatch_by_adding?jobId='+jobId;
 			}
 		</script>
 	@endsection

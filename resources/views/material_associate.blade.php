@@ -3,7 +3,7 @@
 	use App\Models\JobDispatch;
 	use App\Models\Job;
 
-    $materials = Material::where('mtrl_status', '<>', 'DELETED')->orderBy('mtrl_name', 'asc')->get();
+    $materials = Material::where('mtrl_status', '<>', 'DELETED')->where('mtrl_job_id', '0')->orderBy('mtrl_name', 'asc')->get();
     $jobs = Job::all()->where('job_assistants_complete', '=', '0')->where('job_assistants_complete', '<', 'job_total_active_assistants')->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED');
 ?>
 
@@ -181,13 +181,13 @@
         }
 
         function EditJob(inputId) {
-            jobId = inputId.substring(2, inputId.length);
-            window.location = './job_selected?jobId='+jobId;
+            // jobId = inputId.substring(2, inputId.length);
+            // window.location = './job_selected?jobId='+jobId;
         }
 
         function EditMaterial(inputId) {
-            mtrlId = inputId.substring(2, inputId.length);
-            window.location = './material_selected?id='+mtrlId;
+            // mtrlId = inputId.substring(2, inputId.length);
+            // window.location = './material_selected?id='+mtrlId;
         }
     </script>
 @endsection

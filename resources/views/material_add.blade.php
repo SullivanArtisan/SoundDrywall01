@@ -18,6 +18,11 @@
 	<?php
 		$picPath = Session::get('uploadPath');
 		Session::forget(['uploadPath']);
+
+		$job_id = "";
+		if (isset($_GET['jobId'])) {
+			$job_id = $_GET['jobId'];
+		}
 	?>
 	<div>
 		<h2 class="text-muted pl-2 mb-2">Add New Material</h2>
@@ -42,19 +47,28 @@
                         <div class="col"><label class="col-form-label">Used for Job:&nbsp;</label></div>
 						<div class="col">
 							<?php
-							$tagHead = "<input list=\"job_name\" name=\"job_name\" id=\"jobnameinput\" class=\"form-control mt-1 my-text-height\" ";
-							$tagTail = "><datalist id=\"job_name\">";
-
-							$jobs = Job::all()->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'COMPLETED')->sortBy('job_name');
-							foreach($jobs as $job) {
-								$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $job->job_name).">";
-							}
-							$tagTail.= "</datalist>";
-							// if (isset($_GET['selJobId'])) {
-							// 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
-							// } else {
-								echo $tagHead."placeholder=\"\" ".$tagTail;
-							// }
+								if ($job_id == "") {
+									$tagHead = "<input list=\"job_name\" name=\"job_name\" id=\"jobnameinput\" class=\"form-control mt-1 my-text-height\" ";
+									$tagTail = "><datalist id=\"job_name\">";
+		
+									$jobs = Job::all()->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'COMPLETED')->sortBy('job_name');
+									foreach($jobs as $job) {
+										$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $job->job_name).">";
+									}
+									$tagTail.= "</datalist>";
+									// if (isset($_GET['selJobId'])) {
+									// 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
+									// } else {
+										echo $tagHead."placeholder=\"\" ".$tagTail;
+									// }
+								} else {
+									$job = Job::where('id', $job_id)->first();
+									if ($job) {
+										echo "<input class=\"form-control mt-1 my-text-height\" readonly type=\"text\" id=\"job_name\" name=\"job_name\" value=\"".$job->job_name."\">";
+									} else {
+										Log::Info('Failed to access the target job object while doing the "Add a New Material to This Job" button (for job '.$job_id.'".');
+									}
+								}
 							?>
 						</div>
                     </div>

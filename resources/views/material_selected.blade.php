@@ -79,11 +79,11 @@
 									$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $job->job_name).">";
 								}
 								$tagTail.= "</datalist>";
-								// if (isset($_GET['selJobId'])) {
-								// 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
-								// } else {
+								if ($selJob) {
 									echo $tagHead."placeholder=\"\" value=\"".$selJob->job_name."\"".$tagTail;
-								// }
+								} else {
+									echo $tagHead."placeholder=\"\" value=\"\"".$tagTail;
+								}
 								?>
 							</div>
 						</div>
@@ -126,10 +126,10 @@
 							<div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.01" id="mtrl_price" name="mtrl_price" value="{{$material->mtrl_price}}"></div>
 						</div>
 						<div class="row">
-							<div class="col"><label class="col-form-label">Material ID:&nbsp;</label></div>
-							<div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="mtrl_id" name="mtrl_id" value="{{$material->id}}"></div>
 							<div class="col"><label class="col-form-label">Material Type:&nbsp;</label></div>
-							<div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="mtrl_type" name="mtrl_type" value="{{$material->mtrl_type}}"></div>
+							<div class="col"><input class="form-control mt-1 my-text-height" readonly id="mtrl_type" name="mtrl_type" value="{{$material->mtrl_type}}"></div>
+							<div class="col"><label class="col-form-label">&nbsp;</label></div>
+							<div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="mtrl_id" name="mtrl_id" value="{{$material->id}}"></div>
 						</div>
 						<div class="row my-3">
 							<div class="w-25"></div>

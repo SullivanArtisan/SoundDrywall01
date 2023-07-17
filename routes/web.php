@@ -268,37 +268,49 @@ Route::post('job_combination_staff_remove', function (Request $request) {
 })->middleware(['auth'])->name('job_combination_staff_remove');
 
 Route::get('job_dispatch', function (Request $request) {
-    return view('job_dispatch');
+		return view('job_dispatch');
 })->middleware(['auth'])->name('job_dispatch');
+
+Route::get('job_dispatch_by_adding', function (Request $request) {
+    return view('job_dispatch_by_adding');
+})->middleware(['auth'])->name('job_dispatch_by_adding');
 
 Route::post('job_dispatch_to_staff', function (Request $request) {
 	$job_id 	= $_POST['job_id'];
 	$staff_id	= $_POST['staff_id'];
 	$job 		= Job::where('id', $job_id)->first();
-	$association = new JobDispatch;
+	$bound		= JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->first();
+	
+	if ($bound) {	// association existed
+		Log::Info('Association existed, so no need to dispatch job '.$job_id.'to staff '.$staff_id."!");
+		return "jobDispatchOK=true";	
+	} else {
+		$association = new JobDispatch;
 
-	if ($association) {
-		$association->jobdsp_job_id = $job_id;
-		$association->jobdsp_staff_id = $staff_id;
-		$res = $association->save();
-		if (!$res) {
-			Log::Info('Failed to dispatch job '.$job_id.'to staff '.$staff_id."!");
-			return "jobDispatchOK=false";	
-		} else {
-			$job->job_total_assistants 			= $job->job_total_assistants + 1;
-			$job->job_total_active_assistants	= $job->job_total_active_assistants + 1;
-			$res = $job->save();
+		if ($association) {
+			$association->jobdsp_job_id = $job_id;
+			$association->jobdsp_staff_id = $staff_id;
+			$association->jobdsp_status = 'CREATED';
+			$res = $association->save();
 			if (!$res) {
-				Log::Info('Failed to update job_total_assistants and job_total_active_assistants while dispatch job '.$job_id.'to staff '.$staff_id."!");
+				Log::Info('Failed to dispatch job '.$job_id.'to staff '.$staff_id."!");
 				return "jobDispatchOK=false";	
 			} else {
-				Log::Info('Successfully dispatched job '.$job_id.'to staff '.$staff_id."!");
-				return "jobDispatchOK=true";	
+				$job->job_total_assistants 			= $job->job_total_assistants + 1;
+				$job->job_total_active_assistants	= $job->job_total_active_assistants + 1;
+				$res = $job->save();
+				if (!$res) {
+					Log::Info('Failed to update job_total_assistants and job_total_active_assistants while dispatch job '.$job_id.'to staff '.$staff_id."!");
+					return "jobDispatchOK=false";	
+				} else {
+					Log::Info('Successfully dispatched job '.$job_id.'to staff '.$staff_id."!");
+					return "jobDispatchOK=true";	
+				}
 			}
+		} else {
+			Log::Info('Failed to new a JobDispatch object for job '.$job_id.'and staff '.$staff_id."!");
+			return "jobDispatchOK=false";	
 		}
-	} else {
-		Log::Info('Failed to new a JobDispatch object for job '.$job_id.'and staff '.$staff_id."!");
-		return "jobDispatchOK=false";	
 	}
 })->middleware(['auth'])->name('job_dispatch_to_staff');
 

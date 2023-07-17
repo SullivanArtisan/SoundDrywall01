@@ -129,7 +129,7 @@
                                 <div class="col">
                                     <div class="row">
                                         <button class="btn btn-success mx-4" type="submit" id="btn_save">Save</button>
-                                        <button class="btn btn-info mx-3 mr-2" type="button" onclick="DoJobCombination();">Job Combination</button>
+                                        <button class="btn btn-info mx-3 mr-2" type="button" onclick="DoJobCombination();">Edit Job Association</button>
                                         <button class="btn btn-secondary mx-3 ml-2" type="button"><a href="{{route('project_selected', ['id'=>$job->job_proj_id])}}">Cancel</a></button>
                                     </div>
                                 </div>
