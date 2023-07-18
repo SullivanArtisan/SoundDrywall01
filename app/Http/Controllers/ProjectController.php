@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
-use App\Models\Customer;
+use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -17,10 +17,10 @@ class ProjectController extends Controller
 		]);
 		
         $project = new Project;
-        $customer = Customer::where('cstm_account_name', $request->proj_cstmr_name)->first();
+        $client = Client::where('clnt_name', $request->proj_cstmr_name)->first();
 
-        if ($project && $customer) {
-            $project->proj_cstmr_id             = $customer->id;
+        if ($project && $client) {
+            $project->proj_cstmr_id             = $client->id;
             // $project->proj_total_active_jobs    = $request->proj_total_active_jobs;
             // $project->proj_total_jobs           = $request->proj_total_active_jobs;
             $project->proj_status               = $request->proj_status;
@@ -50,13 +50,13 @@ class ProjectController extends Controller
         ]);
         
         $project = Project::where('id', $request->id)->first();
-        $customer = Customer::where('cstm_account_name', $request->proj_cstmr_name)->first();
+        $client = Client::where('clnt_name', $request->proj_cstmr_name)->first();
 
-        if (!isset($customer)) {
-            return redirect()->route('op_result.project')->with('status', ' <span style="color:red">The connection between project and customer is broken!</span>');
+        if (!isset($client)) {
+            return redirect()->route('op_result.project')->with('status', ' <span style="color:red">The connection between project and client is broken!</span>');
         }
 
-        $project->proj_cstmr_id             = $customer->id;
+        $project->proj_cstmr_id             = $client->id;
         // $project->proj_total_active_jobs    = $request->proj_total_active_jobs;
         // $project->proj_total_jobs           = $request->proj_total_active_jobs;
         $project->proj_status               = $request->proj_status;

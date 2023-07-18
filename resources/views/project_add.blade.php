@@ -1,5 +1,5 @@
 <?php
-	use App\Models\Customer;
+	use App\Models\Client;
 	use App\Models\Project;
 	use Illuminate\Support\Facades\Session;
 
@@ -9,13 +9,13 @@
     if (isset($_GET['projId'])) {
 		$proj_id = $_GET['projId'];
         $project = Project::where('id', $proj_id)->first();
-        $customer = Customer::where('id', $project->proj_cstmr_id)->first();
+        $client = Client::where('id', $project->proj_cstmr_id)->first();
 
 		$jobs = \App\Models\Job::where('job_proj_id', $proj_id)->where('job_status', '<>', 'DELETED')->get();
 
-        if ($project && $customer) {
+        if ($project && $client) {
             $proj_notes = $project->proj_notes;
-            $cstmr_name = $customer->cstm_account_name;
+            $cstmr_name = $client->clnt_name;
         }
     } else {
         $proj_id = "";
@@ -121,9 +121,9 @@
                                             $tagHead = "<input list=\"proj_cstmr_name\" name=\"proj_cstmr_name\" id=\"projcstmrnameinput\" class=\"form-control mt-1 my-text-height\" ";
                                             $tagTail = "><datalist id=\"proj_cstmr_name\">";
 
-                                            $customers = Customer::all()->sortBy('cstm_account_name');
-                                            foreach($customers as $customer) {
-                                                $tagTail.= "<option value=".str_replace(' ', '&nbsp;', $customer->cstm_account_name).">";
+                                            $clients = Client::all()->sortBy('clnt_name');
+                                            foreach($clients as $client) {
+                                                $tagTail.= "<option value=".str_replace(' ', '&nbsp;', $client->clnt_name).">";
                                             }
                                             $tagTail.= "</datalist>";
                                             // if (isset($_GET['selJobId'])) {

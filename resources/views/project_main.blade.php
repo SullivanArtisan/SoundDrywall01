@@ -91,15 +91,15 @@
 		
 		// Body Lines
 		foreach ($projects as $project) {
-            $customer_name = "";
-            $customer = \App\Models\Customer::where('id', $project->proj_cstmr_id)->first();
-            if ($customer) {
-                $customer_name = $customer->cstm_account_name;
+            $v_name = "";
+            $client = \App\Models\Client::where('id', $project->proj_cstmr_id)->first();
+            if ($client) {
+                $client_name = $client->clnt_name;
             }
             $outContents = "<div class=\"row\">";
                 $outContents .= "<div class=\"col-3\">";
 					$outContents .= "<a href=\"project_selected?id=$project->id\">";
-					$outContents .= $customer_name;
+					$outContents .= $client_name;
 					$outContents .= "</a>";
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-2\">";

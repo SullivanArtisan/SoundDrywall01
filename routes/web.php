@@ -14,6 +14,7 @@ use App\Http\Controllers\PowerUnitController;
 use App\Http\Controllers\ZoneController;
 use App\Http\Controllers\TerminalController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\CstmAccountPriceController;
 use App\Http\Controllers\DriverPricesController;
@@ -25,6 +26,7 @@ use App\Http\Controllers\ContainerController;
 use App\Models\Staff;
 use App\Models\Material;
 use App\Models\Provider;
+use App\Models\Client;
 use App\Models\Project;
 use App\Models\Job;
 use App\Models\JobDispatch;
@@ -431,12 +433,12 @@ Route::get('/project_add', function () {
 
 Route::post('/project_add', function (Request $request) {
 	$cName = str_replace("&nbsp;", " ", $_POST['proj_cstmr_name']);
-	$customer = Customer::where('cstm_account_name', $cName)->first();
+	$client = Client::where('clnt_name', $cName)->first();
 
-	if ($customer) {
+	if ($client) {
 		$project = new Project;
 		if ($project) {
-			$project->proj_cstmr_id 	= $customer->id;
+			$project->proj_cstmr_id 	= $client->id;
 			$project->proj_total_active_jobs	= $_POST['proj_total_active_jobs'];
 			// $project->proj_total_jobs	= strval($project->proj_total_jobs + 1);
 			$project->proj_status 		= $_POST['proj_status'];
@@ -731,6 +733,35 @@ Route::get('/customer_accprice_add', function () {
 })->middleware(['auth'])->name('customer_accprice_add');
 
 Route::post('/customer_accprice_update', [CstmAccountPriceController::class, 'update'])->name('customer_accprice_update');
+
+//////////////////////////////// For Clients ////////////////////////////////
+Route::get('/client_main', function () {
+    return view('client_main');
+})->middleware(['auth'])->name('client_main');
+
+Route::get('client_selected', function (Request $request) {
+    return view('client_selected');
+})->middleware(['auth'])->name('client_selected');
+
+Route::get('client_condition_selected', function (Request $request) {
+    return view('client_condition_selected');
+})->middleware(['auth'])->name('client_condition_selected');
+
+Route::get('/client_add', function () {
+    return view('client_add');
+})->middleware(['auth'])->name('client_add');
+
+Route::get('/client_delete', function () {
+	$id = $_GET['id'];
+	$pclient = Client::where('id', $id)->first();
+	$clientName = $client->clnt_name;
+	$res = $client->delete();
+	if (!$res) {
+		return redirect()->route('op_result.client')->with('status', 'The client, <span style="font-weight:bold;font-style:italic;color:red">'.$clientName.'</span>, cannot be deleted for some reason.');	
+	} else {
+		return redirect()->route('op_result.client')->with('status', 'The client, <span style="font-weight:bold;font-style:italic;color:blue">'.$clientName.'</span>, has been deleted successfully.');	
+	}
+})->middleware(['auth'])->name('client');
 
 //////////////////////////////// For Drivers ////////////////////////////////
 Route::get('/driver_main', function () {
@@ -1088,6 +1119,10 @@ Route::name('op_result.')->group(function () {
 		return view('op_result')->withOprand('provider');
 	})->middleware(['auth'])->name('provider');
 
+	Route::get('op_result_client', function () {
+		return view('op_result')->withOprand('client');
+	})->middleware(['auth'])->name('client');
+
 	Route::get('op_result_user', function () {
 		return view('op_result')->withOprand('user');
 	})->middleware(['auth'])->name('user');
@@ -1154,6 +1189,9 @@ Route::name('op_result.')->group(function () {
 
 	Route::post('/provider_result', [ProviderController::class, 'store'])->name('provider_add');
 	Route::post('/provider_update', [ProviderController::class, 'update'])->name('provider_update');
+
+	Route::post('/client_result', [ClientController::class, 'store'])->name('client_add');
+	Route::post('/client_update', [ClientController::class, 'update'])->name('client_update');
 
 	Route::post('/system_user_result', [UserController::class, 'store'])->name('system_user_add');
 	Route::post('/system_user_update', [UserController::class, 'update'])->name('system_user_update');

@@ -1,6 +1,6 @@
 <?php
 	use App\Models\Project;
-	use App\Models\Customer;
+	use App\Models\Client;
 	use App\Models\Status;
 	use App\Models\Job;
 ?>
@@ -16,15 +16,15 @@
 
 <?php
 	$id = $_GET['id'];
-    $customer_name = "";
+    $client_name = "";
     $job_add_ok = "";
     $job_update_ok = "";
     $job_delete_ok = "";
 	if ($id) {
 		$project = Project::where('id', $id)->first();
-        $customer = Customer::where('id', $project->proj_cstmr_id)->first();
+        $client = Client::where('id', $project->proj_cstmr_id)->first();
         $jobs = Job::where('job_proj_id', $id)->where('job_status', '<>', 'DELETED')->orderBy('created_at')->get();
-        $customer_name = $customer->cstm_account_name;
+        $client_name = $client->clnt_name;
         if (isset($_GET['JobAddOk'])) {
             $job_add_ok = $_GET['JobAddOk'];
         }
@@ -60,7 +60,7 @@
 		<div>
 			<div class="row m-4">
 				<div>
-					<h2 class="text-muted pl-2">Project (for customer <span style="font-family: 'Times New Roman';font-weight: bold;font-style: italic; color:black !important">{{$customer->cstm_account_name}})</span>:</h2>
+					<h2 class="text-muted pl-2">Project (for client <span style="font-family: 'Times New Roman';font-weight: bold;font-style: italic; color:black !important">{{$client->clnt_name}})</span>:</h2>
 				</div>
 				<div class="col my-auto ml-5">
 					<button class="btn btn-danger me-2" type="button"><a href="project_delete?id={{$project->id}}" onclick="return myConfirmation();">Delete</a></button>
@@ -86,12 +86,12 @@
                             <div class="col"><label class="col-form-label">Customer Name:&nbsp;</label></div>
                             <div class="col">
                                 <?php
-                                $tagHead = "<input list=\"proj_cstmr_name\" name=\"proj_cstmr_name\" id=\"projcstmrnameinput\" class=\"form-control mt-1 my-text-height\" value=\"".$customer_name."\"";
+                                $tagHead = "<input list=\"proj_cstmr_name\" name=\"proj_cstmr_name\" id=\"projcstmrnameinput\" class=\"form-control mt-1 my-text-height\" value=\"".$client_name."\"";
                                 $tagTail = "><datalist id=\"proj_cstmr_name\">";
 
-                                $customers = Customer::all()->sortBy('cstm_account_name');
-                                foreach($customers as $customer) {
-                                    $tagTail.= "<option value=".str_replace(' ', '&nbsp;', $customer->cstm_account_name).">";
+                                $clients = Client::all()->sortBy('clnt_name');
+                                foreach($clients as $client) {
+                                    $tagTail.= "<option value=".str_replace(' ', '&nbsp;', $client->clnt_name).">";
                                 }
                                 $tagTail.= "</datalist>";
                                 // if (isset($_GET['selJobId'])) {
