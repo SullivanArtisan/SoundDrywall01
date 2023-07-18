@@ -1,5 +1,4 @@
 <?php
-	use App\Models\Customer;
 	use App\Models\Project;
 	use App\Models\JobType;
 	use App\Models\Job;
@@ -11,7 +10,6 @@
     if (isset($_GET['projId'])) {
 		$proj_id = $_GET['projId'];
         $project = Project::where('id', $proj_id)->first();
-        $customer = Customer::where('id', $project->proj_cstmr_id)->first();
     } else {
         $proj_id = "";
     }
