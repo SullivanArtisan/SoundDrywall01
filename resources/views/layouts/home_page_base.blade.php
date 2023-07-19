@@ -87,7 +87,7 @@
         <!-- Page Content  -->
         <div id="content">
 
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <nav class="row mb-2">
                 <div class="container-fluid">
 
 					<!--
@@ -100,38 +100,27 @@
                     </button>
 					-->
 
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <div class="col-md-2">
+                    <div class="row" id="navbarSupportedContent">
+                        <div class="col-2">
 							<div><img class="rounded" style="max-width:100%; height:auto" src="assets/img/2020.jpg"></div>
 						</div>
-						<div class="col-md-6 text-muted">
-                            <h2 style="font-family: Georgia;">TwentyTwenty Contracting Ltd.</h3>
+						<div class="col-8 text-muted">
+                            <h2 style="font-family: Georgia;">TwentyTwenty Contracting Ltd.</h2>
 						</div>
-                        <ul class="nav navbar-nav ml-auto">
-                            <div class="mx-3">
+                        <div class="col-2">
+                            <div class="my-2">
 							@yield('goback')
                             </div>
 							<form method="POST" action="{{ route('logout') }}" style="cursor: pointer">
 								@csrf
 
-								<a style="margin-right: 50px; text-decoration:underline;"  class="text-warning"
+								<a style="text-decoration:underline;"  class="text-warning"
 									onclick="event.preventDefault(); this.closest('form').submit();">
 									<i></i>
 									{{ __('Log Out') }}
 								</a>
 							</form>
-							<!--
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Page</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Page</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Page</a>
-                            </li>
-							-->
-                        </ul>
+                        </div>
                     </div>
                 </div>
             </nav>
