@@ -45,7 +45,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="#adminSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">DB Management</a>
+                    <a href="#adminSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">DB Mgmnt</a>
                     <ul class="collapse list-unstyled" id="adminSubmenu">
                         <li> <a href="{{route('client_main')}}">Customers</a> </li>
                         <li> <a href="{{route('provider_main')}}">Providers</a> </li>
@@ -105,8 +105,17 @@
 							<div><img class="rounded" style="max-width:100%; height:auto" src="assets/img/2020.jpg"></div>
 						</div>
 						<div class="col-8 text-muted">
-                            <h2 style="font-family: Georgia;">TwentyTwenty Contracting Ltd.</h2>
-						</div>
+                            <div class="row">
+                                <h2 style="font-family: Georgia;">TwentyTwenty Contracting Ltd.</h2>
+                            </div>
+                            <div class="row mt-2">
+                                <div>
+                                    <button type="button" id="sidebarCollapse" class="btn text-info" style="background-color:lightgrey">
+                                        <span>Sidebar</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-2">
                             <div class="my-2">
 							@yield('goback')
