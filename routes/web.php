@@ -240,12 +240,12 @@ Route::get('/material_delete', function () {
 	$id = $_GET['id'];
    $material = Material::where('id', $id)->first();
    $material->mtrl_status    = "DELETED";
-   $materialName = $material->mtrl_name;
+   $materialType = $material->mtrl_type;
    $res = $material->save();
    if (!$res) {
-	   return redirect()->route('op_result.material')->with('status', 'The material, <span style="font-weight:bold;font-style:italic;color:red">'.$materialName.'</span>, cannot be deleted for some reason.');	
+	   return redirect()->route('op_result.material')->with('status', 'The material of type <span style="font-weight:bold;font-style:italic;color:red">'.$materialType.'</span>, cannot be deleted for some reason.');	
    } else {
-	   return redirect()->route('op_result.material')->with('status', 'The material, <span style="font-weight:bold;font-style:italic;color:blue">'.$materialName.'</span>, has been deleted successfully.');	
+	   return redirect()->route('op_result.material')->with('status', 'The material of type <span style="font-weight:bold;font-style:italic;color:blue">'.$materialType.'</span>, has been deleted successfully.');	
    }
 })->middleware(['auth'])->name('material_delete');
 

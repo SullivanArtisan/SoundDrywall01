@@ -73,7 +73,7 @@
 			$outContents .= "<div class=\"col-3 align-middle\">";
 				$sortParms = "?sort_key_material=mtrl_name&sort_time=".time();
 				$outContents .= "<a href=\"material_main".$sortParms."\">";
-				$outContents .= "Name";
+				$outContents .= "Type";
 				if ($sort_icon == 'asc') {
 					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-up-square\"></a></i>";
 				} else {
@@ -81,7 +81,7 @@
 				}
 			$outContents .= "</div>";
             $outContents .= "<div class=\"col-3\">";
-				$outContents .= "Type";
+				$outContents .= "Model";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-1\">";
 				$outContents .= "for Job";
@@ -103,12 +103,12 @@
             $outContents = "<div class=\"row\">";
 				$outContents .= "<div class=\"col-3\">";
 					$outContents .= "<a href=\"material_selected?id=$material->id\">";
-					$outContents .= $material->mtrl_name;
+					$outContents .= $material->mtrl_type;
 					$outContents .= "</a>";
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-3\">";
 					$outContents .= "<a href=\"material_selected?id=$material->id\">";
-					$outContents .= $material->mtrl_type;
+					$outContents .= $material->mtrl_model;
 					$outContents .= "</a>";
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-1\">";

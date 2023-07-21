@@ -74,7 +74,7 @@
 			@endif
 			<div class="row mx-1">
 				<div class="col">
-					<form method="post" action="{{url('staff_update')}}">
+					<form method="post" action="{{route('op_result.staff_update', ['test'=>'HOHOHO'])}}">
 						@csrf
 						<div class="row">
 							<div class="col"><label class="col-form-label">First Name:&nbsp;</label></div>
@@ -120,6 +120,10 @@
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" name="email" value="{{$staff->email}}"></div>
 							<div class="col"><label class="col-form-label">Mobile Phone:&nbsp;</label></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" name="mobile_phone" value="{{$staff->mobile_phone}}"></div>
+						</div>
+						<div class="row">
+                            <div class="col"><label class="col-form-label">&nbsp;</label></div>
+							<div class="col"><input class="form-control mt-1 my-text-height" type="hidden" name="id" value="{{$staff->id}}"></div>
 						</div>
 						<div class="row my-3">
 							<div class="w-25"></div>

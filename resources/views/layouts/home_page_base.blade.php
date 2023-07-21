@@ -110,7 +110,7 @@
                             </div>
                             <div class="row mt-2">
                                 <div>
-                                    <button type="button" id="sidebarCollapse" class="btn text-info" style="background-color:lightgrey">
+                                    <button type="button" id="sidebarCollapse" class="btn" style="background-color:#7386D5; color:LightCyan">
                                         <span>Sidebar</span>
                                     </button>
                                 </div>

@@ -90,16 +90,16 @@
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="mtrl_amount_unit" name="mtrl_amount_unit"></div>
                     </div>
                     <div class="row">
-                        <div class="col"><label class="col-form-label">Amount Left:&nbsp;</label></div>
-                        <div class="col"><input class="form-control mt-1 my-text-height" readonly type="number" step="0.01" id="mtrl_amount_left" name="mtrl_amount_left"></div>
-                        <div class="col"><label class="col-form-label">Price:&nbsp;</label></div>
-                        <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.01" id="mtrl_price" name="mtrl_price"></div>
+                        <div class="col"><label class="col-form-label">Unit Price:&nbsp;</label></div>
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.01" id="mtrl_unit_price" name="mtrl_unit_price"></div>
+                        <div class="col"><label class="col-form-label">Total Price:&nbsp;</label></div>
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.01" id="mtrl_total_price" name="mtrl_total_price"></div>
                     </div>
                     <div class="row">
-                        <div class="col"><label class="col-form-label">Material Type:&nbsp;</label></div>
-                        <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="mtrl_type" name="mtrl_type" value="DRYWALL SHEET"></div>
-                        <div class="col"><label class="col-form-label">&nbsp;</label></div>
-                        <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" ></div>
+						<div class="col"><label class="col-form-label">Amount Left:&nbsp;</label></div>
+                        <div class="col"><input class="form-control mt-1 my-text-height" readonly type="number" step="0.01" id="mtrl_amount_left" name="mtrl_amount_left"></div>
+						<div class="col"><label class="col-form-label">&nbsp;</label></div>
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="hidden"></div>
                     </div>
                     <div class="row my-3">
                         <div class="w-25"></div>
