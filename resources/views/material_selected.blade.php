@@ -19,6 +19,7 @@
 	$id = $_GET['id'];
 	if ($id) {
 		$material = Material::where('id', $id)->first();
+		$mtrl_type = $material->mtrl_type;
 	}
 ?>
 
@@ -87,13 +88,21 @@
 								}
 								?>
 							</div>
-							<div class="col"><label class="col-form-label">Model:&nbsp;</label></div>
+							<div class="col"><label class="col-form-label">Model/Description:&nbsp;</label></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" id="mtrl_model" name="mtrl_model" value="{{$material->mtrl_model}}"></div>
 						</div>
 						<div class="row">
-							<div class="col"><label class="col-form-label">Item Size:&nbsp;</label></div>
+							@if ($mtrl_type == 'DRYWALL') 
+								<div class="col"><label class="col-form-label">Thickness:&nbsp;</label></div>
+							@else
+								<div class="col"><label class="col-form-label">Item Size:&nbsp;</label></div>
+							@endif
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" id="mtrl_size" name="mtrl_size" value="{{$material->mtrl_size}}"></div>
-							<div class="col"><label class="col-form-label">Size Unit:&nbsp;</label></div>
+							@if ($mtrl_type == 'DRYWALL') 
+								<div class="col"><label class="col-form-label">Thickness Unit:&nbsp;</label></div>
+							@else
+								<div class="col"><label class="col-form-label">Size Unit:&nbsp;</label></div>
+							@endif
 							<div class="col">
 								<?php
 									$tagHead = "<input list=\"mtrl_size_unit\" name=\"mtrl_size_unit\" id=\"mtrlsizeunitinput\" class=\"form-control mt-1 my-text-height\" ";

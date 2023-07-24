@@ -90,7 +90,7 @@
 								}
 							?>
 						</div>
-						<div class="col"><label class="col-form-label">Model:&nbsp;</label></div>
+						<div class="col"><label class="col-form-label">Model/Description:&nbsp;</label></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="mtrl_model" name="mtrl_model"></div>
                     </div>
                     <div class="row">
@@ -245,13 +245,28 @@
 								}
 							?>
 						</div>
-						<div class="col"><label class="col-form-label">Model:&nbsp;</label></div>
+						<div class="col"><label class="col-form-label">Model/Description:&nbsp;</label></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="mtrl_model" name="mtrl_model"></div>
                     </div>
                     <div class="row">
-						<div class="col"><label class="col-form-label">Item Size:&nbsp;</label></div>
-                        <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="mtrl_size" name="mtrl_size"></div>
-                        <div class="col"><label class="col-form-label">Size Unit:&nbsp;</label></div>
+						<div class="col"><label class="col-form-label">Thickness:&nbsp;</label></div>
+						<div class="col">
+							<?php	//mtrl_size here for Drywall is actually mtrl_thickness !!
+								$tagHead = "<input list=\"mtrl_size\" name=\"mtrl_size\" id=\"mtrlsizeinput\" class=\"form-control mt-1 my-text-height\" ";
+								$tagTail = "><datalist id=\"mtrl_size\">";
+
+		
+								$tagTail.= "<option value=\"1/2\">";
+								$tagTail.= "<option value=\"5/8\">";
+								$tagTail.= "<option value=\"3/8\">";
+								$tagTail.= "<option value=\"1/4\">";
+								$tagTail.= "<option value=\"7/16\">";
+								$tagTail.= "<option value=\"1\">";
+								$tagTail.= "</datalist>";
+								echo $tagHead."placeholder=\"\"".$tagTail;
+							?>
+						</div>
+                        <div class="col"><label class="col-form-label">Thickness Unit:&nbsp;</label></div>
 						<div class="col">
 							<?php
 								$tagHead = "<input list=\"mtrl_size_unit\" name=\"mtrl_size_unit\" id=\"mtrlsizeunitinput\" class=\"form-control mt-1 my-text-height\" ";
@@ -266,7 +281,7 @@
 								// if (isset($_GET['selJobId'])) {
 								// 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
 								// } else {
-									echo $tagHead."placeholder=\"\" value=\"SqFt\"".$tagTail;
+									echo $tagHead."placeholder=\"\" value=\"INCH\"".$tagTail;
 								// }
 							?>
 						</div>
@@ -289,7 +304,7 @@
 								// if (isset($_GET['selJobId'])) {
 								// 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
 								// } else {
-									echo $tagHead."placeholder=\"\" value=\"Sq. Feets\"".$tagTail;
+									echo $tagHead."placeholder=\"\" value=\"PIECE\"".$tagTail;
 								// }
 							?>
 						</div>
@@ -380,7 +395,7 @@
 								}
 							?>
 						</div>
-						<div class="col"><label class="col-form-label">Model:&nbsp;</label></div>
+						<div class="col"><label class="col-form-label">Model/Description:&nbsp;</label></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="mtrl_model" name="mtrl_model"></div>
                     </div>
                     <div class="row">
@@ -515,7 +530,7 @@
 								}
 							?>
 						</div>
-						<div class="col"><label class="col-form-label">Model:&nbsp;</label></div>
+						<div class="col"><label class="col-form-label">Model/Description:&nbsp;</label></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="mtrl_model" name="mtrl_model"></div>
                     </div>
                     <div class="row">

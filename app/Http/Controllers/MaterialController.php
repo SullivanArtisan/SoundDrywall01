@@ -16,7 +16,6 @@ class MaterialController extends Controller
             $validated = $request->validate([
                 'mtrl_type'   => 'required',
                 'mtrl_model'  => 'required',
-                'mtrl_size'   => 'required',
                 'mtrl_amount' => 'required',
             ]);
             
@@ -66,7 +65,6 @@ class MaterialController extends Controller
             $validated = $request->validate([
                 'mtrl_type'   => 'required',
                 'mtrl_model'  => 'required',
-                'mtrl_size'   => 'required',
                 'mtrl_amount' => 'required',
             ]);
             
