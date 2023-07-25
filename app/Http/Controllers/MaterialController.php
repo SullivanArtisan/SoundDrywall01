@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\MyHelper;
 use App\Models\Project;
 use App\Models\Material;
 use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class MaterialController extends Controller
 {
@@ -18,9 +20,11 @@ class MaterialController extends Controller
                 'mtrl_model'  => 'required',
                 'mtrl_amount' => 'required',
             ]);
-            
+
             $material = new Material;
             $job = Job::where('job_name', $request->job_name)->first();
+
+            MyHelper::LogStaffAction(Auth::user()->id, 'Added material of type '.$request->mtrl_type.' (model= '.$request->mtrl_model.' for job '.$request->job_name.').', '');
     
             if ($material) {
                 if ($job) {
@@ -48,10 +52,11 @@ class MaterialController extends Controller
             }
             
             if(!$saved) {
-                $err_msg = "Material ".$request->mtrl_name." cannot be added.";
+                $err_msg = "Material ".$request->mtrl_type." cannot be added.";
                 Log::Info($err_msg);
                 return redirect()->route('op_result.material')->with('status', ' <span style="color:red">Material Has NOT Been inserted!</span>');
             } else {
+                MyHelper::LogStaffActionResult(Auth::user()->id, 'Added material OK.', '');
                 return redirect()->route('op_result.material')->with('status', 'The new material of type <span style="font-weight:bold;font-style:italic;color:blue">'.$request->mtrl_type.'</span>, has been inserted successfully.');
             }
         } catch (Exception $e) {
@@ -67,6 +72,8 @@ class MaterialController extends Controller
                 'mtrl_model'  => 'required',
                 'mtrl_amount' => 'required',
             ]);
+
+            MyHelper::LogStaffAction(Auth::user()->id, 'Updated material of ID '.$request->mtrl_id.' (model= '.$request->mtrl_model.').', '');
             
             $material = Material::where('id', $request->mtrl_id)->first();
             $job = Job::where('job_name', $request->job_name)->first();
@@ -97,11 +104,41 @@ class MaterialController extends Controller
             }
             
             if(!$saved) {
-                $err_msg = "Material ".$request->mtrl_name." cannot be updated.";
+                $err_msg = "Material ".$request->mtrl_type." cannot be updated.";
                 Log::Info($err_msg);
                 return redirect()->route('op_result.material')->with('status', ' <span style="color:red">Material Has NOT Been updated!</span>');
             } else {
+                MyHelper::LogStaffActionResult(Auth::user()->id, 'Updated material '.$material->id.' OK.', '');
                 return redirect()->route('op_result.material')->with('status', 'The material of type <span style="font-weight:bold;font-style:italic;color:blue">'.$request->mtrl_type.'</span>, has been updated successfully.');
+            }
+        } catch (Exception $e) {
+            echo 'Message: ' .$e->getMessage();
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+            $id = $_GET['id'];
+
+            MyHelper::LogStaffAction(Auth::user()->id, 'Deleted material of ID '.$id, '');
+
+            $material = Material::where('id', $id)->first();
+            if ($material) {
+                $material->mtrl_status    = "DELETED";
+                $materialType = $material->mtrl_type;
+                $res = $material->save();
+                if (!$res) {
+                    $err_msg = "Material ".$id." cannot be deleted.";
+                    Log::Info($err_msg);
+                    return redirect()->route('op_result.material')->with('status', 'The material of type <span style="font-weight:bold;font-style:italic;color:red">'.$materialType.'</span>, cannot be deleted for some reason.');	
+                } else {
+                    MyHelper::LogStaffActionResult(Auth::user()->id, 'Deleted material '.$id.' OK.', '');
+                    return redirect()->route('op_result.material')->with('status', 'The material of type <span style="font-weight:bold;font-style:italic;color:blue">'.$materialType.'</span>, has been deleted successfully.');	
+                }
+            } else {
+                Log::Info('Staff '.Auth::user()->id.' tried to delete a material, but the material '.$id.' object cannot be accessed');
+                return redirect()->route('op_result.material')->with('status', ' <span style="color:red">The material object cannot be accessed!</span>');
             }
         } catch (Exception $e) {
             echo 'Message: ' .$e->getMessage();

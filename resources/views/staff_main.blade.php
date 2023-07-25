@@ -53,10 +53,10 @@
 				session(['sort_order' => 'asc']);
 				$sort_icon = 'asc';
 			}
-			$staffs = \App\Models\Staff::orderBy($_GET['sort_key_staff'], session('sort_order', 'asc'))->paginate(10);
+			$staffs = \App\Models\Staff::orderBy($_GET['sort_key_staff'], session('sort_order', 'asc'))->where('status', '<>', 'DELETED')->paginate(10);
 			session(['sort_key_staff' => 'l_name']);
 		} else {
-			$staffs = \App\Models\Staff::orderBy($sortKey, $sortOrder)->paginate(10);
+			$staffs = \App\Models\Staff::orderBy($sortKey, $sortOrder)->where('status', '<>', 'DELETED')->paginate(10);
 		}
 
 		// Title Line

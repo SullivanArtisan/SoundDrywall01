@@ -124,7 +124,7 @@
 						</div>
 						<div class="row">
 							<div class="col"><label class="col-form-label">Total Amount:&nbsp;</label></div>
-							<div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.01" id="mtrl_amount" name="mtrl_amount" value="{{$material->mtrl_amount}}"></div>
+							<div class="col"><input class="form-control mt-1 my-text-height" type="number" id="mtrl_amount" name="mtrl_amount" value="{{$material->mtrl_amount}}"></div>
 							<div class="col"><label class="col-form-label">Amount Unit:&nbsp;</label></div>
 							<div class="col">
 								<?php
@@ -176,7 +176,7 @@
 						</div>
 						<div class="row">
 							<div class="col"><label class="col-form-label">Amount Left:&nbsp;</label></div>
-							<div class="col"><input class="form-control mt-1 my-text-height" readonly type="number" step="0.01" id="mtrl_amount_left" name="mtrl_amount_left" value="{{$material->mtrl_amount_left}}"></div>
+							<div class="col"><input class="form-control mt-1 my-text-height" readonly type="number" id="mtrl_amount_left" name="mtrl_amount_left" value="{{$material->mtrl_amount_left}}"></div>
 							<div class="col"><label class="col-form-label">Notes:&nbsp;</label></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" id="mtrl_notes" name="mtrl_notes" value="{{$material->mtrl_notes}}"></div>
 						</div>

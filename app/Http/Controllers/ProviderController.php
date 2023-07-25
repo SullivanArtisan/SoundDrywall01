@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\MyHelper;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Provider;
 use Illuminate\Http\Request;
 
@@ -14,36 +16,11 @@ class ProviderController extends Controller
 			'pvdr_address' => 'required',
 			'pvdr_city' => 'required',
 		]);
+
+		MyHelper::LogStaffAction(Auth::user()->id, 'Added provider '.$request->pvdr_name.' '.$request->l_name.' (city= '.$request->pvdr_city.').', '');
 		
         $provider = new Provider;
-        $provider->pvdr_name        = $request->pvdr_name;
-        $provider->pvdr_address     = $request->pvdr_address;
-        $provider->pvdr_city        = $request->pvdr_city;
-        $provider->pvdr_province    = $request->pvdr_province;
-        $provider->pvdr_postcode    = $request->pvdr_postcode;
-        $provider->pvdr_country     = $request->pvdr_country;
-        $provider->pvdr_contact     = $request->pvdr_contact;
-        $provider->pvdr_phone       = $request->pvdr_phone;
-        $provider->pvdr_email       = $request->pvdr_email;
-        $provider->pvdr_email       = $request->pvdr_email;
-        $saved = $provider->save();
-        
-        if(!$saved) {
-            return redirect()->route('op_result.provider')->with('status', ' <span style="color:red">Data Has NOT Been inserted!</span>');
-        } else {
-            return redirect()->route('op_result.provider')->with('status', 'The new provider,  <span style="font-weight:bold;font-style:italic;color:blue">'.$provider->pvdr_name.'</span>, has been inserted successfully.');
-        }
-    }
-	
-    public function update(Request $request)
-    {
-		$validated = $request->validate([
-			'pvdr_name' => 'required',
-			'pvdr_address' => 'required',
-			'pvdr_city' => 'required',
-		]);
-		
-			$provider = Provider::where('id', $request->id)->first();
+		if ($provider) {
 			$provider->pvdr_name        = $request->pvdr_name;
 			$provider->pvdr_address     = $request->pvdr_address;
 			$provider->pvdr_city        = $request->pvdr_city;
@@ -57,10 +34,81 @@ class ProviderController extends Controller
 			$saved = $provider->save();
 			
 			if(!$saved) {
+				Log::Info('Staff '.Auth::user()->id.' failed to add the new provider'.$request->pvdr_name);
+				return redirect()->route('op_result.provider')->with('status', ' <span style="color:red">Data Has NOT Been inserted!</span>');
+			} else {
+				MyHelper::LogStaffActionResult(Auth::user()->id, 'Added provider OK.', '');
+				return redirect()->route('op_result.provider')->with('status', 'The new provider,  <span style="font-weight:bold;font-style:italic;color:blue">'.$provider->pvdr_name.'</span>, has been inserted successfully.');
+			}
+		} else {
+			Log::Info('Staff '.Auth::user()->id.' tried to add a new provider, but the provider object cannot be created');
+			return redirect()->route('op_result.provider')->with('status', ' <span style="color:red">The provider object cannot be created!</span>');
+		}
+	}
+	
+    public function update(Request $request)
+    {
+		$validated = $request->validate([
+			'pvdr_name' => 'required',
+			'pvdr_address' => 'required',
+			'pvdr_city' => 'required',
+		]);
+
+		MyHelper::LogStaffAction(Auth::user()->id, 'Updated provider '.$request->id.' (name= '.$request->pvdr_name.').', '');
+		
+		$provider = Provider::where('id', $request->id)->first();
+		if ($provider) {
+			$provider->pvdr_name        = $request->pvdr_name;
+			$provider->pvdr_address     = $request->pvdr_address;
+			$provider->pvdr_city        = $request->pvdr_city;
+			$provider->pvdr_province    = $request->pvdr_province;
+			$provider->pvdr_postcode    = $request->pvdr_postcode;
+			$provider->pvdr_country     = $request->pvdr_country;
+			$provider->pvdr_contact     = $request->pvdr_contact;
+			$provider->pvdr_phone       = $request->pvdr_phone;
+			$provider->pvdr_email       = $request->pvdr_email;
+			$provider->pvdr_email       = $request->pvdr_email;
+			$saved = $provider->save();
+			
+			if(!$saved) {
+				Log::Info('Staff '.Auth::user()->id.' failed to update the provider'.$request->id);
 				return redirect()->route('op_result.provider')->with('status', ' <span style="color:red">Data Has NOT Been updated!</span>');
 			} else {
+                MyHelper::LogStaffActionResult(Auth::user()->id, 'Updated provider '.$request->id.' OK.', '');
 				return redirect()->route('op_result.provider')->with('status', 'The provider,  <span style="font-weight:bold;font-style:italic;color:blue">'.$provider->pvdr_name.'</span>, has been updated successfully.');
 			}
-		//}
+		} else {
+			Log::Info('Staff '.Auth::user()->id.' tried to update a provider, but the provider object cannot be accessed');
+			return redirect()->route('op_result.provider')->with('status', ' <span style="color:red">The provider object cannot be accessed!</span>');
+		}
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+            $id = $_GET['id'];
+
+            MyHelper::LogStaffAction(Auth::user()->id, 'Deleted staff of ID '.$id, '');
+
+			$provider = Provider::where('id', $id)->first();
+            if ($provider) {
+				$providerName 			= $provider->pvdr_name;
+                $provider->pvdr_deleted = "Y";
+				$res = $provider->save();
+				if (!$res) {
+                    $err_msg = "Provider ".$id." cannot be deleted.";
+                    Log::Info($err_msg);
+					return redirect()->route('op_result.provider')->with('status', 'The provider, <span style="font-weight:bold;font-style:italic;color:red">'.$providerName.'</span>, cannot be deleted for some reason.');	
+                } else {
+                    MyHelper::LogStaffActionResult(Auth::user()->id, 'Deleted provider '.$id.' OK.', '');
+					return redirect()->route('op_result.provider')->with('status', 'The provider, <span style="font-weight:bold;font-style:italic;color:blue">'.$providerName.'</span>, has been deleted successfully.');	
+                }
+            } else {
+                Log::Info('Staff '.Auth::user()->id.' tried to delete a provider, but the provider '.$id.' object cannot be accessed');
+                return redirect()->route('op_result.provider')->with('status', ' <span style="color:red">The provider object cannot be accessed!</span>');
+            }
+        } catch (Exception $e) {
+            echo 'Message: ' .$e->getMessage();
+        }
     }
 }

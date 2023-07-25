@@ -53,10 +53,10 @@
 				session(['sort_order' => 'asc']);
 				$sort_icon = 'asc';
 			}
-			$clients = \App\Models\Client::orderBy($_GET['sort_key_client'], session('sort_order', 'asc'))->paginate(10);
+			$clients = \App\Models\Client::orderBy($_GET['sort_key_client'], session('sort_order', 'asc'))->where('clnt_deleted', 'N')->orwhere('clnt_deleted', null)->paginate(10);
 			session(['sort_key_client' => 'clnt_name']);
 		} else {
-			$clients = \App\Models\Client::orderBy($sortKey, $sortOrder)->paginate(10);
+			$clients = \App\Models\Client::orderBy($sortKey, $sortOrder)->where('clnt_deleted', 'N')->orwhere('clnt_deleted', null)->paginate(10);
 		}
 
 		// Title Line

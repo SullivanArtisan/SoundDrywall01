@@ -210,18 +210,7 @@ Route::get('/staff_add', function () {
     return view('staff_add');
 })->middleware(['auth'])->name('staff_add');
 
-Route::get('/staff_delete', function () {
-	$id = $_GET['id'];
-	$staff = Staff::where('id', $id)->first();
-	$staffName = $staff->f_name." ".$staff->l_name;
-	$staff->status = 'DELETED';
-	$res = $staff->save();
-	if (!$res) {
-		return redirect()->route('op_result.staff')->with('status', 'The staff, <span style="font-weight:bold;font-style:italic;color:red">'.$staffName.'</span>, cannot be deleted for some reason.');	
-	} else {
-		return redirect()->route('op_result.staff')->with('status', 'The staff, <span style="font-weight:bold;font-style:italic;color:blue">'.$staffName.'</span>, has been deleted successfully.');	
-	}
-})->middleware(['auth'])->name('staff_delete');
+Route::get('/staff_delete', [StaffController::class, 'delete'])->middleware(['auth'])->name('staff_delete');
 
 //////////////////////////////// For Materials ////////////////////////////////
 Route::get('/material_main', function () {
@@ -236,20 +225,9 @@ Route::get('/material_selected', function () {
     return view('material_selected');
 })->middleware(['auth'])->name('material_selected');
 
-Route::get('/material_delete', function () {
-	$id = $_GET['id'];
-   $material = Material::where('id', $id)->first();
-   $material->mtrl_status    = "DELETED";
-   $materialType = $material->mtrl_type;
-   $res = $material->save();
-   if (!$res) {
-	   return redirect()->route('op_result.material')->with('status', 'The material of type <span style="font-weight:bold;font-style:italic;color:red">'.$materialType.'</span>, cannot be deleted for some reason.');	
-   } else {
-	   return redirect()->route('op_result.material')->with('status', 'The material of type <span style="font-weight:bold;font-style:italic;color:blue">'.$materialType.'</span>, has been deleted successfully.');	
-   }
-})->middleware(['auth'])->name('material_delete');
+Route::get('/material_delete', [MaterialController::class, 'delete'])->middleware(['auth'])->name('material_delete');
 
-Route::post('/material_update', [MaterialController::class, 'update'])->name('material_update');
+Route::post('/material_update', [MaterialController::class, 'update'])->middleware(['auth'])->name('material_update');
 
 Route::get('/drywall_main', function () {
     return view('drywall_main');
@@ -419,17 +397,19 @@ Route::get('/provider_add', function () {
     return view('provider_add');
 })->middleware(['auth'])->name('provider_add');
 
-Route::get('/provider_delete', function () {
-	$id = $_GET['id'];
-	$provider = Provider::where('id', $id)->first();
-	$providerName = $provider->pvdr_name;
-	$res = $provider->delete();
-	if (!$res) {
-		return redirect()->route('op_result.provider')->with('status', 'The provider, <span style="font-weight:bold;font-style:italic;color:red">'.$providerName.'</span>, cannot be deleted for some reason.');	
-	} else {
-		return redirect()->route('op_result.provider')->with('status', 'The provider, <span style="font-weight:bold;font-style:italic;color:blue">'.$providerName.'</span>, has been deleted successfully.');	
-	}
-})->middleware(['auth'])->name('provider');
+// Route::get('/provider_delete', function () {
+// 	$id = $_GET['id'];
+// 	$provider = Provider::where('id', $id)->first();
+// 	$providerName = $provider->pvdr_name;
+// 	$res = $provider->delete();
+// 	if (!$res) {
+// 		return redirect()->route('op_result.provider')->with('status', 'The provider, <span style="font-weight:bold;font-style:italic;color:red">'.$providerName.'</span>, cannot be deleted for some reason.');	
+// 	} else {
+// 		return redirect()->route('op_result.provider')->with('status', 'The provider, <span style="font-weight:bold;font-style:italic;color:blue">'.$providerName.'</span>, has been deleted successfully.');	
+// 	}
+// })->middleware(['auth'])->name('provider');
+
+Route::get('provider_delete', [ProviderController::class, 'delete'])->middleware(['auth'])->name('provider_delete');
 
 //////////////////////////////// For ???? ////////////////////////////////
 Route::get('/dev_notes', function () {
@@ -459,17 +439,7 @@ Route::get('/client_add', function () {
     return view('client_add');
 })->middleware(['auth'])->name('client_add');
 
-Route::get('/client_delete', function () {
-	$id = $_GET['id'];
-	$pclient = Client::where('id', $id)->first();
-	$clientName = $client->clnt_name;
-	$res = $client->delete();
-	if (!$res) {
-		return redirect()->route('op_result.client')->with('status', 'The client, <span style="font-weight:bold;font-style:italic;color:red">'.$clientName.'</span>, cannot be deleted for some reason.');	
-	} else {
-		return redirect()->route('op_result.client')->with('status', 'The client, <span style="font-weight:bold;font-style:italic;color:blue">'.$clientName.'</span>, has been deleted successfully.');	
-	}
-})->middleware(['auth'])->name('client');
+Route::get('client_delete', [ClientController::class, 'delete'])->middleware(['auth'])->name('client_delete');
 
 //////////////////////////////// For Dispatch ////////////////////////////////
 Route::get('/dispatch_main', function () {

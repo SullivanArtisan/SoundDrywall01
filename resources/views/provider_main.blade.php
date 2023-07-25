@@ -53,10 +53,10 @@
 				session(['sort_order' => 'asc']);
 				$sort_icon = 'asc';
 			}
-			$providers = \App\Models\Provider::orderBy($_GET['sort_key_provider'], session('sort_order', 'asc'))->paginate(10);
+			$providers = \App\Models\Provider::orderBy($_GET['sort_key_provider'], session('sort_order', 'asc'))->where('pvdr_deleted', 'N')->orwhere('pvdr_deleted', null)->paginate(10);
 			session(['sort_key_provider' => 'pvdr_name']);
 		} else {
-			$providers = \App\Models\Provider::orderBy($sortKey, $sortOrder)->paginate(10);
+			$providers = \App\Models\Provider::orderBy($sortKey, $sortOrder)->where('pvdr_deleted', 'N')->orwhere('pvdr_deleted', null)->paginate(10);
 		}
 
 		// Title Line

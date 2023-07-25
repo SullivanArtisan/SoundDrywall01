@@ -22,6 +22,9 @@
 </head>
 
 <body>
+    <?php
+	use App\Models\StaffAction;
+    ?>
 
     <div class="wrapper">
         <!-- Sidebar  -->
