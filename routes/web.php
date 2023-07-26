@@ -111,6 +111,9 @@ Route::post('job_combination_msg_to_admin', function (Request $request) {
 Route::post('job_assistants_complete', function (Request $request) {
 	$job_id 	= $_POST['job_id'];
 	$staff_id	= $_POST['staff_id'];
+
+	MyHelper::LogStaffAction(Auth::user()->id, 'To complete job '.$job_id.".", '');
+
 	$job 		= Job::where('id', $job_id)->first();
 	$job->job_assistants_complete 	= $job->job_assistants_complete + 1;
 	$job->job_status 				= $job->job_assistants_complete.'/'.$job->job_total_active_assistants.' COMPLETED';
@@ -119,26 +122,29 @@ Route::post('job_assistants_complete', function (Request $request) {
 		Log::Info('Failed to update job_assistants_complete for staff '.$staff_id.' and job '.$job_id."!");
 		return "jobCompleteOK=false";	
 	} else {
-		if ($job->job_assistants_complete == $job->job_total_active_assistants) {
-			$project = project::where('id', $job->job_proj_id)->first();
-			$project->proj_jobs_complete = $project->proj_jobs_complete + 1;
-			$project->proj_status = $project->proj_jobs_complete.'/'.$project->proj_total_active_jobs.' COMPLETED';
-			$res = $project->save();
-			if (!$res) {
-				Log::Info('Failed to update proj_jobs_complete for staff '.$staff_id.' and job '.$job_id."!");
-				return "jobCompleteOK=false";	
-			} else {
-				$association = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->first();
-				$association->jobdsp_status = 'COMPLETED';
-				$res = $association->save();
+		MyHelper::LogStaffActionResult(Auth::user()->id, 'Changed job_assistants_complete to '.$job->job_assistants_complete.' for job '.$job_id.' OK.', '');
+		$association = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->first();
+		$association->jobdsp_status = 'COMPLETED';
+		$res = $association->save();
+		if (!$res) {
+			Log::Info('Staff '.$staff_id.' failed to complete the job '.$job_id."!");
+			return "jobCompleteOK=false";	
+		} else {
+			MyHelper::LogStaffActionResult(Auth::user()->id, 'Completed job '.$job_id.' OK.', '');
+			Log::Info('Staff '.$staff_id.' completed the job '.$job_id." successfully.");
+			if ($job->job_assistants_complete == $job->job_total_active_assistants) {
+				$project = project::where('id', $job->job_proj_id)->first();
+				$project->proj_jobs_complete = $project->proj_jobs_complete + 1;
+				$project->proj_status = $project->proj_jobs_complete.'/'.$project->proj_total_active_jobs.' COMPLETED';
+				$res = $project->save();
 				if (!$res) {
-					Log::Info('Staff '.$staff_id.' failed to complete the job '.$job_id."!");
+					Log::Info('Failed to update proj_jobs_complete for staff '.$staff_id.' and job '.$job_id."!");
 					return "jobCompleteOK=false";	
 				} else {
-					Log::Info('Staff '.$staff_id.' completed the job '.$job_id." successfully.");
-					return "jobCompleteOK=true";	
+					MyHelper::LogStaffActionResult(Auth::user()->id, 'Change the proj_jobs_complete to '.$job->job_assistants_complete.' for job '.$job_id.' OK.', '');
 				}
 			}
+			return "jobCompleteOK=true";	
 		}
 	}
 })->middleware(['auth'])->name('job_assistants_complete');
@@ -170,7 +176,10 @@ Route::post('job_dispatch_to_staff', function (Request $request) {
 	$job 		= Job::where('id', $job_id)->first();
 	$bound		= JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->first();
 	
+	MyHelper::LogStaffAction(Auth::user()->id, 'To dispatch job '.$job_id.' to staff '.$staff_id.'.', '');
+	
 	if ($bound) {	// association existed
+		MyHelper::LogStaffActionResult(Auth::user()->id, 'Dispatched job '.$job_id.' to staff '.$staff_id.', but skipped as no need.', '');
 		Log::Info('Association existed, so no need to dispatch job '.$job_id.'to staff '.$staff_id."!");
 		return "jobDispatchOK=true";	
 	} else {
@@ -192,6 +201,7 @@ Route::post('job_dispatch_to_staff', function (Request $request) {
 					Log::Info('Failed to update job_total_assistants and job_total_active_assistants while dispatch job '.$job_id.'to staff '.$staff_id."!");
 					return "jobDispatchOK=false";	
 				} else {
+                    MyHelper::LogStaffActionResult(Auth::user()->id, 'Dispatched job '.$job_id.' to staff '.$staff_id.' OK.', '');
 					Log::Info('Successfully dispatched job '.$job_id.'to staff '.$staff_id."!");
 					return "jobDispatchOK=true";	
 				}
@@ -393,7 +403,6 @@ Route::get('sendbasicemail', [MailController::class, 'basic_email']);
 Route::get('sendhtmlemail', [MailController::class, 'html_email']);
 
 Route::get('sendattachmentemail', [MailController::class, 'attachment_email']);
-
 //////////////////////////////// For Clients ////////////////////////////////
 Route::get('/client_main', function () {
     return view('client_main');

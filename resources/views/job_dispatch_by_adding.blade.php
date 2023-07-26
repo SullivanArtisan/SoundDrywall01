@@ -73,7 +73,7 @@
             </div>
             <div class="col-1" style="position: relative;">
                 <div style="position: absolute; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%);">
-                    <button class="btn btn-success align-items-center" onclick="doJobDispatch()">Dispatch</button>
+                    <button class="btn btn-success align-items-center" onclick="doJobDispatch({{$job_id}})">Dispatch</button>
                 </div>
             </div>
             <div class="col-5">
@@ -158,7 +158,7 @@
                     },    // the _token:token is for Laravel
                     success: function(dataRetFromPHP) {
                         alert('Job dispatched successfully.')
-                        window.location = './job_dispatch';
+                        window.location = './job_combination_main?jobId='+inputId;
                     },
                     error: function(err) {
                         alert('Failed to dispatch the job.\r\nPlease try again!')

@@ -23,8 +23,12 @@
 		// } else {
 		// 	$backPath = '<a class="text-primary" href="'.route('dispatch_container', ['cntnrId'=>$_GET['cntnrId']]).'" style="margin-right: 10px;">Back</a>';
 		// }
-	// } else if ($oprand == "material") {
-	// 	$backPath = '<a class="text-primary" href="'.route("home_page").'" style="margin-right: 10px;">Back</a>';
+	} else if ($oprand == "material") {
+		if (isset($_GET['backTo'])) {
+			$backPath = '<a class="text-primary" href="'.$_GET['backTo'].'" style="margin-right: 10px;">Back</a>';
+		} else {
+			$backPath = '<a class="text-primary" href="'.route('material_main').'" style="margin-right: 10px;">Back</a>';
+		}
 	// 	if (isset($_GET['materialType'])) {
 	// 		$material_type = $_GET['materialType'];
 	// 		if ($material_type == "DRYWALL SHEET") {

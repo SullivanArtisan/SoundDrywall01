@@ -94,29 +94,31 @@
 						<div class="col"><label class="col-form-label">Model/Description:&nbsp;</label></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="mtrl_model" name="mtrl_model"></div>
                     </div>
+					<!--
                     <div class="row">
 						<div class="col"><label class="col-form-label">Item Size:&nbsp;</label></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="mtrl_size" name="mtrl_size"></div>
                         <div class="col"><label class="col-form-label">Size Unit:&nbsp;</label></div>
 						<div class="col">
 							<?php
-								$tagHead = "<input list=\"mtrl_size_unit\" name=\"mtrl_size_unit\" id=\"mtrlsizeunitinput\" class=\"form-control mt-1 my-text-height\" ";
-								$tagTail = "><datalist id=\"mtrl_size_unit\">";
+								// $tagHead = "<input list=\"mtrl_size_unit\" name=\"mtrl_size_unit\" id=\"mtrlsizeunitinput\" class=\"form-control mt-1 my-text-height\" ";
+								// $tagTail = "><datalist id=\"mtrl_size_unit\">";
 
 		
-								$units = SizeUnit::all()->sortBy('unit_name');
-								foreach($units as $unit) {
-									$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $unit->unit_name).">";
-								}
-								$tagTail.= "</datalist>";
-								// if (isset($_GET['selJobId'])) {
-								// 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
-								// } else {
-									echo $tagHead."placeholder=\"\" value=\"SqFt\"".$tagTail;
+								// $units = SizeUnit::all()->sortBy('unit_name');
+								// foreach($units as $unit) {
+								// 	$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $unit->unit_name).">";
 								// }
+								// $tagTail.= "</datalist>";
+								// // if (isset($_GET['selJobId'])) {
+								// // 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
+								// // } else {
+								// 	echo $tagHead."placeholder=\"\" value=\"SqFt\"".$tagTail;
+								// // }
 							?>
 						</div>
                     </div>
+					-->
                     <div class="row">
                         <div class="col"><label class="col-form-label">Total Amount:&nbsp;</label></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.01" id="mtrl_amount" name="mtrl_amount"></div>
@@ -135,7 +137,7 @@
 								// if (isset($_GET['selJobId'])) {
 								// 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
 								// } else {
-									echo $tagHead."placeholder=\"\" value=\"Sq. Feets\"".$tagTail;
+									echo $tagHead."placeholder=\"\" value=\"SqFt\"".$tagTail;
 								// }
 							?>
 						</div>
@@ -178,6 +180,12 @@
                     <div class="row">
                         <div class="col"><label class="col-form-label">&nbsp;</label></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="mtrl_type" name="mtrl_type" value="{{$mtrl_type}}"></div>
+						<div class="col"><label class="col-form-label">&nbsp;</label></div>
+						@if ($job_id == "")
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="back_to" name="back_to" value="material_main"></div>
+						@else
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="back_to" name="back_to" value="job_combination_main?jobId={{$job_id}}"></div>
+						@endif
                     </div>
 					<!--
                     <div class="row">
@@ -348,6 +356,12 @@
                     <div class="row">
                         <div class="col"><label class="col-form-label">&nbsp;</label></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="mtrl_type" name="mtrl_type" value="{{$mtrl_type}}"></div>
+						<div class="col"><label class="col-form-label">&nbsp;</label></div>
+						@if ($job_id == "")
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="back_to" name="back_to" value="material_main"></div>
+						@else
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="back_to" name="back_to" value="job_combination_main?jobId={{$job_id}}"></div>
+						@endif
                     </div>
                     <div class="row my-3">
                         <div class="w-25"></div>
@@ -483,6 +497,12 @@
                     <div class="row">
                         <div class="col"><label class="col-form-label">&nbsp;</label></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="mtrl_type" name="mtrl_type" value="{{$mtrl_type}}"></div>
+						<div class="col"><label class="col-form-label">&nbsp;</label></div>
+						@if ($job_id == "")
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="back_to" name="back_to" value="material_main"></div>
+						@else
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="back_to" name="back_to" value="job_combination_main?jobId={{$job_id}}"></div>
+						@endif
                     </div>
                     <div class="row my-3">
                         <div class="w-25"></div>
@@ -618,6 +638,12 @@
                     <div class="row">
                         <div class="col"><label class="col-form-label">&nbsp;</label></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="mtrl_type" name="mtrl_type" value="{{$mtrl_type}}"></div>
+						<div class="col"><label class="col-form-label">&nbsp;</label></div>
+						@if ($job_id == "")
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="back_to" name="back_to" value="material_main"></div>
+						@else
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="back_to" name="back_to" value="job_combination_main?jobId={{$job_id}}"></div>
+						@endif
                     </div>
                     <div class="row my-3">
                         <div class="w-25"></div>
@@ -753,7 +779,13 @@
                     <div class="row">
                         <div class="col"><label class="col-form-label">&nbsp;</label></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="mtrl_type" name="mtrl_type" value="{{$mtrl_type}}"></div>
-                    </div>
+						<div class="col"><label class="col-form-label">&nbsp;</label></div>
+						@if ($job_id == "")
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="back_to" name="back_to" value="material_main"></div>
+						@else
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="back_to" name="back_to" value="job_combination_main?jobId={{$job_id}}"></div>
+						@endif
+                   </div>
                     <div class="row my-3">
                         <div class="w-25"></div>
                         <div class="col">
@@ -779,6 +811,7 @@
 		// var colScrew      = document.getElementById('col_screw');
 		// var colTape       = document.getElementById('col_tape');
 		// var inputMtrlType = "";
+		var jobId =  {!!json_encode($job_id)!!};
 		var mtrlType = {!!json_encode($mtrl_type)!!};
 
 		if (mtrlType == '' || mtrlType == 'INSULATION') {
@@ -787,7 +820,7 @@
 			document.getElementById('rdo_drywall').checked = true;
 		} else if (mtrlType == 'SCREW') {
 			document.getElementById('rdo_screw').checked = true;
-		} else if (mtrlType == 'Tape') {
+		} else if (mtrlType == 'TAPE') {
 			document.getElementById('rdo_tape').checked = true;
 		} else {
 			document.getElementById('rdo_other').checked = true;
@@ -831,7 +864,10 @@
 
 			// document.getElementById(fmSelected).style.visibility='visible';
 			// alert('Type = ' + document.getElementById('mtrl_type').value);
-			window.location = './material_add?mtrlType='+inputMtrlType;
+			if (jobId.length == 0)
+				window.location = './material_add?mtrlType='+inputMtrlType;
+			else
+				window.location = './material_add?jobId='+jobId+'&mtrlType='+inputMtrlType;
         }
 	</script>
 			

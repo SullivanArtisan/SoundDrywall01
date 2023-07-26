@@ -55,7 +55,7 @@
 		<div>
 			<div class="row m-4">
 				<div>
-					<h2 class="text-muted pl-2">Job Combination for <span style="font-family: 'Times New Roman';font-weight: bold;font-style: italic; color:black !important">{{$job->job_name}}</span>:</h2>
+					<h2 class="text-muted pl-2">Combination of Job <span style="font-family: 'Times New Roman';font-weight: bold;font-style: italic; color:black !important">{{$job->job_name}}</span>:</h2>
 				</div>
 			</div>
             <div>
@@ -78,7 +78,8 @@
                                 <div class="col">
                                     <div class="row text-white" style="max-height: 400px; background-color:grey; font-weight:bold !important;">
                                         <div class="col">Type</div>
-                                        <div class="col">Name</div>
+                                        <div class="col">Size</div>
+                                        <div class="col">Amount</div>
                                     </div>
                                     <?php 
                                         $listed_items = 0;
@@ -91,7 +92,8 @@
                                             }
                                             $outContents = "<div class=\"row\" style=\"background-color:".$bg_color."\">";
                                             $outContents .= "<div class=\"col mt-1\">".$material->mtrl_type."</div>";
-                                            $outContents .= "<div class=\"col mt-1\">".$material->mtrl_name."</div>";
+                                            $outContents .= "<div class=\"col mt-1\">".$material->mtrl_size."</div>";
+                                            $outContents .= "<div class=\"col mt-1\">".$material->mtrl_amount_left."/".$material->mtrl_amount." ".strtolower($material->mtrl_amount_unit)."</div>";
                                             $outContents .= "</div>";
                                             echo $outContents;
                                         }
@@ -111,8 +113,9 @@
                             <div class="row my-2">
                                 <div class="col">
                                     <div class="row text-white" style="max-height: 400px; background-color:grey; font-weight:bold !important;">
-                                        <div class="col-4">First Name</div>
-                                        <div class="col-8">Last Name</div>
+                                        <div class="col">First Name</div>
+                                        <div class="col">Last Name</div>
+                                        <div class="col">Roll</div>
                                     </div>
                                     <?php 
                                         $listed_items = 0;
@@ -125,12 +128,30 @@
                                                 $bg_color = "PaleGreen";
                                             }
                                             $outContents = "<div class=\"row\" style=\"background-color:".$bg_color."\">";
-                                            $outContents .= "<div class=\"col-4 mt-1\">";
-                                            $outContents .= "<a href=\"job_combination_staff_selected?jobId=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
-                                            $outContents .= $staff_origin->f_name."</a></div>";
-                                            $outContents .= "<div class=\"col-8 mt-1\">";
-                                            $outContents .= "<a href=\"job_combination_staff_selected?jobId=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
-                                            $outContents .= $staff_origin->l_name."</a></div>";
+                                            $outContents .= "<div class=\"col mt-1\">";
+                                            if ($association->jobdsp_status == "COMPLETED") {
+                                                $outContents .= "<span style=\"text-decoration: line-through;color: blue;\">";
+                                                $outContents .= $staff_origin->f_name."</span></div>";
+                                            } else {
+                                                $outContents .= "<a href=\"job_combination_staff_selected?jobId=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
+                                                $outContents .= $staff_origin->f_name."</a></div>";
+                                            }
+                                            $outContents .= "<div class=\"col mt-1\">";
+                                            if ($association->jobdsp_status == "COMPLETED") {
+                                                $outContents .= "<span style=\"text-decoration: line-through;color: blue;\">";
+                                                $outContents .= $staff_origin->l_name."</span></div>";
+                                            } else {
+                                                $outContents .= "<a href=\"job_combination_staff_selected?jobId=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
+                                                $outContents .= $staff_origin->l_name."</a></div>";
+                                            }
+                                            $outContents .= "<div class=\"col mt-1\">";
+                                            if ($association->jobdsp_status == "COMPLETED") {
+                                                $outContents .= "<span style=\"text-decoration: line-through;color: blue;\">";
+                                                $outContents .= $staff_origin->roll."</span></div>";
+                                            } else {
+                                                $outContents .= "<a href=\"job_combination_staff_selected?jobId=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
+                                                $outContents .= $staff_origin->roll."</a></div>";
+                                            }
                                             $outContents .= "</div>";
                                             echo $outContents;
                                         }
@@ -138,7 +159,7 @@
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-center">
-                                <button class="btn-success m-3 rounded" onclick="AddAssistant()">Add Another Assistant to This Job</button>
+                                <button class="btn-success m-3 rounded" onclick="AddAssistant()">Add an Assistant to This Job</button>
                             </div>
                         </div>
                     </div>

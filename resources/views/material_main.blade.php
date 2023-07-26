@@ -52,7 +52,7 @@
 			
 		// Get data ordered by the user's intent
 		$sort_icon = $sortOrder = session('sort_order', 'asc');
-		$sortKey = session('sort_key_material', 'mtrl_name');
+		$sortKey = session('sort_key_material', 'mtrl_type');
 		if ($needResort == true) {
 			if ($sortOrder == 'asc') {
 				session(['sort_order' => 'desc']);

@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="row m-4">
-            <div class="col-6">
+            <div class="col-5">
                 <!-- Available Materials Section -->
                 <div class="container">
                     <div class="row">
@@ -33,10 +33,9 @@
                     <div class="row my-2">
                     <div class="col">
                         <div class="row text-white" style="max-height: 400px; background-color:grey; font-weight:bold !important;">
-                            <div class="col-3">Name</div>
-                            <div class="col-5">Type</div>
-                            <div class="col-2">Amount</div>
-                            <div class="col-2">For Job</div>
+                            <div class="col">Type</div>
+                            <div class="col">Size</div>
+                            <div class="col">Amount</div>
                         </div>
                         <?php 
                             $listed_items = 0;
@@ -48,15 +47,15 @@
                                     $bg_color = "PaleGreen";
                                 }
                                 $outContents = "<div class=\"row\" id=\"m_".$material->id."\" onclick=\"MaterialSelected(this.id)\" ondblclick=\"EditMaterial(this.id)\" style=\"background-color:".$bg_color."\">";
-                                $outContents .= "<div class=\"col-3\" style=\"cursor:default\">".$material->mtrl_name."</div>";
-                                $outContents .= "<div class=\"col-5\" style=\"cursor:default\">".$material->mtrl_type."</div>";
-                                $outContents .= "<div class=\"col-2\" style=\"cursor:default\">".intval($material->mtrl_amount_left)."/".intval($material->mtrl_amount)."</div>";
-                                $job = Job::where('id', $material->mtrl_job_id)->first();
-                                if ($job) {
-                                    $outContents .= "<div class=\"col-2\" style=\"cursor:default\">".$job->job_name."</div>";
-                                } else {
-                                    $outContents .= "<div class=\"col-2\" style=\"cursor:default\"></div>";
-                                }
+                                $outContents .= "<div class=\"col\" style=\"cursor:default\">".$material->mtrl_type."</div>";
+                                $outContents .= "<div class=\"col\" style=\"cursor:default\">".$material->mtrl_size."</div>";
+                                $outContents .= "<div class=\"col\" style=\"cursor:default\">".intval($material->mtrl_amount_left)."/".intval($material->mtrl_amount)."</div>";
+                                // $job = Job::where('id', $material->mtrl_job_id)->first();
+                                // if ($job) {
+                                //     $outContents .= "<div class=\"col-2\" style=\"cursor:default\">".$job->job_name."</div>";
+                                // } else {
+                                //     $outContents .= "<div class=\"col-2\" style=\"cursor:default\"></div>";
+                                // }
                                 $outContents .= "</div>";
                                 echo $outContents;
                             }
@@ -73,7 +72,7 @@
                     <button class="btn btn-success align-items-center" onclick="doMtrlAssociate()">Associate</button>
                 </div>
             </div>
-            <div class="col-5">
+            <div class="col-6">
                 <!-- Available Jobs Section -->
                 <div class="container">
                     <div class="row">
@@ -100,7 +99,7 @@
                                 $outContents .= "<div class=\"col-2 mt-1\" style=\"cursor:default\">".$job->job_name."</div>";
                                 $outContents .= "<div class=\"col-4 mt-1\" style=\"cursor:default\">".$job->job_type."</div>";
                                 $outContents .= "<div class=\"col-2 mt-1\" style=\"cursor:default\">".$job->job_total_active_assistants."</div>";
-                                $outContents .= "<div class=\"col-4 mt-1\" style=\"cursor:default\">".$job->job_address."</div>";
+                                $outContents .= "<div class=\"col-4 mt-1\" style=\"cursor:default\">".$job->job_address.", ".$job->job_city."</div>";
                                 $outContents .= "</div>";
                                 echo $outContents;
                             }
