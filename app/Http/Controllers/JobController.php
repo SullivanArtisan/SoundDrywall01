@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Customer;
 use App\Models\Job;
+use App\Helper\MyHelper;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -19,6 +21,8 @@ class JobController extends Controller
                 'job_city'      => 'required',
                 'job_province'  => 'required',
             ]);
+
+            MyHelper::LogStaffAction(Auth::user()->id, 'Added job '.$request->job_name.' (city= '.$request->job_city.').', '');
             
             $job = new Job;
             $project = Project::where('id', $request->proj_id)->first();
@@ -57,6 +61,7 @@ class JobController extends Controller
                     Log::Info($err_msg);
                     return redirect()->route('op_result.job')->with('status', ' <span style="color:red">'.$err_msg.'</span>');
                 } else {
+                    MyHelper::LogStaffActionResult(Auth::user()->id, 'Added job OK.', '');
                     return redirect()->route('project_selected', ['id'=>$request->proj_id, 'JobAddOk'=>$request->job_name])->with('status', 'The job <span style="font-weight:bold;font-style:italic;color:blue">'.$request->job_name.'</span>, has been inserted successfully.');
                 }
             }
@@ -74,6 +79,8 @@ class JobController extends Controller
                 'job_city'      => 'required',
                 'job_province'  => 'required',
             ]);
+
+            MyHelper::LogStaffAction(Auth::user()->id, 'Updated job '.$request->job_id.' (city= '.$request->job_city.').', '');
             
             $job = Job::where('id', $request->job_id)->first();
     
@@ -98,7 +105,51 @@ class JobController extends Controller
                 Log::Info($err_msg);
                 return redirect()->route('op_result.job')->with('status', ' <span style="color:red">Data Has NOT Been Updated!</span>');
             } else {
+                MyHelper::LogStaffActionResult(Auth::user()->id, 'Updated job '.$request->job_id.' OK.', '');
                 return redirect()->route('project_selected', ['id'=>$request->job_proj_id, 'JobUpdateOk'=>$request->job_name])->with('status', 'The job <span style="font-weight:bold;font-style:italic;color:blue">'.$request->job_name.'</span>, has been updated successfully.');
+            }
+        } catch (Exception $e) {
+            echo 'Message: ' .$e->getMessage();
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+            $id = $_GET['id'];
+
+            MyHelper::LogStaffAction(Auth::user()->id, 'Deleted job of ID '.$id, '');
+
+            $job = Job::where('id', $id)->first();
+            if ($job) {
+                $job->job_status    = "DELETED";
+                $project = Project::where('id', $job->job_proj_id)->first();
+                if ($project) {
+                    $job_name = $job->job_name;
+                    $res = $job->save();
+                    if (!$res) {
+                        $err_msg = "Job ".$id." cannot be deleted.";
+                        Log::Info($err_msg);
+                        return redirect()->route('op_result.job')->with('status', 'The job cannot be deleted for some reason.');	
+                    } else {
+                        MyHelper::LogStaffActionResult(Auth::user()->id, 'Deleted job '.$id.' OK.', '');
+                        $project->proj_total_active_jobs = strval($project->proj_total_active_jobs - 1);
+                        $res2 = $project->save();
+                        if (!$res2) {
+                            Log::Info('Staff '.Auth::user()->id.' tried to delete a job, but the proj_total_active_jobs of job '.$id.' object cannot be accessed');
+                            return redirect()->route('op_result.job')->with('status', "The project's proj_total_active_jobs cannot be decreased.");	
+                        } else {
+                            MyHelper::LogStaffActionResult(Auth::user()->id, 'Changed proj_total_active_jobs to '.$project->proj_total_active_jobs.' OK while deleting job '.$id, '');
+                            return redirect()->route('project_selected', ['id'=>$job->job_proj_id, 'JobDeleteOk'=>$job_name]);
+                        }
+                    }
+                } else {
+                    Log::Info('Staff '.Auth::user()->id.' tried to delete a job, but the project object cannot be accessed while deleting the job'.$id);
+                    return redirect()->route('op_result.job')->with('status', "The project object cannot be accessed while deleting the job.");	
+                }
+            } else {
+                Log::Info('Staff '.Auth::user()->id.' tried to delete a job, but the job '.$id.' object cannot be accessed');
+                return redirect()->route('op_result.job')->with('status', ' <span style="color:red">The job object cannot be accessed!</span>');
             }
         } catch (Exception $e) {
             echo 'Message: ' .$e->getMessage();

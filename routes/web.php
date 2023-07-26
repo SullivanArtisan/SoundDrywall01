@@ -19,6 +19,7 @@ use App\Models\Project;
 use App\Models\Job;
 use App\Models\JobDispatch;
 use App\Models\User;
+use App\Helper\MyHelper;
 
 
 /*
@@ -296,7 +297,11 @@ Route::get('/project_add', function () {
 })->middleware(['auth'])->name('project_add');
 
 Route::post('/project_add', function (Request $request) {
+
 	$cName = str_replace("&nbsp;", " ", $_POST['proj_cstmr_name']);
+
+	MyHelper::LogStaffAction(Auth::user()->id, 'Added project for client '.$cName, '');
+
 	$client = Client::where('clnt_name', $cName)->first();
 
 	if ($client) {
@@ -312,30 +317,27 @@ Route::post('/project_add', function (Request $request) {
 			$res = $project->save();
 
 			if (!$res) {
-				return "NNOO";
+                Log::Info('Staff '.Auth::user()->id.' failed to add the new project for client '.$cName);
+				return "pausedReason = Data Has NOT Been inserted!";
 			} else {
 				$newProj = Project::where('proj_my_creation_timestamp', $_POST['proj_my_creation_timestamp'])->first();
 
 				if ($newProj) {
+					MyHelper::LogStaffActionResult(Auth::user()->id, 'Added project OK.', '');
 					return $newProj->id;
 				} else {
-					return "NNOO";
+					Log::Info('Staff '.Auth::user()->id.' has added the new project for client '.$cName.', but the project object cannot be accessed');
+					return "pausedReason = The project object cannot be accessed!";
 				}
 			}
 		}
+	} else {
+		Log::Info('Staff '.Auth::user()->id.' tried to add a new project, but the project object cannot be created');
+		return "pausedReason = The project object cannot be created!";
 	}
 })->middleware(['auth'])->name('project_add');
 
-Route::get('/project_delete', function () {
-	$id = $_GET['id'];
-	$project = Project::where('id', $id)->first();
-	$res = $project->delete();
-	if (!$res) {
-		return redirect()->route('op_result.project')->with('status', 'The project cannot be deleted for some reason.');	
-	} else {
-		return redirect()->route('op_result.project')->with('status', 'The project has been deleted successfully.');	
-	}
-})->middleware(['auth'])->name('project_delete');
+Route::get('/project_delete', [ProjectController::class, 'delete'])->name('project_delete');
 
 //////////////////////////////// For Jobs ////////////////////////////////
 Route::get('job_main', function (Request $request) {
@@ -358,27 +360,9 @@ Route::get('assistant_job_selected', function (Request $request) {
     return view('assistant_job_selected');
 })->middleware(['auth'])->name('assistant_job_selected');
 
-Route::get('/job_delete', function () {
-	$id = $_GET['id'];
-	$job = Job::where('id', $id)->first();
-	$job->job_status    = "DELETED";
-	$project = Project::where('id', $job->job_proj_id)->first();
-	$job_name = $job->job_name;
-	$res = $job->save();
-	if (!$res) {
-		return redirect()->route('op_result.job')->with('status', 'The job cannot be deleted for some reason.');	
-	} else {
-		$project->proj_total_active_jobs = strval($project->proj_total_active_jobs - 1);
-		$res2 = $project->save();
-		if (!$res2) {
-			return redirect()->route('op_result.job')->with('status', "The project's proj_total_active_jobs cannot be decreased.");	
-		} else {
-			return redirect()->route('project_selected', ['id'=>$job->job_proj_id, 'JobDeleteOk'=>$job_name]);
-		}
-	}
-})->middleware(['auth'])->name('job_delete');
+Route::get('/job_delete', [JobController::class, 'delete'])->middleware(['auth'])->name('job_delete');
 
-Route::post('/job_update', [JobController::class, 'update'])->name('job_update');
+// Route::post('/job_update', [JobController::class, 'update'])->name('job_update');
 
 //////////////////////////////// For Providers ////////////////////////////////
 Route::get('/provider_main', function () {
@@ -396,18 +380,6 @@ Route::get('provider_condition_selected', function (Request $request) {
 Route::get('/provider_add', function () {
     return view('provider_add');
 })->middleware(['auth'])->name('provider_add');
-
-// Route::get('/provider_delete', function () {
-// 	$id = $_GET['id'];
-// 	$provider = Provider::where('id', $id)->first();
-// 	$providerName = $provider->pvdr_name;
-// 	$res = $provider->delete();
-// 	if (!$res) {
-// 		return redirect()->route('op_result.provider')->with('status', 'The provider, <span style="font-weight:bold;font-style:italic;color:red">'.$providerName.'</span>, cannot be deleted for some reason.');	
-// 	} else {
-// 		return redirect()->route('op_result.provider')->with('status', 'The provider, <span style="font-weight:bold;font-style:italic;color:blue">'.$providerName.'</span>, has been deleted successfully.');	
-// 	}
-// })->middleware(['auth'])->name('provider');
 
 Route::get('provider_delete', [ProviderController::class, 'delete'])->middleware(['auth'])->name('provider_delete');
 
@@ -458,6 +430,10 @@ Route::name('op_result.')->group(function () {
 	})->middleware(['auth'])->name('staff');
 
 	Route::get('op_result_project', function () {
+		if (isset($_GET['status'])) {
+			$status = str_replace("&nbsp;", " ", $_GET['status']);
+			session(['status' => $status]);
+		}
 		return view('op_result')->withOprand('project');
 	})->middleware(['auth'])->name('project');
 

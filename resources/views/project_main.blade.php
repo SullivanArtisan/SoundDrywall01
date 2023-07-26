@@ -55,10 +55,10 @@
 				session(['sort_order' => 'asc']);
 				$sort_icon = 'asc';
 			}
-			$projects = \App\Models\Project::orderBy($_GET['sort_key_project'], session('sort_order', 'asc'))->paginate(10);
+			$projects = \App\Models\Project::orderBy($_GET['sort_key_project'], session('sort_order', 'asc'))->where('proj_status', '<>', 'CANCELED')->where('proj_status', '<>', 'DELETED')->paginate(10);
 			session(['sort_key_project' => 'created_at']);
 		} else {
-			$projects = \App\Models\Project::orderBy($sortKey, $sortOrder)->paginate(10);
+			$projects = \App\Models\Project::orderBy($sortKey, $sortOrder)->where('proj_status', '<>', 'CANCELED')->where('proj_status', '<>', 'DELETED')->paginate(10);
 		}
 
 		// Title Line

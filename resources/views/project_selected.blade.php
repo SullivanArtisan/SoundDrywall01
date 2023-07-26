@@ -60,7 +60,7 @@
 		<div>
 			<div class="row m-4">
 				<div>
-					<h2 class="text-muted pl-2">Project (for client <span style="font-family: 'Times New Roman';font-weight: bold;font-style: italic; color:black !important">{{$client->clnt_name}})</span>:</h2>
+					<h2 class="text-muted pl-2">Project {{$id}} (for client <span style="font-family: 'Times New Roman';font-weight: bold;font-style: italic; color:black !important">{{$client->clnt_name}})</span>:</h2>
 				</div>
 				<div class="col my-auto ml-5">
 					<button class="btn btn-danger me-2" type="button"><a href="project_delete?id={{$project->id}}" onclick="return myConfirmation();">Delete</a></button>

@@ -22,7 +22,7 @@
     }
 
     if (isset($_GET['projAddFailed'])) {
-        alert('For some reason, we failed to create the project.\n\rPlease try again later.');
+        Log::Info('For some reason, we failed to create the project.\n\rPlease try again later.');
     }
 ?>
 
@@ -151,7 +151,7 @@
                                 <div class="col">
                                     <div class="row">
                                         <button class="btn btn-success mx-4" type="submit" id="btn_save" onclick="addThisProject();">Save</button>
-                                        <button class="btn btn-secondary mx-3" type="button"><a href="{{route('home_page')}}">Cancel</a></button>
+                                        <button class="btn btn-secondary mx-3" type="button"><a href="{{route('project_main')}}">Cancel</a></button>
                                     </div>
                                 </div>
                                 <div class="col"></div>
@@ -181,7 +181,7 @@
 
                 // document.getElementById('jobs_div').style.display = "block";
             } else {
-                document.getElementById('jobs_div').style.display = "none";
+                // document.getElementById('jobs_div').style.display = "none";
             }
 
         function addThisProject() {
@@ -199,15 +199,20 @@
                     proj_my_creation_timestamp:document.getElementById('proj_my_creation_timestamp').value
                 },    // the _token:token is for Laravel
                 success: function(dataRetFromPHP) {
-                    console.log(dataRetFromPHP);
-                    if(!confirm("The new project is created successfully.\r\nDo you want to add any job to it now?")) {
-                        window.location = './project_main';
+                    let statusKey = new String("pausedReason = ");
+                    let position = dataRetFromPHP.indexOf(statusKey);
+                    if (position >= 0) {
+                        window.location = './op_result_project?status='+dataRetFromPHP.substr(statusKey.length);
                     } else {
-                        window.location = './project_selected?id='+dataRetFromPHP;
+                        if(!confirm("The new project is created successfully.\r\nDo you want to add any job to it now?")) {
+                            window.location = './op_result_project?status=The project is added successfully!';
+                        } else {
+                            window.location = './project_selected?id='+dataRetFromPHP;
+                        }
                     }
                 },
                 error: function(err) {
-                    window.location = './project_add?projAddFailed='+document.getElementById('projcstmrnameinput').value;
+                    window.location = './op_result_project?status='+err;
                 }
             });
         }
