@@ -50,6 +50,7 @@ class JobController extends Controller
                 Log::Info($err_msg);
                 return redirect()->route('op_result.job')->with('status', ' <span style="color:red">Data Has NOT Been inserted!</span>');
             } else {
+                MyHelper::LogStaffActionResult(Auth::user()->id, 'Added job OK.', '');
                 $project->proj_total_active_jobs = $project->proj_total_active_jobs+1;
                 $project->proj_total_jobs = $project->proj_total_jobs+1;
                 if (strstr($project->proj_status, 'COMPLETED')) {
@@ -61,7 +62,7 @@ class JobController extends Controller
                     Log::Info($err_msg);
                     return redirect()->route('op_result.job')->with('status', ' <span style="color:red">'.$err_msg.'</span>');
                 } else {
-                    MyHelper::LogStaffActionResult(Auth::user()->id, 'Added job OK.', '');
+                    MyHelper::LogStaffActionResult(Auth::user()->id, 'Changed proj_total_active_jobs to '.$project->proj_total_active_jobs.' OK while adding job.', '');
                     return redirect()->route('project_selected', ['id'=>$request->proj_id, 'JobAddOk'=>$request->job_name])->with('status', 'The job <span style="font-weight:bold;font-style:italic;color:blue">'.$request->job_name.'</span>, has been inserted successfully.');
                 }
             }
