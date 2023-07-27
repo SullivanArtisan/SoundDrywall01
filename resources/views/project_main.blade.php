@@ -64,16 +64,19 @@
 		// Title Line
 		$outContents = "<div class=\"container mw-100\">";
         $outContents .= "<div class=\"row bg-info text-white fw-bold\">";
-			$outContents .= "<div class=\"col-3 align-middle\">";
+			$outContents .= "<div class=\"col-1\">";
+				$outContents .= "ID";
+			$outContents .= "</div>";
+			$outContents .= "<div class=\"col-3\">";
 				$outContents .= "Customer Name";
 			$outContents .= "</div>";
-			$outContents .= "<div class=\"col-2\">";
+			$outContents .= "<div class=\"col-1\">";
 				$outContents .= "Status";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-1\">";
 				$outContents .= "Total Jobs";
 			$outContents .= "</div>";
-			$outContents .= "<div class=\"col-2 align-middle\">";
+			$outContents .= "<div class=\"col-2\">";
 				$sortParms = "?sort_key_project=created_at&sort_time=".time();
 				$outContents .= "<a href=\"project_main".$sortParms."\">";
 				$outContents .= "Created Time";
@@ -97,12 +100,17 @@
                 $client_name = $client->clnt_name;
             }
             $outContents = "<div class=\"row\">";
-                $outContents .= "<div class=\"col-3\">";
+				$outContents .= "<div class=\"col-1\">";
+					$outContents .= "<a href=\"project_selected?id=$project->id\">";
+					$outContents .= $project->id;
+					$outContents .= "</a>";
+				$outContents .= "</div>";
+				$outContents .= "<div class=\"col-3\">";
 					$outContents .= "<a href=\"project_selected?id=$project->id\">";
 					$outContents .= $client_name;
 					$outContents .= "</a>";
 				$outContents .= "</div>";
-                $outContents .= "<div class=\"col-2\">";
+                $outContents .= "<div class=\"col-1\">";
 					$outContents .= "<a href=\"project_selected?id=$project->id\">";
 					$outContents .= $project->proj_status;
 					$outContents .= "</a>";

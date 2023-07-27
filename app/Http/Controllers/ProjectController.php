@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\Client;
+use App\Models\Job;
+use App\Models\Material;
+use App\Models\JobDispatch;
 use App\Helper\MyHelper;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -99,6 +102,55 @@ class ProjectController extends Controller
                     return redirect()->route('op_result.project')->with('status', 'The project cannot be deleted for some reason.');	
                 } else {
                     MyHelper::LogStaffActionResult(Auth::user()->id, 'Deleted project '.$id.' OK.', '');
+
+                    $jobs = Job::where('job_proj_id', $id)->get();
+                    foreach ($jobs as $job) {
+                        if ($job->job_status == "DELETED") {
+                            continue;
+                        }
+
+                        $job->job_status = "DELETED";
+                        $res = $job->save();
+                        if (!$res) {
+                            Log::Info("Job ".$job->id." cannot be deleted.");
+                            return redirect()->route('op_result.project')->with('status', 'The project has been deleted, but the associated job cannot be deleted for some reason.');	
+                        } else {
+                            MyHelper::LogStaffActionResult(Auth::user()->id, "Deleted project's associated job '.$job->id.' OK.", "");
+
+                            $materials = Material::where('mtrl_job_id', $job->id)->get();
+                            foreach ($materials as $material) {
+                                if ($material->mtrl_status == "DELETED") {
+                                    continue;
+                                }
+                        
+                                $material->mtrl_status = "DELETED";
+                                $res = $material->save();
+                                if (!$res) {
+                                    Log::Info("Material ".$material->id." cannot be deleted.");
+                                    return redirect()->route('op_result.project')->with('status', "The project's associated job has been deleted, but its material cannot be deleted for some reason.");	
+                                } else {
+                                    MyHelper::LogStaffActionResult(Auth::user()->id, "Deleted project's associated job's material '.$material->id.' OK.", "");
+                                }
+                            }
+
+                            $dispatches = JobDispatch::where('jobdsp_job_id', $job->id)->get();
+                            foreach ($dispatches as $dispatch) {
+                                if ($dispatch->jobdsp_status == "DELETED") {
+                                    continue;
+                                }
+                        
+                                $dispatch->jobdsp_status = "DELETED";
+                                $res = $dispatch->save();
+                                if (!$res) {
+                                    Log::Info("Dispatch ".$dispatch->id." cannot be deleted.");
+                                    return redirect()->route('op_result.project')->with('status', "The project's associated job has been deleted, but its dispatch cannot be deleted for some reason.");	
+                                } else {
+                                    MyHelper::LogStaffActionResult(Auth::user()->id, "Deleted project's associated job's dispatch '.$dispatch->id.' OK.", "");
+                                }
+                            }
+                        }
+                    }
+
                     return redirect()->route('op_result.project')->with('status', 'The project has been deleted successfully.');	
                 }
             } else {

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Customer;
 use App\Models\Job;
+use App\Models\Material;
+use App\Models\JobDispatch;
 use App\Helper\MyHelper;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -141,6 +143,39 @@ class JobController extends Controller
                             return redirect()->route('op_result.job')->with('status', "The project's proj_total_active_jobs cannot be decreased.");	
                         } else {
                             MyHelper::LogStaffActionResult(Auth::user()->id, 'Changed proj_total_active_jobs to '.$project->proj_total_active_jobs.' OK while deleting job '.$id, '');
+                            
+                            $materials = Material::where('mtrl_job_id', $id)->get();
+                            foreach ($materials as $material) {
+                                if ($material->mtrl_status == "DELETED") {
+                                    continue;
+                                }
+                        
+                                $material->mtrl_status = "DELETED";
+                                $res = $material->save();
+                                if (!$res) {
+                                    Log::Info("Material ".$material->id." cannot be deleted.");
+                                    return redirect()->route('op_result.project')->with('status', "The job has been deleted, but its material cannot be deleted for some reason.");	
+                                } else {
+                                    MyHelper::LogStaffActionResult(Auth::user()->id, "Deleted job's material '.$material->id.' OK.", "");
+                                }
+                            }
+
+                            $dispatches = JobDispatch::where('jobdsp_job_id', $id)->get();
+                            foreach ($dispatches as $dispatch) {
+                                if ($dispatch->jobdsp_status == "DELETED") {
+                                    continue;
+                                }
+                        
+                                $dispatch->jobdsp_status = "DELETED";
+                                $res = $dispatch->save();
+                                if (!$res) {
+                                    Log::Info("Dispatch ".$dispatch->id." cannot be deleted.");
+                                    return redirect()->route('op_result.project')->with('status', "The job has been deleted, but its dispatch cannot be deleted for some reason.");	
+                                } else {
+                                    MyHelper::LogStaffActionResult(Auth::user()->id, "Deleted job's dispatch '.$dispatch->id.' OK.", "");
+                                }
+                            }
+
                             return redirect()->route('project_selected', ['id'=>$job->job_proj_id, 'JobDeleteOk'=>$job_name]);
                         }
                     }
