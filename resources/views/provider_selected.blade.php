@@ -76,13 +76,13 @@
 					<form method="post" action="{{url('provider_update')}}">
 						@csrf
 						<div class="row">
-							<div class="col"><label class="col-form-label">Provider Name:&nbsp;</label></div>
+							<div class="col"><label class="col-form-label">Provider Name:&nbsp;</label><span class="text-danger">*</span></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" id="pvdr_name" name="pvdr_name" value="{{$provider->pvdr_name}}"></div>
-							<div class="col"><label class="col-form-label">Address:&nbsp;</label></div>
+							<div class="col"><label class="col-form-label">Address:&nbsp;</label><span class="text-danger">*</span></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" name="pvdr_address" value="{{$provider->pvdr_address}}"></div>
 						</div>
 						<div class="row">
-							<div class="col"><label class="col-form-label">City:&nbsp;</label></div>
+							<div class="col"><label class="col-form-label">City:&nbsp;</label><span class="text-danger">*</span></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" name="pvdr_city" value="{{$provider->pvdr_city}}"></div>
                             <div class="col"><label class="col-form-label">Province:&nbsp;</label></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" name="pvdr_province" value="{{$provider->pvdr_province}}"></div>

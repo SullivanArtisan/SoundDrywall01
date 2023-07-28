@@ -79,7 +79,7 @@
                                 </div>
                                 <div class="col m-1">
                                     <div class="row"><label class="col-form-label">Message From Assistant:&nbsp;</label></div>
-                                    <div class="row"><textarea readonly class="form-control mt-1 my-text-height text-white" style="background-color:silver;" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$association->jobdsp_msg_from_staff}}</textarea></div>
+                                    <div class="row"><textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$association->jobdsp_msg_from_staff}}</textarea></div>
                                 </div>
                             </div>
                             <div class="row my-3">
@@ -99,7 +99,37 @@
 		</div>
 		
 		<script>
-			function doSendMsgToStaff() {
+            var jobId = {!!json_encode($job_id)!!};
+            var staffId = {!!json_encode($staff_id)!!};
+
+            setTimeout(ReloadPageForJobMsg, 7500);
+
+            function ReloadPageForJobMsg() {
+                $.ajax({
+                    url: '/reload_page_for_job_msg_from_staff',
+                    type: 'POST',
+                    data: {
+                        _token:"{{ csrf_token() }}", 
+                        job_id:jobId,
+                        staff_id:staffId,
+                    },    // the _token:token is for Laravel
+                    success: function(dataRetFromPHP) {
+                        setTimeout(ReloadPageForJobMsg, 7500);
+                        if (document.getElementById('msg_from_staff').value != dataRetFromPHP) {
+                            document.getElementById('msg_from_staff').value = dataRetFromPHP;
+                            document.getElementById('msg_from_staff').style.color = 'red';
+                        } else {
+                            document.getElementById('msg_from_staff').value = dataRetFromPHP;
+                            document.getElementById('msg_from_staff').style.color = 'white';
+                        }
+                    },
+                    error: function(err) {
+                        setTimeout(ReloadPageForJobMsg, 7500);
+                    }
+                });
+            }
+
+            function doSendMsgToStaff() {
                 msg = document.getElementById('msg_from_admin').value;
                 if (msg.length > 0) {
                     event.preventDefault();

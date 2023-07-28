@@ -84,12 +84,17 @@ Route::post('job_combination_msg_to_staff', function (Request $request) {
 	$job_id 	= $_POST['job_id'];
 	$staff_id	= $_POST['staff_id'];
 	$msg		= $_POST['msg'];
+
+	MyHelper::LogStaffAction(Auth::user()->id, 'To send msg:'.$msg." to staff ".$staff_id.' for job '.$job_id.'.', '');
+
 	$association = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->first();
 	$association->jobdsp_msg_from_admin = $msg;
 	$res = $association->save();
 	if (!$res) {
+		Log::Info('Failed to send msg '.$msg." to staff ".$staff_id.' for job '.$job_id.'.', '');
 		return "msgToStaffOK=false";	
 	} else {
+		MyHelper::LogStaffActionResult(Auth::user()->id, 'Sent msg:'.$msg." to staff ".$staff_id.' for job '.$job_id.' OK.', '');
 		return "msgToStaffOK=true";	
 	}
 })->middleware(['auth'])->name('job_combination_msg_to_staff');
@@ -98,12 +103,17 @@ Route::post('job_combination_msg_to_admin', function (Request $request) {
 	$job_id 	= $_POST['job_id'];
 	$staff_id	= $_POST['staff_id'];
 	$msg		= $_POST['msg'];
+
+	MyHelper::LogStaffAction(Auth::user()->id, 'To send msg:'.$msg.' to admin for job '.$job_id.'.', '');
+
 	$association = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->first();
 	$association->jobdsp_msg_from_staff = $msg;
 	$res = $association->save();
 	if (!$res) {
+		Log::Info('Failed to send msg '.$msg.' to admin for job '.$job_id.'.', '');
 		return "msgToAdminOK=false";	
 	} else {
+		MyHelper::LogStaffActionResult(Auth::user()->id, 'Sent msg:'.$msg.' to admin for job '.$job_id.' OK.', '');
 		return "msgToAdminOK=true";	
 	}
 })->middleware(['auth'])->name('job_combination_msg_to_admin');
@@ -152,12 +162,17 @@ Route::post('job_assistants_complete', function (Request $request) {
 Route::post('job_combination_staff_remove', function (Request $request) {
 	$job_id 	= $_POST['job_id'];
 	$staff_id	= $_POST['staff_id'];
+
+	MyHelper::LogStaffAction(Auth::user()->id, 'To remove the association of job '.$job_id." and assistant ".$staff_id.".", '');
+
 	$association = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->first();
 	$association->jobdsp_status = 'DELETED';
 	$res = $association->save();
 	if (!$res) {
+		Log::Info('Failed to remove the association of job '.$job_id." and assistant ".$staff_id.".", '');
 		return "staffRemoveOK=false";	
 	} else {
+		MyHelper::LogStaffActionResult(Auth::user()->id, 'Removed the association of job '.$job_id." and assistant ".$staff_id." OK.", '');
 		return "staffRemoveOK=true";	
 	}
 })->middleware(['auth'])->name('job_combination_staff_remove');
@@ -403,6 +418,29 @@ Route::get('sendbasicemail', [MailController::class, 'basic_email']);
 Route::get('sendhtmlemail', [MailController::class, 'html_email']);
 
 Route::get('sendattachmentemail', [MailController::class, 'attachment_email']);
+
+Route::post('reload_page_for_job_msg_from_admin', function() {
+	$job_id 	= $_POST['job_id'];
+	$staff_id	= $_POST['staff_id'];
+	$job_dispatch = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->first();
+	if ($job_dispatch) {
+		return $job_dispatch->jobdsp_msg_from_admin;
+	} else {
+		Log::Info('Failed to get the JobDispatch object for job '.$job_id.' and staff '.$staff_id.' while refreshing its msg from administrator.');
+	}
+})->middleware(['auth'])->name('reload_page_for_job_msg_from_admin');
+
+Route::post('reload_page_for_job_msg_from_staff', function() {
+	$job_id 	= $_POST['job_id'];
+	$staff_id	= $_POST['staff_id'];
+	$job_dispatch = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->first();
+	if ($job_dispatch) {
+		return $job_dispatch->jobdsp_msg_from_staff;
+	} else {
+		Log::Info('Failed to get the JobDispatch object for job '.$job_id.' and staff '.$staff_id.' while refreshing its msg from staff.');
+	}
+})->middleware(['auth'])->name('reload_page_for_job_msg_from_staff');
+
 //////////////////////////////// For Clients ////////////////////////////////
 Route::get('/client_main', function () {
     return view('client_main');

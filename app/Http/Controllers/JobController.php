@@ -21,7 +21,6 @@ class JobController extends Controller
                 'job_type'      => 'required',
                 'job_address'   => 'required',
                 'job_city'      => 'required',
-                'job_province'  => 'required',
             ]);
 
             MyHelper::LogStaffAction(Auth::user()->id, 'Added job '.$request->job_name.' (city= '.$request->job_city.').', '');
@@ -80,7 +79,6 @@ class JobController extends Controller
                 'job_type'      => 'required',
                 'job_address'   => 'required',
                 'job_city'      => 'required',
-                'job_province'  => 'required',
             ]);
 
             MyHelper::LogStaffAction(Auth::user()->id, 'Updated job '.$request->job_id.' (city= '.$request->job_city.').', '');

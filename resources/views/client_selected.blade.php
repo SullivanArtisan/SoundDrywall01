@@ -76,13 +76,13 @@
 					<form method="post" action="{{url('client_update')}}">
 						@csrf
 						<div class="row">
-							<div class="col"><label class="col-form-label">Client Name:&nbsp;</label></div>
+							<div class="col"><label class="col-form-label">Client Name:&nbsp;</label><span class="text-danger">*</span></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" id="clnt_name" name="clnt_name" value="{{$client->clnt_name}}"></div>
-							<div class="col"><label class="col-form-label">Address:&nbsp;</label></div>
+							<div class="col"><label class="col-form-label">Address:&nbsp;</label><span class="text-danger">*</span></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" name="clnt_address" value="{{$client->clnt_address}}"></div>
 						</div>
 						<div class="row">
-							<div class="col"><label class="col-form-label">City:&nbsp;</label></div>
+							<div class="col"><label class="col-form-label">City:&nbsp;</label><span class="text-danger">*</span></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" name="clnt_city" value="{{$client->clnt_city}}"></div>
                             <div class="col"><label class="col-form-label">Province:&nbsp;</label></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" name="clnt_province" value="{{$client->clnt_province}}"></div>

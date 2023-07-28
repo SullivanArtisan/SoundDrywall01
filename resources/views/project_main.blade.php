@@ -8,7 +8,7 @@
     <div>
         <div class="row m-4">
             <div>
-				<h2 class="text-muted pl-2">Projects</h2>
+				<h2 class="text-muted pl-2">All Projects</h2>
             </div>
             <div class="col my-auto ml-5">
 				<button class="btn btn-success mr-4" type="button"><a href="{{route('project_add')}}">Add</a></button>

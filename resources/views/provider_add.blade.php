@@ -35,13 +35,13 @@
                 <form method="post" action="{{route('op_result.provider_add')}}">
 					@csrf
                     <div class="row">
-                        <div class="col"><label class="col-form-label">Provider Name:&nbsp;</label></div>
+                        <div class="col"><label class="col-form-label">Provider Name:&nbsp;</label><span class="text-danger">*</span></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="pvdr_name" name="pvdr_name"></div>
-                        <div class="col"><label class="col-form-label">Address:&nbsp;</label></div>
+                        <div class="col"><label class="col-form-label">Address:&nbsp;</label><span class="text-danger">*</span></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="pvdr_address" name="pvdr_address"></div>
                     </div>
                     <div class="row">
-                        <div class="col"><label class="col-form-label">City:&nbsp;</label></div>
+                        <div class="col"><label class="col-form-label">City:&nbsp;</label><span class="text-danger">*</span></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="pvdr_city" name="pvdr_city"></div>
                         <div class="col"><label class="col-form-label">Province:&nbsp;</label></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="pvdr_province" name="pvdr_province"></div>

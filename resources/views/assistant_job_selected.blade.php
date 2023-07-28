@@ -114,14 +114,14 @@
 
         <!-- Messages Section -->
         <div class="row text-dark" style="background-color:lightsteelblue;">
-            <div class="col">
+            <div class="col mt-2">
                 <form method="post" action="{{url('job_combination_msg_to_admin')}}">
                     @csrf
                     <div class="row">
                         <div class="col m-1">
                             <div class="row font-weight-bold"><label class="col-form-label">Message From Administrator:&nbsp;</label></div>
                             <div class="row">
-                                <textarea readonly class="form-control mt-1 my-text-height text-white" style="background-color:silver;" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$association->jobdsp_msg_from_admin}}</textarea>
+                                <textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$association->jobdsp_msg_from_admin}}</textarea>
                             </div>
                         </div>
                         <div class="col m-1">
@@ -130,7 +130,7 @@
                         </div>
                     </div>
                     <div class="row mb-2">
-                        <div class="col text-center" style="background: var(--bs-warning-border-subtle);position: static;padding-top: 11px; display: flex; justify-content: right;">
+                        <div class="col" style="display: flex; justify-content: center;">
                             <button class="btn btn-success m-3 rounded" type="submit" onclick="return doSendMsgToAdmin();">Send Message</button>
                         </div>
                     </div>
@@ -140,7 +140,7 @@
         <div class="row mt-2">
         </div>
         <div class="row text-dark" style="background-color:lightpink;">
-            <div class="col" style="display: flex; justify-content: center;">
+            <div class="col my-4 text-center" style="background: var(--bs-warning-border-subtle);position: static; display: flex; justify-content: right;">
                 <button class="btn m-2 text-white rounded" style="background-color:lightcoral;" onclick="return doCompleteThisJob();">Complete This Job</button>
             </div>
         </div>
@@ -149,16 +149,43 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script>
         var msgToShow = {!!json_encode($msg_to_show)!!};
+        var jobId = {!!json_encode($id)!!};
+        var staffId = {!!json_encode($staff_id)!!};
         if (msgToShow.length > 0) {
             alert(msgToShow);
+        }
+
+        setTimeout(ReloadPageForJobMsg, 7500);
+
+        function ReloadPageForJobMsg() {
+            $.ajax({
+                url: '/reload_page_for_job_msg_from_admin',
+                type: 'POST',
+                data: {
+                    _token:"{{ csrf_token() }}", 
+                    job_id:jobId,
+                    staff_id:staffId,
+                },    // the _token:token is for Laravel
+                success: function(dataRetFromPHP) {
+                    setTimeout(ReloadPageForJobMsg, 7500);
+                    if (document.getElementById('msg_from_admin').value != dataRetFromPHP) {
+                        document.getElementById('msg_from_admin').value = dataRetFromPHP;
+                        document.getElementById('msg_from_admin').style.color = 'red';
+                    } else {
+                        document.getElementById('msg_from_admin').value = dataRetFromPHP;
+                        document.getElementById('msg_from_admin').style.color = 'white';
+                    }
+                },
+                error: function(err) {
+                    setTimeout(ReloadPageForJobMsg, 7500);
+                }
+            });
         }
 
         function doSendMsgToAdmin() {
             msg = document.getElementById('msg_from_staff').value;
             if (msg.length > 0) {
                 event.preventDefault();
-                var jobId = {!!json_encode($id)!!};
-                var staffId = {!!json_encode($staff_id)!!};
                 $.ajax({
                     url: '/job_combination_msg_to_admin',
                     type: 'POST',
@@ -182,8 +209,6 @@
             if(!confirm("Are you sure to complete this job?")) {
                 //event.preventDefault();
             } else {
-                var jobId = {!!json_encode($id)!!};
-                var staffId = {!!json_encode($staff_id)!!};
                 $.ajax({
                     url: '/job_assistants_complete',
                     type: 'POST',

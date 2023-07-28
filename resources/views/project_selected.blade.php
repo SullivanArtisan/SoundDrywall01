@@ -83,7 +83,7 @@
 					<form method="post" action="{{url('project_update')}}">
 						@csrf
                         <div class="row">
-                            <div class="col"><label class="col-form-label">Customer Name:&nbsp;</label></div>
+                            <div class="col"><label class="col-form-label">Customer Name:&nbsp;</label><span class="text-danger">*</span></div>
                             <div class="col">
                                 <?php
                                 $tagHead = "<input list=\"proj_cstmr_name\" name=\"proj_cstmr_name\" id=\"projcstmrnameinput\" class=\"form-control mt-1 my-text-height\" value=\"".$client_name."\"";

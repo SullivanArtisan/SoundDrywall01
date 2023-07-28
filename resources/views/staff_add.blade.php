@@ -35,9 +35,9 @@
                 <form method="post" action="{{route('op_result.staff_add')}}">
 					@csrf
                     <div class="row">
-                        <div class="col"><label class="col-form-label">First Name:&nbsp;</label></div>
+                        <div class="col"><label class="col-form-label">First Name:&nbsp;</label><span class="text-danger">*</span></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="f_name" name="f_name"></div>
-                        <div class="col"><label class="col-form-label">Last Name:&nbsp;</label></div>
+                        <div class="col"><label class="col-form-label">Last Name:&nbsp;</label><span class="text-danger">*</span></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="l_name" name="l_name"></div>
                     </div>
                     <div class="row">
@@ -55,7 +55,7 @@
                     <div class="row">
                         <div class="col"><label class="col-form-label">Country:&nbsp;</label></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="country" name="country"></div>
-                        <div class="col"><label class="col-form-label">Roll:&nbsp;</label></div>
+                        <div class="col"><label class="col-form-label">Roll:&nbsp;</label><span class="text-danger">*</span></div>
 						<div class="col">
 							<?php
 							$tagHead = "<input list=\"roll\" name=\"roll\" id=\"rollinput\" class=\"form-control mt-1 my-text-height\" ";
@@ -74,15 +74,15 @@
 						</div>
                     </div>
                     <div class="row">
-                        <div class="col"><label class="col-form-label">Email:&nbsp;</label></div>
+                        <div class="col"><label class="col-form-label">Email:&nbsp;</label><span class="text-danger">*</span></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="email" name="email"></div>
                         <div class="col"><label class="col-form-label">Mobile Phone:&nbsp;</label></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="mobile_phone" name="mobile_phone"></div>
                     </div>
                     <div class="row">
-                        <div class="col"><label class="col-form-label">Password:&nbsp;</label></div>
+                        <div class="col"><label class="col-form-label">Password:&nbsp;</label><span class="text-danger">*</span></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="password" id="password" name="password"></div>
-                        <div class="col"><label class="col-form-label">Confirm Password:&nbsp;</label></div>
+                        <div class="col"><label class="col-form-label">Confirm Password:&nbsp;</label><span class="text-danger">*</span></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="password" id="password2" name="password2"></div>
                     </div>
                     <div class="row my-3">

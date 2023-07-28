@@ -91,7 +91,7 @@
 								}
 							?>
 						</div>
-						<div class="col"><label class="col-form-label">Model/Description:&nbsp;</label></div>
+						<div class="col"><label class="col-form-label">Model/Description:&nbsp;</label><span class="text-danger">*</span></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="mtrl_model" name="mtrl_model"></div>
                     </div>
 					<!--
@@ -120,7 +120,7 @@
                     </div>
 					-->
                     <div class="row">
-                        <div class="col"><label class="col-form-label">Total Amount:&nbsp;</label></div>
+                        <div class="col"><label class="col-form-label">Total Amount:&nbsp;</label><span class="text-danger">*</span></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.01" id="mtrl_amount" name="mtrl_amount"></div>
                         <div class="col"><label class="col-form-label">Amount Unit:&nbsp;</label></div>
 						<div class="col">

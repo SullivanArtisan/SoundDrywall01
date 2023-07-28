@@ -88,7 +88,7 @@
 								}
 								?>
 							</div>
-							<div class="col"><label class="col-form-label">Model/Description:&nbsp;</label></div>
+							<div class="col"><label class="col-form-label">Model/Description:&nbsp;</label><span class="text-danger">*</span></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" id="mtrl_model" name="mtrl_model" value="{{$material->mtrl_model}}"></div>
 						</div>
 						<div class="row">
@@ -123,7 +123,7 @@
 							</div>
 						</div>
 						<div class="row">
-							<div class="col"><label class="col-form-label">Total Amount:&nbsp;</label></div>
+							<div class="col"><label class="col-form-label">Total Amount:&nbsp;</label><span class="text-danger">*</span></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="number" id="mtrl_amount" name="mtrl_amount" value="{{$material->mtrl_amount}}"></div>
 							<div class="col"><label class="col-form-label">Amount Unit:&nbsp;</label></div>
 							<div class="col">
@@ -181,7 +181,7 @@
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" id="mtrl_notes" name="mtrl_notes" value="{{$material->mtrl_notes}}"></div>
 						</div>
 						<div class="row">
-							<div class="col"><label class="col-form-label">Material Type:&nbsp;</label></div>
+							<div class="col"><label class="col-form-label">Material Type:&nbsp;</label><span class="text-danger">*</span></div>
                         	<div class="col"><input class="form-control mt-1 my-text-height" readonly type="text" id="mtrl_type" name="mtrl_type" value="{{$material->mtrl_type}}"></div>
 							<div class="col"><label class="col-form-label">&nbsp;</label></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="mtrl_id" name="mtrl_id" value="{{$material->id}}"></div>

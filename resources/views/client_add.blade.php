@@ -35,13 +35,13 @@
                 <form method="post" action="{{route('op_result.client_add')}}">
 					@csrf
                     <div class="row">
-                        <div class="col"><label class="col-form-label">Client Name:&nbsp;</label></div>
+                        <div class="col"><label class="col-form-label">Client Name:&nbsp;</label><span class="text-danger">*</span></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="clnt_name" name="clnt_name"></div>
-                        <div class="col"><label class="col-form-label">Address:&nbsp;</label></div>
+                        <div class="col"><label class="col-form-label">Address:&nbsp;</label><span class="text-danger">*</span></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="clnt_address" name="clnt_address"></div>
                     </div>
                     <div class="row">
-                        <div class="col"><label class="col-form-label">City:&nbsp;</label></div>
+                        <div class="col"><label class="col-form-label">City:&nbsp;</label><span class="text-danger">*</span></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="clnt_city" name="clnt_city"></div>
                         <div class="col"><label class="col-form-label">Province:&nbsp;</label></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="clnt_province" name="clnt_province"></div>
