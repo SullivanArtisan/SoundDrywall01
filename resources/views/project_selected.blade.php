@@ -11,7 +11,7 @@
 </style>
 
 @section('goback')
-	<a class="text-primary" href="{{route('project_main')}}" style="margin-right: 10px;">Back</a>
+	<a class="text-primary" href="{{url()->previous()}}" style="margin-right: 10px;">Back</a>
 @show
 
 <?php
@@ -136,7 +136,7 @@
 							<div class="col"></div>
 							<div class="col">
 									<button class="btn btn-warning mx-3" type="submit">Update</button>
-									<button class="btn btn-secondary mx-3" type="button"><a href="{{route('project_main')}}">Cancel</a></button>
+									<button class="btn btn-secondary mx-3" type="button"><a href="{{url()->previous()}}">Cancel</a></button>
 							</div>
 							<div class="col"></div>
 						</div>

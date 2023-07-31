@@ -91,6 +91,7 @@
 							<div class="col"><label class="col-form-label">Model/Description:&nbsp;</label><span class="text-danger">*</span></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" id="mtrl_model" name="mtrl_model" value="{{$material->mtrl_model}}"></div>
 						</div>
+						<!--
 						<div class="row">
 							@if ($mtrl_type == 'DRYWALL') 
 								<div class="col"><label class="col-form-label">Thickness:&nbsp;</label></div>
@@ -105,23 +106,24 @@
 							@endif
 							<div class="col">
 								<?php
-									$tagHead = "<input list=\"mtrl_size_unit\" name=\"mtrl_size_unit\" id=\"mtrlsizeunitinput\" class=\"form-control mt-1 my-text-height\" ";
-									$tagTail = "><datalist id=\"mtrl_size_unit\">";
+									// $tagHead = "<input list=\"mtrl_size_unit\" name=\"mtrl_size_unit\" id=\"mtrlsizeunitinput\" class=\"form-control mt-1 my-text-height\" ";
+									// $tagTail = "><datalist id=\"mtrl_size_unit\">";
 
 			
-									$units = SizeUnit::all()->sortBy('unit_name');
-									foreach($units as $unit) {
-										$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $unit->unit_name).">";
-									}
-									$tagTail.= "</datalist>";
-									// if (isset($_GET['selJobId'])) {
-									// 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
-									// } else {
-										echo $tagHead."placeholder=\"\" value=\"".$material->mtrl_size_unit."\"".$tagTail;
+									// $units = SizeUnit::all()->sortBy('unit_name');
+									// foreach($units as $unit) {
+									// 	$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $unit->unit_name).">";
 									// }
+									// $tagTail.= "</datalist>";
+									// // if (isset($_GET['selJobId'])) {
+									// // 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
+									// // } else {
+									// 	echo $tagHead."placeholder=\"\" value=\"".$material->mtrl_size_unit."\"".$tagTail;
+									// // }
 								?>
 							</div>
 						</div>
+						-->
 						<div class="row">
 							<div class="col"><label class="col-form-label">Total Amount:&nbsp;</label><span class="text-danger">*</span></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="number" id="mtrl_amount" name="mtrl_amount" value="{{$material->mtrl_amount}}"></div>

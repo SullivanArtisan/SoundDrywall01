@@ -67,7 +67,7 @@
         <div class="row">
             <div class="card">
                 <div class="card-body">
-                    <button class="btn-grad" type="button" style="margin: 6px;"><a href="{{route('project_main')}}">All Projects</a></button>
+                    <button class="btn-grad" type="button" style="margin: 6px;"><a href="{{route('project_main', ['display_filter'=>'active'])}}">All Projects</a></button>
                 </div>
             </div>
             <div class="card ml-1">

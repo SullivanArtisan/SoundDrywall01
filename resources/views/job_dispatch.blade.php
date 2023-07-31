@@ -5,7 +5,7 @@
 	use App\Models\Staff;
 
     $jobs = Job::all()->where('job_assistants_complete', '=', '0')->where('job_assistants_complete', '<', 'job_total_active_assistants')->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED');
-    $assistants = Staff::where('roll', 'ASSISTANT')->where('status', '<>', 'DELETED')->orderBy('f_name', 'asc')->get();
+    $assistants = Staff::where('roll', 'ASSISTANT')->orwhere('roll', 'SUBCONTRACTOR')->orwhere('roll', 'SUPERINTENDENT')->where('status', '<>', 'DELETED')->orderBy('f_name', 'asc')->get();
 
     // if (isset($_GET['staffRemoveOK'])) {
     //     $staffRemoveResult = $_GET['staffRemoveOK'];
@@ -89,7 +89,8 @@
                     <div class="col">
                         <div class="row text-white" style="max-height: 400px; background-color:grey; font-weight:bold !important;">
                             <div class="col-4">First Name</div>
-                            <div class="col-8">Last Name</div>
+                            <div class="col-4">Last Name</div>
+                            <div class="col-4">ROLL</div>
                         </div>
                         <?php 
                             $listed_items = 0;
@@ -101,10 +102,15 @@
                                 } else {
                                     $bg_color = "PaleGreen";
                                 }
-                                $outContents = "<div class=\"row\" id=\"s_".$assistant->id."\" onclick=\"StaffSelected(this.id)\" ondblclick=\"EditStaff(this.id)\" style=\"background-color:".$bg_color."\">";
+                                if ($assistant->roll == 'SUPERINTENDENT') {
+                                    $outContents = "<div class=\"row text-danger\" id=\"s_".$assistant->id."\" onclick=\"StaffSelected(this.id)\" ondblclick=\"EditStaff(this.id)\" style=\"background-color:".$bg_color."\">";
+                                } else {
+                                    $outContents = "<div class=\"row\" id=\"s_".$assistant->id."\" onclick=\"StaffSelected(this.id)\" ondblclick=\"EditStaff(this.id)\" style=\"background-color:".$bg_color."\">";
+                                }
                                 $outContents .= "<div class=\"col-4\" style=\"cursor:default\">".$assistant->f_name."</div>";
-                                $outContents .= "<div class=\"col-8\" style=\"cursor:default\">".$assistant->l_name."</div>";
-                                $outContents .= "</div>";
+                                $outContents .= "<div class=\"col-4\" style=\"cursor:default\">".$assistant->l_name."</div>";
+                                $outContents .= "<div class=\"col-4\" style=\"cursor:default\">".$assistant->roll."</div>";
+                        $outContents .= "</div>";
                                 echo $outContents;
                             }
                         ?>

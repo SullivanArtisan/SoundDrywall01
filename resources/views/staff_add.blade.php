@@ -61,14 +61,15 @@
 							$tagHead = "<input list=\"roll\" name=\"roll\" id=\"rollinput\" class=\"form-control mt-1 my-text-height\" ";
 							$tagTail = "><datalist id=\"roll\">";
 
-							$tagTail.= "<option value=\"ASSISTANT\">";
-							$tagTail.= "<option value=\"DISPATCHER\">";
 							$tagTail.= "<option value=\"ADMINISTRATOR\">";
+							$tagTail.= "<option value=\"SUPERINTENDENT\">";
+							$tagTail.= "<option value=\"ASSISTANT\">";
+							$tagTail.= "<option value=\"SUBCONTRACTOR\">";
 							$tagTail.= "</datalist>";
 							// if (isset($_GET['selJobId'])) {
 							// 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
 							// } else {
-								echo $tagHead."placeholder=\"\" value=\"ASSISTANT\"".$tagTail;
+								echo $tagHead."placeholder=\"\"".$tagTail;
 							// }
 							?>
 						</div>
