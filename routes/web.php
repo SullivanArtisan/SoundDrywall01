@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\LogoutController;
 use App\Models\Staff;
 use App\Models\Material;
 use App\Models\Provider;
@@ -66,6 +67,11 @@ Route::get('/home_page_old', function () {
 Route::get('/register', function () {
     return view('register');
 })->name('register');
+
+Route::group(['middleware' => ['auth']], function() {
+	// Logout Route
+	Route::get('/logout', [LogoutController::class, 'perform'])->name('logout.perform');
+ });
 
 //////////////////////////////// For Staffs ////////////////////////////////
 Route::get('/staff_main', function () {

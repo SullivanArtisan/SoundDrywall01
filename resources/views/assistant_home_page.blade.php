@@ -30,7 +30,11 @@
         <!-- Header Section -->
         <div class="row mb-4">
             <div class="col-md-9" style="background: var(--bs-success-bg-subtle);">
-                <h1><span style="color:maroon; font-family: Georgia;">{{Auth::user()->f_name}}&nbsp;{{Auth::user()->l_name}}</span>'s Jobs List</h1>
+                @if (Auth::user()->roll == 'ASSISTANT')
+                    <h1>Assistant <span style="color:maroon; font-family: Georgia;">{{Auth::user()->f_name}}&nbsp;{{Auth::user()->l_name}}</span>'s Jobs List</h1>
+                @else
+                    <h1>Superintendent <span style="color:maroon; font-family: Georgia;">{{Auth::user()->f_name}}&nbsp;{{Auth::user()->l_name}}</span>'s Jobs List</h1>
+                @endif
             </div>
             <div class="col-md-1">
                 <div style="display: flex; justify-content: right;"><img class="rounded" style="max-width:100%; height:auto" src="assets/img/2020_assistant.jpg"></div>

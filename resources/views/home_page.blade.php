@@ -1,9 +1,16 @@
 @extends('layouts.home_page_base')
 @section('function_page')
 
-    @if (Auth::user()->roll == 'ASSISTANT')
+    @if (Auth::user()->roll == 'ASSISTANT' || Auth::user()->roll == 'SUPERINTENDENT')
         <script type="text/javascript">
-            window.location = './assistant_home_page';//here double curly bracket
+            window.location = './assistant_home_page';
+        </script>
+    @endif
+
+    @if (Auth::user()->roll != 'ADMINISTRATOR')
+        <script type="text/javascript">
+            alert('Sorry, you are not authorized to log in.');
+            window.location = './logout';
         </script>
     @endif
 
