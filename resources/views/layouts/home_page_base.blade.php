@@ -157,9 +157,9 @@
             <h3>Lorem Ipsum Dolor</h3>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 			-->
-            <footer class="text-center text-lg-start fixed-bottom" style="margin-left: 150px; background-color:#7386D5;>
+            <footer class="text-center text-lg-start fixed-bottom" style="margin-left: 150px; background-color:#7386D5;">
                 <!-- Copyright -->
-                <div class="text-center p-3">
+                <div class="text-center p-3 text-white">
                     © 2023 Copyright: TwentyTwenty Contracting Ltd.
                 </div>
                 <!-- Copyright -->

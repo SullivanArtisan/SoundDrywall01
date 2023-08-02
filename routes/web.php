@@ -391,6 +391,10 @@ Route::get('assistant_job_selected', function (Request $request) {
     return view('assistant_job_selected');
 })->middleware(['auth'])->name('assistant_job_selected');
 
+Route::get('assistant_material_in_job_selected', function (Request $request) {
+    return view('assistant_material_in_job_selected');
+})->middleware(['auth'])->name('assistant_material_in_job_selected');
+
 Route::get('/job_delete', [JobController::class, 'delete'])->middleware(['auth'])->name('job_delete');
 
 // Route::post('/job_update', [JobController::class, 'update'])->name('job_update');
@@ -477,6 +481,10 @@ Route::name('op_result.')->group(function () {
 	Route::get('op_result_material', function () {
 		return view('op_result')->withOprand('material');
 	})->middleware(['auth'])->name('material');
+
+	Route::get('op_result_material_for_assistant', function () {
+		return view('op_result_for_assistant')->withOprand('material');
+	})->middleware(['auth'])->name('material_for_assistant');
 
 	Route::get('op_result_staff', function () {
 		return view('op_result')->withOprand('staff');

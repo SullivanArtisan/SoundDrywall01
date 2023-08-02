@@ -5,16 +5,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>2020_Assistant_Main_01</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
     <?php
         use App\Models\Job;
         use App\Models\Staff;
+        use App\Models\Client;
+        use App\Models\Project;
+        use App\Models\Material;
         use App\Models\JobDispatch;
         use Illuminate\Support\Facades\Log;
+        use Illuminate\Support\Facades\Auth;
 
+        $client_name = "";
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
             $staff_id = Auth::user()->id;
@@ -30,6 +36,18 @@
                         Log::Info($msg_to_show);
                     }
                 }
+
+                $project = Project::where('id', $job->job_proj_id)->first();
+                if (!$project) {
+                    Log::Info("Project object cannot be found for job ".$id);
+                }
+                $client  = Client::where('id', $project->proj_cstmr_id)->first();
+                if (!$client) {
+                    Log::Info("Client object cannot be found for job ".$id);
+                } else {
+                    $client_name = $client->clnt_name;
+                }
+                $materials  = Material::where('mtrl_job_id', $id)->where('mtrl_status', '<>', 'DELETED')->where('mtrl_status', '<>', 'CANCELED')->orderBy('mtrl_type')->get();
             } else {
                 $err_msg = "Job ".$id."'s object cannot be accessed while just entering the job's main page.";
                 Log::Info($err_msg);
@@ -40,8 +58,8 @@
     <div class="container pt-5 text-dark" style="background: var(--bs-btn-bg); background-color:beige;">
         <!-- Header Section -->
         <div class="row">
-            <div class="col-md-9 my-2" style="background: var(--bs-success-bg-subtle);">
-                <h1>Job {{$job->job_name}}'s Details:</h1>
+            <div class="col-md-9 my-2" style="">
+                <h1>Hi, <span style="font-family: 'Times New Roman';font-weight: bold;font-style: italic; color:brown !important">{{Auth::user()->f_name}} {{Auth::user()->l_name}}</span>!    Job {{$job->job_name}}'s Details:</h1>
             </div>
             <div class="col-md-1 my-4">
                         <button class="btn btn-secondary text-center" type="button">
@@ -51,7 +69,7 @@
                             </a>
                         </button>
             </div>
-            <div class="col-md-2 my-4" style="background: var(--bs-success-bg-subtle);">
+            <div class="col-md-2 my-4" style="">
                 <form method="POST" action="{{ route('logout') }}" style="cursor: pointer">
                     @csrf
                     <a style="text-decoration:none;"  class="text-dark border rounded btn btn-dark" 
@@ -63,6 +81,10 @@
         </div>
 
         <!-- Jobs Section -->
+        <div class="row" style="max-height: 400px;">
+            <div class="col-3"><label class="col-form-label">Customer Name:&nbsp;</label></div>
+            <div class="col-9"><input class="form-control mt-1 my-text-height" type="text" readonly id="clnt_name" name="clnt_name" value="{{$client_name}}"></div>
+        </div>
         <div class="row" style="max-height: 400px;">
             <div class="col-3"><label class="col-form-label">Job Name:&nbsp;</label></div>
             <div class="col-9"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_name" name="job_name" value="{{$job->job_name}}"></div>
@@ -98,6 +120,90 @@
 
         <!-- Footage Section -->
         <div class="row mt-2">
+            <p>
+            <button class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                Show / Hide Materials
+            </button>
+            </p>
+            <div class="collapse" id="collapseExample">
+                <div class="my-3">
+                    <?php
+                    // Title Line
+                    $outContents = "<div class=\"container mw-100\">";
+                    $outContents .= "<div class=\"row bg-info text-white fw-bold\">";
+                        $outContents .= "<div class=\"col-2\">";
+                            $outContents .= "Material Name";
+                        $outContents .= "</div>";
+                        $outContents .= "<div class=\"col-2\">";
+                            $outContents .= "Type";
+                        $outContents .= "</div>";
+                        $outContents .= "<div class=\"col-2\">";
+                            $outContents .= "Model";
+                        $outContents .= "</div>";
+                        $outContents .= "<div class=\"col-2\">";
+                            $outContents .= "Size";
+                        $outContents .= "</div>";
+                        $outContents .= "<div class=\"col-2\">";
+                            $outContents .= "Original Amount";
+                        $outContents .= "</div>";
+                        $outContents .= "<div class=\"col-2\">";
+                            $outContents .= "Left Amount";
+                        $outContents .= "</div>";
+                    $outContents .= "</div></div>";
+                    {{echo $outContents;}}
+                    // Body Lines
+                    foreach ($materials as $material) {
+                            $outContents = "<div class=\"row\">";
+                            $outContents .= "<div class=\"col-2\">";
+                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                                $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
+                            $outContents .= $material->mtrl_name;
+                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                                $outContents .= "</a>";
+                            $outContents .= "</div>";
+                            $outContents .= "<div class=\"col-2\">";
+                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                                $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
+                                $outContents .= $material->mtrl_type;
+                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                                $outContents .= "</a>";
+                            $outContents .= "</div>";
+                            $outContents .= "<div class=\"col-2\">";
+                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                                $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
+                                $outContents .= $material->mtrl_model;
+                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                                $outContents .= "</a>";
+                            $outContents .= "</div>";
+                            $outContents .= "<div class=\"col-2\">";
+                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                                $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
+                                $outContents .= $material->mtrl_size;
+                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                                $outContents .= "</a>";
+                            $outContents .= "</div>";
+                            $outContents .= "<div class=\"col-2\">";
+                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                                $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
+                                $outContents .= $material->mtrl_amount;
+                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                                $outContents .= "</a>";
+                            $outContents .= "</div>";
+                            $outContents .= "<div class=\"col-2\">";
+                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                                $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
+                                $outContents .= $material->mtrl_amount_left;
+                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                                $outContents .= "</a>";
+                            $outContents .= "</div>";
+                            $outContents .= "</div><hr class=\"m-1\"/>";
+                        {{ 					
+                            echo $outContents;;
+                        }}
+                    }
+                    ?>
+                </div>
+            </div>        
             <!--div class="col">
                 <div class="row mb-4">
                     <div class="col text-center" style="background: var(--bs-warning-border-subtle);position: static;padding-top: 11px; display: flex; justify-content: center;">
@@ -140,7 +246,7 @@
         <div class="row mt-2">
         </div>
         <div class="row text-dark" style="background-color:lightpink;">
-            <div class="col my-4 text-center" style="background: var(--bs-warning-border-subtle);position: static; display: flex; justify-content: right;">
+            <div class="col my-4 text-center" style="position: static; display: flex; justify-content: right;">
                 <button class="btn m-2 text-white rounded" style="background-color:lightcoral;" onclick="return doCompleteThisJob();">Complete This Job</button>
             </div>
         </div>

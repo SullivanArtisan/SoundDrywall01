@@ -94,7 +94,7 @@ class MaterialController extends Controller
                 $material->mtrl_shipped_by  = $request->mtrl_shipped_by;
                 $material->mtrl_amount      = $request->mtrl_amount;
                 $material->mtrl_amount_unit = $request->mtrl_amount_unit;
-                $material->mtrl_amount_left = $request->mtrl_amount;
+                $material->mtrl_amount_left = $request->mtrl_amount_left;
                 $material->mtrl_unit_price  = $request->mtrl_unit_price;
                 $material->mtrl_total_price = $request->mtrl_total_price;
                 $material->mtrl_notes       = $request->mtrl_notes;
@@ -111,7 +111,11 @@ class MaterialController extends Controller
                 return redirect()->route('op_result.material')->with('status', ' <span style="color:red">Material Has NOT Been updated!</span>');
             } else {
                 MyHelper::LogStaffActionResult(Auth::user()->id, 'Updated material '.$material->id.' OK.', '');
-                return redirect()->route('op_result.material')->with('status', 'The material of type <span style="font-weight:bold;font-style:italic;color:blue">'.$request->mtrl_type.'</span>, has been updated successfully.');
+                if (Auth::user()->roll == 'ADMINISTRATOR') {
+                    return redirect()->route('op_result.material')->with('status', 'The material of type <span style="font-weight:bold;font-style:italic;color:blue">'.$request->mtrl_type.'</span>, has been updated successfully.');
+                } else {
+                    return redirect()->route('op_result.material_for_assistant')->with('status', 'The material of type <span style="font-weight:bold;font-style:italic;color:blue">'.$request->mtrl_type.'</span>, has been updated successfully.');
+                }
             }
         } catch (Exception $e) {
             echo 'Message: ' .$e->getMessage();
