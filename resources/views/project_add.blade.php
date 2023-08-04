@@ -32,7 +32,7 @@
 </style>
 
 @section('goback')
-	<a class="text-primary" href="{{url()->previous()}}" style="margin-right: 10px;">Back</a>
+	<a class="text-primary" href="{{route('project_main')}}" style="margin-right: 10px;">Back</a>
 @show
 
 @section('function_page')
@@ -151,7 +151,7 @@
                                 <div class="col">
                                     <div class="row">
                                         <button class="btn btn-success mx-4" type="submit" id="btn_save" onclick="addThisProject();">Save</button>
-                                        <button class="btn btn-secondary mx-3" type="button"><a href="{{url()->previous()}}">Cancel</a></button>
+                                        <button class="btn btn-secondary mx-3" type="button"><a href="{{route('project_main')}}">Cancel</a></button>
                                     </div>
                                 </div>
                                 <div class="col"></div>

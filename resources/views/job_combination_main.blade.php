@@ -8,7 +8,7 @@
 	if ($job_id) {
         $job = Job::where('id', $job_id)->first();
         $materials = Material::all()->where('mtrl_job_id', $job_id)->where('mtrl_status', '<>', 'DELETED');
-        $associations = JobDispatch::all()->where('jobdsp_job_id', $job_id);
+        $associations = JobDispatch::all()->where('jobdsp_job_id', $job_id)->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED');
 	}
 
     $msg_to_show = "";
@@ -101,7 +101,7 @@
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-center">
-                                <button class="btn-success m-3 rounded" onclick="AddMaterial()">Add a New Material to This Job</button>
+                                <button class="btn-success m-3 p-2 rounded" onclick="AddMaterial()">Add a New Material to This Job</button>
                             </div>
                         </div>
                     </div>
@@ -159,7 +159,7 @@
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-center">
-                                <button class="btn-success m-3 rounded" onclick="AddAssistant()">Add an Assistant to This Job</button>
+                                <button class="btn-success m-3 p-2 rounded" onclick="AddAssistant()">Add an Assistant to This Job</button>
                             </div>
                         </div>
                     </div>

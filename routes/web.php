@@ -171,14 +171,27 @@ Route::post('job_combination_staff_remove', function (Request $request) {
 
 	MyHelper::LogStaffAction(Auth::user()->id, 'To remove the association of job '.$job_id." and assistant ".$staff_id.".", '');
 
-	$association = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->first();
+	$association = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->where('jobdsp_status', '<>', 'COMPLETED')->first();
 	$association->jobdsp_status = 'DELETED';
-	$res = $association->save();
-	if (!$res) {
+	$res1 = $association->save();
+	if (!$res1) {
 		Log::Info('Failed to remove the association of job '.$job_id." and assistant ".$staff_id.".", '');
 		return "staffRemoveOK=false";	
 	} else {
-		MyHelper::LogStaffActionResult(Auth::user()->id, 'Removed the association of job '.$job_id." and assistant ".$staff_id." OK.", '');
+		$job 		= Job::where('id', $job_id)->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'COMPLETED')->first();
+		if (!$job) {
+			Log::Info('Failed to access the object for job '.$job_id.".", '');
+		} else {
+			$job->job_total_active_assistants--;
+			if ($job->job_total_active_assistants == 0) {
+				$job->job_status = 'CREATED';
+			}
+			$res2 = $job->save();
+			if (!$res2) {
+				Log::Info('Failed to decrease job_total_active_assistants for job '.$job_id." while removing staff ".$staff_id.".", '');
+			}
+			MyHelper::LogStaffActionResult(Auth::user()->id, 'Removed the association of job '.$job_id." and assistant ".$staff_id." OK.", '');
+		}
 		return "staffRemoveOK=true";	
 	}
 })->middleware(['auth'])->name('job_combination_staff_remove');
@@ -226,7 +239,7 @@ Route::post('job_dispatch_to_staff', function (Request $request) {
 					return "jobDispatchOK=false";	
 				} else {
                     MyHelper::LogStaffActionResult(Auth::user()->id, 'Dispatched job '.$job_id.' to staff '.$staff_id.' OK.', '');
-					Log::Info('Successfully dispatched job '.$job_id.'to staff '.$staff_id."!");
+					Log::Info('Successfully dispatched job '.$job_id.' to staff '.$staff_id."!");
 					return "jobDispatchOK=true";	
 				}
 			}

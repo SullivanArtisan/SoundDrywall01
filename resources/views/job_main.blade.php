@@ -107,7 +107,7 @@
 				$outContents .= "Material#";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2\">";
-				$outContents .= "Deadline";
+				$outContents .= "Due Date";
 			$outContents .= "</div>";
 		$outContents .= "</div><hr class=\"m-1\"/>";
 		{{echo $outContents;}}

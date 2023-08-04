@@ -11,7 +11,7 @@
 </style>
 
 @section('goback')
-	<a class="text-primary" href="{{url()->previous()}}" style="margin-right: 10px;">Back</a>
+	<a class="text-primary" href="{{route('project_main')}}" style="margin-right: 10px;">Back</a>
 @show
 
 <?php
@@ -23,7 +23,7 @@
 	if ($id) {
 		$project = Project::where('id', $id)->first();
         $client = Client::where('id', $project->proj_cstmr_id)->first();
-        $jobs = Job::where('job_proj_id', $id)->where('job_status', '<>', 'DELETED')->orderBy('created_at')->get();
+        $jobs = Job::where('job_proj_id', $id)->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'COMPLETED')->orderBy('created_at')->get();
         $client_name = $client->clnt_name;
         if (isset($_GET['JobAddOk'])) {
             $job_add_ok = $_GET['JobAddOk'];
@@ -136,7 +136,7 @@
 							<div class="col"></div>
 							<div class="col">
 									<button class="btn btn-warning mx-3" type="submit">Update</button>
-									<button class="btn btn-secondary mx-3" type="button"><a href="{{url()->previous()}}">Cancel</a></button>
+									<button class="btn btn-secondary mx-3" type="button"><a href="{{route('project_main')}}">Cancel</a></button>
 							</div>
 							<div class="col"></div>
 						</div>
@@ -229,7 +229,7 @@
                 }
                 ?>
                 <div class="row mt-5 d-flex justify-content-center">
-                    <div class="col-3 my-auto ml-5">
+                    <div class="col-3 my-4 ml-5">
 					    <button class="btn btn-success me-2" type="button"><a href="{{route('job_add', ['projId'=>$project->id])}}">Add a Job</a></button>
 				    </div>
 				</div>

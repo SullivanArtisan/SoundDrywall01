@@ -1,6 +1,6 @@
 <?php
 	use App\Models\Project;
-	use App\Models\Customer;
+	use App\Models\Client;
 	use App\Models\Status;
 	use App\Models\JobType;
 	use App\Models\Job;
@@ -8,6 +8,8 @@
     $job_id = $_GET['jobId'];
 	if ($job_id) {
         $job = Job::where('id', $job_id)->first();
+        $project = Project::where('id', $job->job_proj_id)->first();
+        $client = Client::where('id', $project->proj_cstmr_id)->first();
 	}
 ?>
 
@@ -43,10 +45,10 @@
 		<div>
 			<div class="row m-4">
 				<div>
-					<h2 class="text-muted pl-2">Job {{$job->job_name}}:</h2>
+					<h2 class="text-muted pl-2">Job {{$job->job_name}} (for Customer <span style="color:maroon; font-family: Georgia; font-style: italic;">{{$client->clnt_name}}</span>):</h2>
 				</div>
 				<div class="col my-auto ml-5">
-					<button class="btn btn-danger me-2" type="button"><a href="job_delete?id={{$job->id}}" onclick="return myConfirmation();">Delete</a></button>
+					<button class="btn btn-danger" type="button"><a href="job_delete?id={{$job->id}}" onclick="return myConfirmation();">Delete</a></button>
 				</div>
 				<div class="col"></div>
 			</div>

@@ -49,9 +49,9 @@
             <div class="col-2">Job Type</div>
             <div class="col-1">Job Name</div>
             <div class="col-2">Status</div>
-            <div class="col-3">Job Address</div>
-            <div class="col-2">Job City</div>
-            <div class="col-2">Job Deadline</div>
+            <div class="col-3">Address</div>
+            <div class="col-2">City</div>
+            <div class="col-2">Due Date</div>
         </div>
         <?php
             $listed_jobs = 0;
