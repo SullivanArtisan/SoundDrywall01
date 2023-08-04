@@ -9,7 +9,7 @@ use Illuminate\Session\Store;
 class AutoLogout
 {
     protected $session;
-    protected $timeout = 60;
+    protected $timeout = 60;   //seconds
 
     public function __construct(Store $session)
     {

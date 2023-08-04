@@ -17,6 +17,7 @@
         use App\Models\Project;
         use App\Models\Material;
         use App\Models\JobDispatch;
+        use App\Helper\MyHelper;
         use Illuminate\Support\Facades\Log;
         use Illuminate\Support\Facades\Auth;
 
@@ -28,6 +29,32 @@
             $msg_to_show = "";
             if ($job) {
                 $association = JobDispatch::where('jobdsp_job_id', $id)->where('jobdsp_staff_id', $staff_id)->first();
+                if (!$association) {
+                    Log::Info("JobDispatch object cannot be found for job ".$id);
+                    url()->previous();
+                } else {
+                    if ($association->jobdsp_status == 'CREATED') {
+                        $association->jobdsp_status = 'RECEIVED';
+
+                        $result = $association->save();
+                        if (!$result) {
+                            MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to updated JobDispatch status to RECEIVED OK for job '.$id.'.', '900');
+                        } else {
+                            MyHelper::LogStaffActionResult(Auth::user()->id, 'Updated JobDispatch status to RECEIVED OK for job '.$id.'.', '');
+
+                            $total_received = 0;
+                            $associations = JobDispatch::where('jobdsp_job_id', $id)->get();
+                            foreach($associations as $asso) {
+                                if ($asso->jobdsp_status == 'RECEIVED') {
+                                    $total_received++;
+                                }
+                            }
+
+                            $job->job_status = $total_received.'/'.$job->job_total_assistants.' RECEIVED';
+                            $result = $job->save();
+                        }
+                    }
+                }
 
                 if (isset($_GET['msgToAdminOK'])) {
                     $result = $_GET['msgToAdminOK'];
