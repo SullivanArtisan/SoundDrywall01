@@ -163,7 +163,7 @@
                         $outContents .= "Job Type";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-1 mt-1 align-middle\">";
-                        $outContents .= "Assistants#";
+                        $outContents .= "Crew#";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-2 mt-1 align-middle\">";
                         $outContents .= "Job Status";

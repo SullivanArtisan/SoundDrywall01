@@ -83,7 +83,7 @@
                         <div class="row text-white" style="max-height: 400px; background-color:grey; font-weight:bold !important;">
                             <div class="col-2">Job Name</div>
                             <div class="col-4">Job Type</div>
-                            <div class="col-2">Assistants#</div>
+                            <div class="col-2">Crew#</div>
                             <div class="col-4">Job Address</div>
                         </div>
                         <?php 

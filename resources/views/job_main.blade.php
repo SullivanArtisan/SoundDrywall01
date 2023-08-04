@@ -101,7 +101,7 @@
 				$outContents .= "City";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-1\">";
-				$outContents .= "Assistants#";
+				$outContents .= "Crew#";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-1\">";
 				$outContents .= "Material#";

@@ -217,6 +217,9 @@ Route::post('job_dispatch_to_staff', function (Request $request) {
 			} else {
 				$job->job_total_assistants 			= $job->job_total_assistants + 1;
 				$job->job_total_active_assistants	= $job->job_total_active_assistants + 1;
+				if (!strstr(strtoupper($job->job_status), 'RECEIVED')) {
+					$job->job_status = 'DISPATCHED';
+				}
 				$res = $job->save();
 				if (!$res) {
 					Log::Info('Failed to update job_total_assistants and job_total_active_assistants while dispatch job '.$job_id.'to staff '.$staff_id."!");
