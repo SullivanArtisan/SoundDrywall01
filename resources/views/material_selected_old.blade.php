@@ -1,7 +1,6 @@
 <?php
 	use App\Models\Job;
 	use App\Models\Material;
-	use App\Models\MaterialType;
 	use App\Models\SizeUnit;
 	use App\Models\AmountUnit;
 	use App\Models\Provider;
@@ -20,7 +19,7 @@
 	$id = $_GET['id'];
 	if ($id) {
 		$material = Material::where('id', $id)->first();
-		//$mtrl_type = $material->mtrl_type;
+		$mtrl_type = $material->mtrl_type;
 	}
 ?>
 
@@ -70,25 +69,6 @@
 					<form method="post" action="{{url('material_update')}}">
 						@csrf
 						<div class="row">
-							<div class="col"><label class="col-form-label">Name:&nbsp;</label><span class="text-danger">*</span></div>
-							<div class="col"><input class="form-control mt-1 my-text-height" type="text" id="mtrl_name" name="mtrl_name" value="{{$material->mtrl_name}}"></div>
-							<div class="col"><label class="col-form-label">Type:&nbsp;</label><span class="text-danger">*</span></div>
-							<div class="col">
-								<?php
-									$types = MaterialType::all()->sortBy('mtrl_type');
-									$tagHead = "<input list=\"mtrl_type\" name=\"mtrl_type\" id=\"mtrltypeinput\" class=\"form-control mt-1 my-text-height\" ";
-									$tagTail = "><datalist id=\"mtrl_type\">";
-									foreach($types as $type) {
-										$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $type->mtrl_type).">";
-									}
-									$tagTail.= "</datalist>";
-									echo $tagHead."placeholder=\"\" value=\"".$material->mtrl_type."\"".$tagTail;
-								?>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col"><label class="col-form-label">Model:&nbsp;</label><span class="text-danger">*</span></div>
-							<div class="col"><input class="form-control mt-1 my-text-height" id="mtrl_model" name="mtrl_model" value="{{$material->mtrl_model}}"></div>
 							<div class="col"><label class="col-form-label">Used for Job:&nbsp;</label></div>
 							<div class="col">
 								<?php
@@ -108,26 +88,42 @@
 								}
 								?>
 							</div>
+							<div class="col"><label class="col-form-label">Model/Description:&nbsp;</label><span class="text-danger">*</span></div>
+							<div class="col"><input class="form-control mt-1 my-text-height" id="mtrl_model" name="mtrl_model" value="{{$material->mtrl_model}}"></div>
 						</div>
+						<!--
 						<div class="row">
-							<div class="col"><label class="col-form-label">Item Size:&nbsp;</label></div>
+							@if ($mtrl_type == 'DRYWALL') 
+								<div class="col"><label class="col-form-label">Thickness:&nbsp;</label></div>
+							@else
+								<div class="col"><label class="col-form-label">Item Size:&nbsp;</label></div>
+							@endif
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" id="mtrl_size" name="mtrl_size" value="{{$material->mtrl_size}}"></div>
-							<div class="col"><label class="col-form-label">Size Unit:&nbsp;</label></div>
+							@if ($mtrl_type == 'DRYWALL') 
+								<div class="col"><label class="col-form-label">Thickness Unit:&nbsp;</label></div>
+							@else
+								<div class="col"><label class="col-form-label">Size Unit:&nbsp;</label></div>
+							@endif
 							<div class="col">
 								<?php
-									$tagHead = "<input list=\"mtrl_size_unit\" name=\"mtrl_size_unit\" id=\"mtrlsizeunitinput\" class=\"form-control mt-1 my-text-height\" ";
-									$tagTail = "><datalist id=\"mtrl_size_unit\">";
+									// $tagHead = "<input list=\"mtrl_size_unit\" name=\"mtrl_size_unit\" id=\"mtrlsizeunitinput\" class=\"form-control mt-1 my-text-height\" ";
+									// $tagTail = "><datalist id=\"mtrl_size_unit\">";
 
 			
-									$units = SizeUnit::all()->sortBy('unit_name');
-									foreach($units as $unit) {
-										$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $unit->unit_name).">";
-									}
-									$tagTail.= "</datalist>";
-									echo $tagHead."placeholder=\"\" value=\"".$material->mtrl_size_unit."\"".$tagTail;
+									// $units = SizeUnit::all()->sortBy('unit_name');
+									// foreach($units as $unit) {
+									// 	$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $unit->unit_name).">";
+									// }
+									// $tagTail.= "</datalist>";
+									// // if (isset($_GET['selJobId'])) {
+									// // 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
+									// // } else {
+									// 	echo $tagHead."placeholder=\"\" value=\"".$material->mtrl_size_unit."\"".$tagTail;
+									// // }
 								?>
 							</div>
 						</div>
+						-->
 						<div class="row">
 							<div class="col"><label class="col-form-label">Total Amount:&nbsp;</label><span class="text-danger">*</span></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="number" id="mtrl_amount" name="mtrl_amount" value="{{$material->mtrl_amount}}"></div>
@@ -143,7 +139,11 @@
 										$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $unit->amount_unit_name).">";
 									}
 									$tagTail.= "</datalist>";
-									echo $tagHead."placeholder=\"\" value=\"".$material->mtrl_amount_unit."\"".$tagTail;
+									// if (isset($_GET['selJobId'])) {
+									// 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
+									// } else {
+										echo $tagHead."placeholder=\"\" value=\"".$material->mtrl_amount_unit."\"".$tagTail;
+									// }
 								?>
 							</div>
 						</div>
@@ -160,7 +160,11 @@
 										$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $provider->pvdr_name.' ('.$provider->pvdr_address.', '.$provider->pvdr_city.')').">";
 									}
 									$tagTail.= "</datalist>";
-									echo $tagHead."placeholder=\"\" value=\"".$material->mtrl_source."\"".$tagTail;
+									// if (isset($_GET['selJobId'])) {
+									// 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
+									// } else {
+										echo $tagHead."placeholder=\"\" value=\"".$material->mtrl_source."\"".$tagTail;
+									// }
 								?>
 							</div>
 							<div class="col"><label class="col-form-label">Shipped by:&nbsp;</label></div>
@@ -179,6 +183,8 @@
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" id="mtrl_notes" name="mtrl_notes" value="{{$material->mtrl_notes}}"></div>
 						</div>
 						<div class="row">
+							<div class="col"><label class="col-form-label">Material Type:&nbsp;</label><span class="text-danger">*</span></div>
+                        	<div class="col"><input class="form-control mt-1 my-text-height" readonly type="text" id="mtrl_type" name="mtrl_type" value="{{$material->mtrl_type}}"></div>
 							<div class="col"><label class="col-form-label">&nbsp;</label></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="mtrl_id" name="mtrl_id" value="{{$material->id}}"></div>
 						</div>

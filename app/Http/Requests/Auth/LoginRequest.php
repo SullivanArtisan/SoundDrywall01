@@ -44,7 +44,7 @@ class LoginRequest extends FormRequest
      */
     public function authenticate()
     {
-        MyHelper::LogStaffActionResult(0, $this->throttleKey().' attempted to log in...', '500');
+        MyHelper::LogStaffAction(0, $this->throttleKey().' attempted to log in...', '');
         $this->ensureIsNotRateLimited();
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {

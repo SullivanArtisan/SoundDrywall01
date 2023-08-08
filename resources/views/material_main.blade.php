@@ -70,8 +70,18 @@
 		// Title Line
 		$outContents = "<div class=\"container mw-100\">";
         $outContents .= "<div class=\"row bg-info text-white fw-bold\">";
-			$outContents .= "<div class=\"col-3 align-middle\">";
+			$outContents .= "<div class=\"col-2 align-middle\">";
 				$sortParms = "?sort_key_material=mtrl_name&sort_time=".time();
+				$outContents .= "<a href=\"material_main".$sortParms."\">";
+				$outContents .= "Name";
+				if ($sort_icon == 'asc') {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-up-square\"></a></i>";
+				} else {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-down-square\"></a></i>";
+				}
+			$outContents .= "</div>";
+			$outContents .= "<div class=\"col-3 align-middle\">";
+				$sortParms = "?sort_key_material=mtrl_type&sort_time=".time();
 				$outContents .= "<a href=\"material_main".$sortParms."\">";
 				$outContents .= "Type";
 				if ($sort_icon == 'asc') {
@@ -80,7 +90,7 @@
 					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-down-square\"></a></i>";
 				}
 			$outContents .= "</div>";
-            $outContents .= "<div class=\"col-3\">";
+            $outContents .= "<div class=\"col-1\">";
 				$outContents .= "Model";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-1\">";
@@ -101,12 +111,17 @@
 		// Body Lines
 		foreach ($materials as $material) {
             $outContents = "<div class=\"row\">";
+				$outContents .= "<div class=\"col-2\">";
+					$outContents .= "<a href=\"material_selected?id=$material->id\">";
+					$outContents .= $material->mtrl_name;
+					$outContents .= "</a>";
+				$outContents .= "</div>";
 				$outContents .= "<div class=\"col-3\">";
 					$outContents .= "<a href=\"material_selected?id=$material->id\">";
 					$outContents .= $material->mtrl_type;
 					$outContents .= "</a>";
 				$outContents .= "</div>";
-                $outContents .= "<div class=\"col-3\">";
+                $outContents .= "<div class=\"col-1\">";
 					$outContents .= "<a href=\"material_selected?id=$material->id\">";
 					$outContents .= $material->mtrl_model;
 					$outContents .= "</a>";

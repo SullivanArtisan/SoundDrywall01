@@ -16,6 +16,7 @@ class MaterialController extends Controller
     {
         try {
             $validated = $request->validate([
+                'mtrl_name'   => 'required',
                 'mtrl_type'   => 'required',
                 'mtrl_model'  => 'required',
                 'mtrl_amount' => 'required',
@@ -30,14 +31,14 @@ class MaterialController extends Controller
                 if ($job) {
                     $material->mtrl_job_id      = $job->id;
                 }
-                // $material->mtrl_name        = $request->mtrl_name;
+                $material->mtrl_name        = $request->mtrl_name;
                 $material->mtrl_model       = $request->mtrl_model;
                 $material->mtrl_status      = "CREATED";
                 $material->mtrl_type        = $request->mtrl_type;
-                if ($request->mtrl_type != "INSULATION") {
+                // if ($request->mtrl_type != "INSULATION") {
                     $material->mtrl_size        = $request->mtrl_size;
                     $material->mtrl_size_unit   = $request->mtrl_size_unit;
-                }
+                // }
                 $material->mtrl_source      = $request->mtrl_source;
                 $material->mtrl_shipped_by  = $request->mtrl_shipped_by;
                 $material->mtrl_amount      = $request->mtrl_amount;
@@ -70,6 +71,7 @@ class MaterialController extends Controller
     {
         try {
             $validated = $request->validate([
+                'mtrl_name'   => 'required',
                 'mtrl_type'   => 'required',
                 'mtrl_model'  => 'required',
                 'mtrl_amount' => 'required',
@@ -81,10 +83,16 @@ class MaterialController extends Controller
             $job = Job::where('job_name', $request->job_name)->first();
     
             if ($material) {
-                if ($job) {
-                    $material->mtrl_job_id      = $job->id;
+                if ($request->job_name == "") {
+                    $material->mtrl_job_id      = 0;
+                } else {
+                    if ($job) {
+                        $material->mtrl_job_id  = $job->id;
+                    } else {
+                        MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to access job object for job '.$request->job_name.' while update material '.$request->mtrl_id, '900');
+                    }
                 }
-                // $material->mtrl_name        = $request->mtrl_name;
+                $material->mtrl_name        = $request->mtrl_name;
                 // $material->mtrl_status      = $request->mtrl_status;
                 $material->mtrl_model       = $request->mtrl_model;
                 $material->mtrl_type        = $request->mtrl_type;
