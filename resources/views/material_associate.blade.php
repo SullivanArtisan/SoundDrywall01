@@ -3,6 +3,13 @@
 	use App\Models\JobDispatch;
 	use App\Models\Job;
 
+    $job_id = "";
+    if (isset($_GET['jobId'])) {
+        $job_id = $_GET['jobId'];
+        $job = Job::where('id', $job_id)->first();
+    } else {
+        Log::Info('Failed get the input jobId parameter while doing job_dispatch_by_adding');
+    }
     $materials = Material::where('mtrl_status', '<>', 'DELETED')->where('mtrl_job_id', '0')->orderBy('mtrl_name', 'asc')->get();
     $jobs = Job::all()->where('job_assistants_complete', '=', '0')->where('job_assistants_complete', '<', 'job_total_active_assistants')->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED');
 ?>
@@ -13,7 +20,11 @@
 </style>
 
 @section('goback')
-	<a class="text-primary" href="{{route('home_page')}}" style="margin-right: 10px;">Back</a>
+    @if ($job_id == "")
+	    <a class="text-primary" href="{{route('home_page')}}" style="margin-right: 10px;">Back</a>
+    @else
+        <a class="text-primary" href="{{route('job_combination_main', ['jobId'=>$job_id])}}" style="margin-right: 10px;">Back</a>
+    @endif
 @show
 
 @section('function_page')
@@ -33,6 +44,7 @@
                     <div class="row my-2">
                     <div class="col">
                         <div class="row text-white" style="max-height: 400px; background-color:grey; font-weight:bold !important;">
+                            <div class="col">Name</div>
                             <div class="col">Type</div>
                             <div class="col">Size</div>
                             <div class="col">Amount</div>
@@ -47,6 +59,7 @@
                                     $bg_color = "PaleGreen";
                                 }
                                 $outContents = "<div class=\"row\" id=\"m_".$material->id."\" onclick=\"MaterialSelected(this.id)\" ondblclick=\"EditMaterial(this.id)\" style=\"background-color:".$bg_color."\">";
+                                $outContents .= "<div class=\"col\" style=\"cursor:default\">".$material->mtrl_name."</div>";
                                 $outContents .= "<div class=\"col\" style=\"cursor:default\">".$material->mtrl_type."</div>";
                                 $outContents .= "<div class=\"col\" style=\"cursor:default\">".$material->mtrl_size."</div>";
                                 $outContents .= "<div class=\"col\" style=\"cursor:default\">".intval($material->mtrl_amount_left)."/".intval($material->mtrl_amount)."</div>";
@@ -88,14 +101,25 @@
                         </div>
                         <?php 
                             $listed_items = 0;
+                            if ($job_id == "") {
+
                             foreach ($jobs as $job) {
-                                $listed_items++;
-                                if ($listed_items % 2) {
-                                    $bg_color = "Lavender";
-                                } else {
-                                    $bg_color = "PaleGreen";
+                                    $listed_items++;
+                                    if ($listed_items % 2) {
+                                        $bg_color = "Lavender";
+                                    } else {
+                                        $bg_color = "PaleGreen";
+                                    }
+                                    $outContents = "<div class=\"row\" id=\"j_".$job->id."\" onclick=\"JobSelected(this.id)\" ondblclick=\"EditJob(this.id)\" style=\"background-color:".$bg_color."\">";
+                                    $outContents .= "<div class=\"col-2 mt-1\" style=\"cursor:default\">".$job->job_name."</div>";
+                                    $outContents .= "<div class=\"col-4 mt-1\" style=\"cursor:default\">".$job->job_type."</div>";
+                                    $outContents .= "<div class=\"col-2 mt-1\" style=\"cursor:default\">".$job->job_total_active_assistants."</div>";
+                                    $outContents .= "<div class=\"col-4 mt-1\" style=\"cursor:default\">".$job->job_address.", ".$job->job_city."</div>";
+                                    $outContents .= "</div>";
+                                    echo $outContents;
                                 }
-                                $outContents = "<div class=\"row\" id=\"j_".$job->id."\" onclick=\"JobSelected(this.id)\" ondblclick=\"EditJob(this.id)\" style=\"background-color:".$bg_color."\">";
+                            } else {
+                                $outContents = "<div class=\"row\" id=\"j_".$job->id."\" style=\"background-color:pink\">";
                                 $outContents .= "<div class=\"col-2 mt-1\" style=\"cursor:default\">".$job->job_name."</div>";
                                 $outContents .= "<div class=\"col-4 mt-1\" style=\"cursor:default\">".$job->job_type."</div>";
                                 $outContents .= "<div class=\"col-2 mt-1\" style=\"cursor:default\">".$job->job_total_active_assistants."</div>";
@@ -157,6 +181,9 @@
         }
 
         function doMtrlAssociate(inputId) {
+            if (jobId == "") {
+                jobId = {!!json_encode($job_id)!!};
+            }
             if (jobId == "" || mtrlId == "") {
                 alert('Please select Material and Job first befor you do the association!')
             } else {
@@ -170,7 +197,12 @@
                     },    // the _token:token is for Laravel
                     success: function(dataRetFromPHP) {
                         alert('Material associated successfully.')
-                        window.location = './material_associate';
+                        parmJobId = {!!json_encode($job_id)!!};
+                        if (parmJobId == "") {
+                            window.location = './material_associate';
+                        } else {
+                            window.location = './material_associate?jobId='+jobId;
+                        }
                     },
                     error: function(err) {
                         alert('Failed to associate the material.\r\nPlease try again!')

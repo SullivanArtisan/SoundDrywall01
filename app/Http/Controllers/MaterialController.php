@@ -25,7 +25,7 @@ class MaterialController extends Controller
             $material = new Material;
             $job = Job::where('job_name', $request->job_name)->first();
 
-            MyHelper::LogStaffAction(Auth::user()->id, 'Added material of type '.$request->mtrl_type.' (model= '.$request->mtrl_model.' for job '.$request->job_name.').', '');
+            MyHelper::LogStaffAction(Auth::user()->id, 'Added material of type '.$request->mtrl_type.' (model= '.$request->mtrl_model.') for job '.$request->job_name.'.', '');
     
             if ($material) {
                 if ($job) {

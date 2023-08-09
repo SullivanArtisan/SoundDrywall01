@@ -196,6 +196,34 @@ Route::post('job_combination_staff_remove', function (Request $request) {
 	}
 })->middleware(['auth'])->name('job_combination_staff_remove');
 
+Route::post('job_combination_material_remove', function (Request $request) {
+	$job_id 		= $_POST['job_id'];
+	$material_id	= $_POST['material_id'];
+
+	MyHelper::LogStaffAction(Auth::user()->id, 'To remove the association of job '.$job_id." and material ".$material_id.".", '');
+
+	$material = Material::where('id', $material_id)->where('mtrl_status', '<>', 'DELETED')->where('mtrl_status', '<>', 'CANCELED')->where('mtrl_status', '<>', 'COMPLETED')->first();
+	$material->mtrl_job_id = 0;
+	$res = $material->save();
+	if (!$res) {
+		Log::Info('Failed to remove the association of job '.$job_id." and material ".$material_id.".", '');
+		return "materialRemoveOK=false";	
+	} else {
+		$job 		= Job::where('id', $job_id)->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'COMPLETED')->first();
+		if (!$job) {
+			Log::Info('Failed to access the object for job '.$job_id.' while removing the materail association for material '.$material_id);
+		} else {
+			$job->job_total_active_materials--;
+			$res2 = $job->save();
+			if (!$res2) {
+				Log::Info('Failed to decrease job_total_active_materials for job '.$job_id." while removing material ".$material_id.".", '');
+			}
+			MyHelper::LogStaffActionResult(Auth::user()->id, 'Removed the association of job '.$job_id." and material ".$material_id." OK.", '');
+		}
+		return "materialRemoveOK=true";	
+	}
+})->middleware(['auth'])->name('job_combination_material_remove');
+
 Route::get('job_dispatch', function (Request $request) {
 		return view('job_dispatch');
 })->middleware(['auth'])->name('job_dispatch');

@@ -71,12 +71,14 @@
                 <div class="row m-4">
                     <div class="col">
                         <div class="container">
-                            <div class="row">
-                                <div class="col bg-info text-white"><h5 class="mt-1">Materials:&nbsp;</h5></div>
+                            <div class="row bg-info text-white">
+                                <div class="col-3"><h5 class="mt-1">Materials:&nbsp;</h5></div>
+                                <div class="col-9 pt-2 font-italic"><h6>(Double click a row to de-associate it)</h6></div>
                             </div>
                             <div class="row my-2">
                                 <div class="col">
                                     <div class="row text-white" style="max-height: 400px; background-color:grey; font-weight:bold !important;">
+                                        <div class="col">Name</div>
                                         <div class="col">Type</div>
                                         <div class="col">Size</div>
                                         <div class="col">Amount</div>
@@ -90,7 +92,8 @@
                                             } else {
                                                 $bg_color = "PaleGreen";
                                             }
-                                            $outContents = "<div class=\"row\" style=\"background-color:".$bg_color."\">";
+                                            $outContents = "<div class=\"row\" id=\"m_".$material->id."\" ondblclick=\"RemoveThisMaterial(this.id)\" style=\"background-color:".$bg_color."\">";
+                                            $outContents .= "<div class=\"col mt-1\">".$material->mtrl_name."</div>";
                                             $outContents .= "<div class=\"col mt-1\">".$material->mtrl_type."</div>";
                                             $outContents .= "<div class=\"col mt-1\">".$material->mtrl_size."</div>";
                                             $outContents .= "<div class=\"col mt-1\">".$material->mtrl_amount_left."/".$material->mtrl_amount." ".strtolower($material->mtrl_amount_unit)."</div>";
@@ -107,8 +110,9 @@
                     </div>
                     <div class="col">
                         <div class="container">
-                            <div class="row">
-                                <div class="col bg-info text-white"><h5 class="mt-1">Assistants:&nbsp;</h5></div>
+                            <div class="row bg-info text-white">
+                                <div class="col-3"><h5 class="mt-1">Assistants:&nbsp;</h5></div>
+                                <div class="col-9 pt-2 font-italic"><h6>(Click a row to chat or de-associate it)</h6></div>
                             </div>
                             <div class="row my-2">
                                 <div class="col">
@@ -176,7 +180,7 @@
 			function AddMaterial() {
                 jobId = {!!json_encode($job_id)!!};
                 event.preventDefault();
-                window.location = './material_add?jobId='+jobId;
+                window.location = './material_associate?jobId='+jobId;
 			}
 
 			function AddAssistant() {
@@ -184,7 +188,31 @@
                 event.preventDefault();
                 window.location = './job_dispatch_by_adding?jobId='+jobId;
 			}
-		</script>
+
+            function RemoveThisMaterial(inputId) {
+                mtrlId = inputId.substring(2, inputId.length);
+                if(!confirm("Are you sure to remove this material from this job?")) {
+			        event.preventDefault();
+                } else {
+                    var jobId = {!!json_encode($job_id)!!};
+                    $.ajax({
+                        url: '/job_combination_material_remove',
+                        type: 'POST',
+                        data: {
+                            _token:"{{ csrf_token() }}", 
+                            job_id:jobId,
+                            material_id:mtrlId
+                        },    // the _token:token is for Laravel
+                        success: function(dataRetFromPHP) {
+                            window.location = './job_combination_main?jobId='+jobId;
+                        },
+                        error: function(err) {
+                            window.location = './job_combination_main?jobId='+jobId;
+                        }
+                    });
+                }
+            }
+        </script>
 	@endsection
 }
 @endif

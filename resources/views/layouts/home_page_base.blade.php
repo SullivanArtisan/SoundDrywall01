@@ -108,8 +108,9 @@
 							<div><img class="rounded" style="max-width:100%; height:auto" src="assets/img/2020.jpg"></div>
 						</div>
 						<div class="col-8 text-muted">
-                            <div class="row">
-                                <h2 style="font-family: Georgia;">TwentyTwenty Contracting Ltd.</h2>
+                            <div class="row" style="font-family: Georgia;">
+                                <div class="col"><h2>TwentyTwenty Contracting Ltd.&nbsp&nbsp</h2></div>
+                                <div class="col pt-2"><h6>(Ver. 0.1)</h6></div>
                             </div>
                             <div class="row mt-2">
                                 <div>

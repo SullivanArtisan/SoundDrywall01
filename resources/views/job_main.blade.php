@@ -85,11 +85,11 @@
 		// Title Line
 		$outContents = "<div class=\"container mw-100\">";
         $outContents .= "<div class=\"row bg-info text-white fw-bold\">";
-			$outContents .= "<div class=\"col-2 align-middle\">";
-				$outContents .= "Job Type";
-			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-1\">";
 				$outContents .= "Job Name";
+			$outContents .= "</div>";
+			$outContents .= "<div class=\"col-2 align-middle\">";
+				$outContents .= "Job Type";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-1\">";
 				$outContents .= "Status";
@@ -115,16 +115,16 @@
 		// Body Lines
 		foreach ($jobs as $job) {
             $outContents = "<div class=\"row\">";
-                $outContents .= "<div class=\"col-2\">";
-                    $outContents .= "<a href=\"job_selected?jobId=$job->id\">";
-                    $outContents .= $job->job_type;
-                    $outContents .= "</a>";
-                $outContents .= "</div>";
-                $outContents .= "<div class=\"col-1\">";
+				$outContents .= "<div class=\"col-1\">";
 					$outContents .= "<a href=\"job_selected?jobId=$job->id\">";
 					$outContents .= $job->job_name;
 					$outContents .= "</a>";
 				$outContents .= "</div>";
+				$outContents .= "<div class=\"col-2\">";
+                    $outContents .= "<a href=\"job_selected?jobId=$job->id\">";
+                    $outContents .= $job->job_type;
+                    $outContents .= "</a>";
+                $outContents .= "</div>";
                 $outContents .= "<div class=\"col-1\">";
 					$outContents .= "<a href=\"job_selected?jobId=$job->id\">";
 					$outContents .= $job->job_status;
