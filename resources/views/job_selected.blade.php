@@ -5,12 +5,22 @@
 	use App\Models\JobType;
 	use App\Models\Job;
 
-    $job_id = $_GET['jobId'];
+    $job_id = "";
+    if (isset($_GET['jobId'])) {
+        $job_id = $_GET['jobId'];
+    }
+
+    if (isset($_GET['jobIdFromProj'])) {
+        $job_id = $_GET['jobIdFromProj'];
+    }
+
 	if ($job_id) {
         $job = Job::where('id', $job_id)->first();
         $project = Project::where('id', $job->job_proj_id)->first();
         $client = Client::where('id', $project->proj_cstmr_id)->first();
-	}
+	} else {
+        Log::Info('Failed to get jobId');
+    }
 ?>
 
 @extends('layouts.home_page_base')
@@ -19,7 +29,11 @@
 </style>
 
 @section('goback')
+    @if (isset($_GET['jobIdFromProj']))
 	<a class="text-primary" href="{{route('project_selected', ['id'=>$job->job_proj_id])}}" style="margin-right: 10px;">Back</a>
+    @else
+	<a class="text-primary" href="{{route('job_main')}}" style="margin-right: 10px;">Back</a>
+    @endif
 @show
 
 @if (!$job_id) {

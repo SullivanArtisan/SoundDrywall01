@@ -60,7 +60,7 @@
 		<div>
 			<div class="row m-4">
 				<div>
-					<h2 class="text-muted pl-2">Project {{$id}} (for client <span style="font-family: 'Times New Roman';font-weight: bold;font-style: italic; color:black !important">{{$client->clnt_name}})</span>:</h2>
+					<h2 class="text-muted pl-2">Project {{$id}}:</h2>
 				</div>
 				<div class="col my-auto ml-5">
 					<button class="btn btn-danger me-2" type="button"><a href="project_delete?id={{$project->id}}" onclick="return myConfirmation();">Delete</a></button>
@@ -165,13 +165,16 @@
                     $outContents .= "<div class=\"col-1 mt-1 align-middle\">";
                         $outContents .= "Crew#";
                     $outContents .= "</div>";
+                    $outContents .= "<div class=\"col-1 mt-1 align-middle\">";
+                        $outContents .= "Materail#";
+                    $outContents .= "</div>";
                     $outContents .= "<div class=\"col-2 mt-1 align-middle\">";
                         $outContents .= "Job Status";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-2 mt-1 align-middle\">";
                         $outContents .= "Job Address";
                     $outContents .= "</div>";
-                    $outContents .= "<div class=\"col-2 mt-1 align-middle\">";
+                    $outContents .= "<div class=\"col-1 mt-1 align-middle\">";
                         $outContents .= "Job City";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-2 align-middle\">";
@@ -190,37 +193,42 @@
                         $outContents = "<div class=\"row\" style=\"background-color:PaleGreen\">";
                     }
                     $outContents .= "<div class=\"col-1\">";
-                        $outContents .= "<a href=\"".route('job_selected', ['jobId='.$job->id])."\">";
+                        $outContents .= "<a href=\"".route('job_selected', ['jobIdFromProj='.$job->id])."\">";
                         $outContents .= $job->job_name;
                         $outContents .= "</a>";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-2\">";
-                        $outContents .= "<a href=\"".route('job_selected', ['jobId='.$job->id])."\">";
+                        $outContents .= "<a href=\"".route('job_selected', ['jobIdFromProj='.$job->id])."\">";
                         $outContents .= $job->job_type;
                         $outContents .= "</a>";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-1\">";
-                        $outContents .= "<a href=\"".route('job_selected', ['jobId='.$job->id])."\">";
+                        $outContents .= "<a href=\"".route('job_selected', ['jobIdFromProj='.$job->id])."\">";
                         $outContents .= $job->job_total_active_assistants;
                         $outContents .= "</a>";
                     $outContents .= "</div>";
+                    $outContents .= "<div class=\"col-1\">";
+                        $outContents .= "<a href=\"".route('job_selected', ['jobIdFromProj='.$job->id])."\">";
+                        $outContents .= $job->job_total_active_materials;
+                        $outContents .= "</a>";
+                    $outContents .= "</div>";
                     $outContents .= "<div class=\"col-2\">";
-                        $outContents .= "<a href=\"".route('job_selected', ['jobId='.$job->id])."\">";
+                        $outContents .= "<a href=\"".route('job_selected', ['jobIdFromProj='.$job->id])."\">";
                         $outContents .= $job->job_status;
                         $outContents .= "</a>";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-2\">";
-                        $outContents .= "<a href=\"".route('job_selected', ['jobId='.$job->id])."\">";
+                        $outContents .= "<a href=\"".route('job_selected', ['jobIdFromProj='.$job->id])."\">";
                         $outContents .= $job->job_address;
                         $outContents .= "</a>";
                     $outContents .= "</div>";
-                    $outContents .= "<div class=\"col-2\">";
-                        $outContents .= "<a href=\"".route('job_selected', ['jobId='.$job->id])."\">";
+                    $outContents .= "<div class=\"col-1\">";
+                        $outContents .= "<a href=\"".route('job_selected', ['jobIdFromProj='.$job->id])."\">";
                         $outContents .= $job->job_city;
                         $outContents .= "</a>";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-2\">";
-                        $outContents .= "<a href=\"".route('job_selected', ['jobId='.$job->id])."\">";
+                        $outContents .= "<a href=\"".route('job_selected', ['jobIdFromProj='.$job->id])."\">";
                         $outContents .= $job->job_province;
                         $outContents .= "</a>";
                     $outContents .= "</div>";

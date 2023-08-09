@@ -217,6 +217,8 @@ Route::post('job_combination_material_remove', function (Request $request) {
 			$res2 = $job->save();
 			if (!$res2) {
 				Log::Info('Failed to decrease job_total_active_materials for job '.$job_id." while removing material ".$material_id.".", '');
+			} else {
+				MyHelper::LogStaffActionResult(Auth::user()->id, 'Decreased job_total_active_materials for job '.$job_id.' OK.', '');
 			}
 			MyHelper::LogStaffActionResult(Auth::user()->id, 'Removed the association of job '.$job_id." and material ".$material_id." OK.", '');
 		}
@@ -342,6 +344,7 @@ Route::get('/drywall_delete', function () {
 	$job 		= Job::where('id', $job_id)->first();
 	$material 	= Material::where('id', $mtrl_id)->first();
 
+	MyHelper::LogStaffAction(Auth::user()->id, 'To associate material '.$mtrl_id.' with the job '.$job_id.'.', '');
 	if ($material) {
 		$material->mtrl_job_id = $job_id;
 		$res = $material->save();
@@ -349,11 +352,24 @@ Route::get('/drywall_delete', function () {
 			Log::Info('Failed to associate material '.$mtrl_id.' with the job '.$job_id."!");
 			return "mtrlAssociateOK=false";	
 		} else {
-			Log::Info('Successfully associate material '.$mtrl_id.' with the job '.$job_id."!");
+			if ($job) {
+				$job->job_total_active_materials++;
+				$res2 = $job->save();
+				if (!$res2) {
+					Log::Info('Failed to increase job_total_active_materials for job '.$job_id." while associate material ".$mtrl_id."!");
+					return "mtrlAssociateOK=false";	
+				} else {
+					MyHelper::LogStaffActionResult(Auth::user()->id, 'Increased job_total_active_materials for job '.$job_id.' OK.', '');
+				}
+			} else {
+				Log::Info('Failed to access the job '.$job_id." while associate material ".$mtrl_id."!");
+				return "mtrlAssociateOK=false";	
+			}
+			MyHelper::LogStaffActionResult(Auth::user()->id, 'Associated material '.$mtrl_id.' with job '.$job_id.' OK.', '');
 			return "mtrlAssociateOK=true";	
 		}
 	} else {
-		Log::Info('Failed to access the material '.$mtrl_id."!");
+		Log::Info('Failed to access the material '.$mtrl_id." while associate it with job ".$job_id."!");
 		return "mtrlAssociateOK=false";	
 	}
 })->middleware(['auth'])->name('mtrl_associate_with_job');
