@@ -186,7 +186,7 @@
 							<div class="w-25"></div>
 							<div class="col">
 								<div class="row">
-									<button class="btn btn-warning mx-4" type="submit">Update</button>
+									<button class="btn btn-warning mx-4" type="submit" onclick="CheckMtrlStatusFirst('{{$material->mtrl_status}}')">Update</button>
 									<button class="btn btn-secondary mx-3" type="button"><a href="{{route('material_main', ['display_filter'=>'active'])}}">Cancel</a></button>
 								</div>
 							</div>
@@ -201,6 +201,13 @@
 			function myConfirmation() {
 				if(!confirm("Are you sure to delete this material?"))
 				event.preventDefault();
+			}
+
+			function CheckMtrlStatusFirst(mtrlStatus) {
+				if(mtrlStatus.includes('COMPLETED')) {
+					alert('You cannot update this material, as the associated job has been COMPLETED.');
+					event.preventDefault();
+				}
 			}
 		</script>
 	@endsection

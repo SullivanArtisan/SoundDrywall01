@@ -73,7 +73,7 @@
                         <div class="container">
                             <div class="row bg-info text-white">
                                 <div class="col-3"><h5 class="mt-1">Materials:&nbsp;</h5></div>
-                                <div class="col-9 pt-2 font-italic"><h6>(Double click a row to de-associate it)</h6></div>
+                                <div class="col-9 pt-2 font-italic text-warning"><h6>(Double click a row to de-associate it)</h6></div>
                             </div>
                             <div class="row my-2">
                                 <div class="col">
@@ -92,7 +92,7 @@
                                             } else {
                                                 $bg_color = "PaleGreen";
                                             }
-                                            $outContents = "<div class=\"row\" id=\"m_".$material->id."\" ondblclick=\"RemoveThisMaterial(this.id)\" style=\"background-color:".$bg_color."\">";
+                                            $outContents = "<div class=\"row\" id=\"m_".$material->id."\" ondblclick=\"RemoveThisMaterial(this.id,'".$material->mtrl_status."')\" style=\"background-color:".$bg_color."\">";
                                             $outContents .= "<div class=\"col mt-1\">".$material->mtrl_name."</div>";
                                             $outContents .= "<div class=\"col mt-1\">".$material->mtrl_type."</div>";
                                             $outContents .= "<div class=\"col mt-1\">".$material->mtrl_size."</div>";
@@ -104,7 +104,7 @@
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-center">
-                                <button class="btn-success m-3 p-2 rounded" onclick="AddMaterial()">Add a New Material to This Job</button>
+                                <button class="btn-success m-3 p-2 rounded" onclick="AddMaterial('{{$job->job_status}}')">Add a New Material to This Job</button>
                             </div>
                         </div>
                     </div>
@@ -112,7 +112,7 @@
                         <div class="container">
                             <div class="row bg-info text-white">
                                 <div class="col-3"><h5 class="mt-1">Assistants:&nbsp;</h5></div>
-                                <div class="col-9 pt-2 font-italic"><h6>(Click a row to chat or de-associate it)</h6></div>
+                                <div class="col-9 pt-2 font-italic text-warning"><h6>(Click a row to chat or de-associate it)</h6></div>
                             </div>
                             <div class="row my-2">
                                 <div class="col">
@@ -163,7 +163,7 @@
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-center">
-                                <button class="btn-success m-3 p-2 rounded" onclick="AddAssistant()">Add an Assistant to This Job</button>
+                                <button class="btn-success m-3 p-2 rounded" onclick="AddAssistant('{{$job->job_status}}')">Add an Assistant to This Job</button>
                             </div>
                         </div>
                     </div>
@@ -177,39 +177,51 @@
                 alert(msgToShow);
             }
 
-			function AddMaterial() {
-                jobId = {!!json_encode($job_id)!!};
-                event.preventDefault();
-                window.location = './material_associate?jobId='+jobId;
-			}
-
-			function AddAssistant() {
-                jobId = {!!json_encode($job_id)!!};
-                event.preventDefault();
-                window.location = './job_dispatch_by_adding?jobId='+jobId;
-			}
-
-            function RemoveThisMaterial(inputId) {
-                mtrlId = inputId.substring(2, inputId.length);
-                if(!confirm("Are you sure to remove this material from this job?")) {
-			        event.preventDefault();
+			function AddMaterial(jobStatus) {
+                if (jobStatus.includes("COMPLETED")) {
+                    alert('You cannot add any new material, as the job has been COMPLETED.');
                 } else {
-                    var jobId = {!!json_encode($job_id)!!};
-                    $.ajax({
-                        url: '/job_combination_material_remove',
-                        type: 'POST',
-                        data: {
-                            _token:"{{ csrf_token() }}", 
-                            job_id:jobId,
-                            material_id:mtrlId
-                        },    // the _token:token is for Laravel
-                        success: function(dataRetFromPHP) {
-                            window.location = './job_combination_main?jobId='+jobId;
-                        },
-                        error: function(err) {
-                            window.location = './job_combination_main?jobId='+jobId;
-                        }
-                    });
+                    jobId = {!!json_encode($job_id)!!};
+                    event.preventDefault();
+                    window.location = './material_associate?jobId='+jobId;
+                }
+			}
+
+			function AddAssistant(jobStatus) {
+                if (jobStatus.includes("COMPLETED")) {
+                    alert('You cannot add any new assistant, as the job has been COMPLETED.');
+                } else {
+                    jobId = {!!json_encode($job_id)!!};
+                    event.preventDefault();
+                    window.location = './job_dispatch_by_adding?jobId='+jobId;
+                }
+			}
+
+            function RemoveThisMaterial(inputId, mtrlStatus) {
+                if ('COMPLETED' == mtrlStatus) {
+                    alert('You cannot de-associate this material, as the job has been COMPLETED.');
+                } else {
+                    mtrlId = inputId.substring(2, inputId.length);
+                    if(!confirm("Are you sure to remove this material from this job?")) {
+                        event.preventDefault();
+                    } else {
+                        var jobId = {!!json_encode($job_id)!!};
+                        $.ajax({
+                            url: '/job_combination_material_remove',
+                            type: 'POST',
+                            data: {
+                                _token:"{{ csrf_token() }}", 
+                                job_id:jobId,
+                                material_id:mtrlId
+                            },    // the _token:token is for Laravel
+                            success: function(dataRetFromPHP) {
+                                window.location = './job_combination_main?jobId='+jobId;
+                            },
+                            error: function(err) {
+                                window.location = './job_combination_main?jobId='+jobId;
+                            }
+                        });
+                    }
                 }
             }
         </script>
