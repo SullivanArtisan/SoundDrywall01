@@ -15,7 +15,7 @@
 </style>
 
 @section('goback')
-	<a class="text-primary" href="{{route('material_main')}}" style="margin-right: 10px;">Back</a>
+	<a class="text-primary" href="{{route('material_main', ['display_filter'=>'active'])}}" style="margin-right: 10px;">Back</a>
 @show
 
 @section('function_page')
@@ -162,7 +162,7 @@
                     <div class="row">
 						<div class="col"><label class="col-form-label">&nbsp;</label></div>
 						@if ($job_id == "")
-                        <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="back_to" name="back_to" value="material_main"></div>
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="back_to" name="back_to" value="material_main?display_filter=active"></div>
 						@else
                         <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="back_to" name="back_to" value="job_combination_main?jobId={{$job_id}}"></div>
 						@endif
@@ -172,7 +172,7 @@
                         <div class="col">
 							<div class="row">
 								<button class="btn btn-success mx-4" type="submit">Save</button>
-								<button class="btn btn-secondary mx-3" type="button"><a href="{{route('material_main')}}">Cancel</a></button>
+								<button class="btn btn-secondary mx-3" type="button"><a href="{{route('material_main', ['display_filter'=>'active'])}}">Cancel</a></button>
 							</div>
 						</div>
                         <div class="col"></div>

@@ -53,7 +53,7 @@
                         <li> <a href="{{route('client_main')}}">Customers</a> </li>
                         <li> <a href="{{route('provider_main')}}">Providers</a> </li>
                         <li> <a href="{{route('staff_main')}}">Staffs</a> </li>
-                        <li> <a href="{{route('material_main')}}">Materials for Jobs</a> </li>
+                        <li> <a href="{{route('material_main', ['display_filter'=>'active'])}}">Materials for Jobs</a> </li>
                         <!--					
                         <li> <a href="#materialsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Materials for Jobs</a> </li>
 							<ul class="collapse list-unstyled mx-4" id="materialsSubmenu">

@@ -13,7 +13,7 @@
 </style>
 
 @section('goback')
-	<a class="text-primary" href="{{route('material_main')}}" style="margin-right: 10px;">Back</a>
+	<a class="text-primary" href="{{route('material_main', ['display_filter'=>'active'])}}" style="margin-right: 10px;">Back</a>
 @show
 
 <?php
@@ -187,7 +187,7 @@
 							<div class="col">
 								<div class="row">
 									<button class="btn btn-warning mx-4" type="submit">Update</button>
-									<button class="btn btn-secondary mx-3" type="button"><a href="{{route('material_main')}}">Cancel</a></button>
+									<button class="btn btn-secondary mx-3" type="button"><a href="{{route('material_main', ['display_filter'=>'active'])}}">Cancel</a></button>
 								</div>
 							</div>
 							<div class="col"></div>

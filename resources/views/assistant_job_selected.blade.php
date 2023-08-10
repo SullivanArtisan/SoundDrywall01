@@ -22,12 +22,16 @@
         use Illuminate\Support\Facades\Auth;
 
         $client_name = "";
+        $roll = "";
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
             $staff_id = Auth::user()->id;
             $job = Job::where('id', $id)->first();
             $msg_to_show = "";
             if ($job) {
+                $staff = Staff::where('id', $staff_id)->first();
+                $roll = $staff->roll;
+
                 $association = JobDispatch::where('jobdsp_job_id', $id)->where('jobdsp_staff_id', $staff_id)->first();
                 if (!$association) {
                     Log::Info("JobDispatch object cannot be found for job ".$id);
@@ -50,8 +54,12 @@
                                 }
                             }
 
-                            $job->job_status = $total_received.'/'.$job->job_total_assistants.' RECEIVED';
-                            $result = $job->save();
+                            if (strstr($job->job_status, 'COMPLETED')) {
+                                // If anybody associated with that job had completed it, keep that ?/? COMPLETED status
+                            } else {
+                                $job->job_status = $total_received.'/'.$job->job_total_assistants.' RECEIVED';
+                                $result = $job->save();
+                            }
                         }
                     }
                 }
@@ -339,7 +347,13 @@
         }
 
         function doCompleteThisJob() {
-            if(!confirm("Are you sure to complete this job?")) {
+            roll = {!!json_encode($roll)!!}
+            if (roll == 'SUPERINTENDENT') {
+                promptMsg = "You have to update the Amount Left value of each material before you complete this job.\r\n\r\nAre you sure to complete this job?";
+            } else {
+                promptMsg = "Are you sure to complete this job?";
+            }
+            if(!confirm(promptMsg)) {
                 //event.preventDefault();
             } else {
                 $.ajax({

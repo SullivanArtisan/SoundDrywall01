@@ -39,7 +39,7 @@
                 <!-- Available Materials Section -->
                 <div class="container">
                     <div class="row">
-                        <div class="col bg-info text-white"><h5 class="mt-1">Materials:&nbsp;</h5></div>
+                        <div class="col bg-info text-white"><h5 class="mt-1">Available Materials:&nbsp;</h5></div>
                     </div>
                     <div class="row my-2">
                     <div class="col">
@@ -94,10 +94,10 @@
                     <div class="row my-2">
                     <div class="col">
                         <div class="row text-white" style="max-height: 400px; background-color:grey; font-weight:bold !important;">
-                            <div class="col-2">Job Name</div>
-                            <div class="col-4">Job Type</div>
-                            <div class="col-2">Crew#</div>
-                            <div class="col-4">Job Address</div>
+                            <div class="col">Job Name</div>
+                            <div class="col">Job Type</div>
+                            <div class="col">Material#</div>
+                            <div class="col">Job Address</div>
                         </div>
                         <?php 
                             $listed_items = 0;
@@ -111,19 +111,19 @@
                                         $bg_color = "PaleGreen";
                                     }
                                     $outContents = "<div class=\"row\" id=\"j_".$job->id."\" onclick=\"JobSelected(this.id)\" ondblclick=\"EditJob(this.id)\" style=\"background-color:".$bg_color."\">";
-                                    $outContents .= "<div class=\"col-2 mt-1\" style=\"cursor:default\">".$job->job_name."</div>";
-                                    $outContents .= "<div class=\"col-4 mt-1\" style=\"cursor:default\">".$job->job_type."</div>";
-                                    $outContents .= "<div class=\"col-2 mt-1\" style=\"cursor:default\">".$job->job_total_active_assistants."</div>";
-                                    $outContents .= "<div class=\"col-4 mt-1\" style=\"cursor:default\">".$job->job_address.", ".$job->job_city."</div>";
+                                    $outContents .= "<div class=\"col mt-1\" style=\"cursor:default\">".$job->job_name."</div>";
+                                    $outContents .= "<div class=\"col mt-1\" style=\"cursor:default\">".$job->job_type."</div>";
+                                    $outContents .= "<div class=\"col mt-1\" style=\"cursor:default\">".$job->job_total_active_materials."</div>";
+                                    $outContents .= "<div class=\"col mt-1\" style=\"cursor:default\">".$job->job_address.", ".$job->job_city."</div>";
                                     $outContents .= "</div>";
                                     echo $outContents;
                                 }
                             } else {
                                 $outContents = "<div class=\"row\" id=\"j_".$job->id."\" style=\"background-color:pink\">";
-                                $outContents .= "<div class=\"col-2 mt-1\" style=\"cursor:default\">".$job->job_name."</div>";
-                                $outContents .= "<div class=\"col-4 mt-1\" style=\"cursor:default\">".$job->job_type."</div>";
-                                $outContents .= "<div class=\"col-2 mt-1\" style=\"cursor:default\">".$job->job_total_active_assistants."</div>";
-                                $outContents .= "<div class=\"col-4 mt-1\" style=\"cursor:default\">".$job->job_address.", ".$job->job_city."</div>";
+                                $outContents .= "<div class=\"col mt-1\" style=\"cursor:default\">".$job->job_name."</div>";
+                                $outContents .= "<div class=\"col mt-1\" style=\"cursor:default\">".$job->job_type."</div>";
+                                $outContents .= "<div class=\"col mt-1\" style=\"cursor:default\">".$job->job_total_active_materials."</div>";
+                                $outContents .= "<div class=\"col mt-1\" style=\"cursor:default\">".$job->job_address.", ".$job->job_city."</div>";
                                 $outContents .= "</div>";
                                 echo $outContents;
                             }

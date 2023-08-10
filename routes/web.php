@@ -148,6 +148,21 @@ Route::post('job_assistants_complete', function (Request $request) {
 		} else {
 			MyHelper::LogStaffActionResult(Auth::user()->id, 'Completed job '.$job_id.' OK.', '');
 			Log::Info('Staff '.$staff_id.' completed the job '.$job_id." successfully.");
+
+			// Change all associated materials' statuses to 'COMPLETED', if this JobDispatch entry is completed by the superintendent
+			$staff = Staff::where('id', $staff_id)->first();
+			if ($staff->roll == 'SUPERINTENDENT') {
+				$materials = Material::where('mtrl_job_id', $job_id)->get();
+				foreach($materials as $material) {
+					$material->mtrl_status = 'COMPLETED';
+					$res = $material->save();
+					if (!$res) {
+						MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to change the status to COMPLETED for material '.$material->id.'.', '900');
+					}
+				}
+			}
+
+			// Change the parent project's status if necessary
 			if ($job->job_assistants_complete == $job->job_total_active_assistants) {
 				$project = project::where('id', $job->job_proj_id)->first();
 				$project->proj_jobs_complete = $project->proj_jobs_complete + 1;
@@ -190,6 +205,7 @@ Route::post('job_combination_staff_remove', function (Request $request) {
 			if (!$res2) {
 				Log::Info('Failed to decrease job_total_active_assistants for job '.$job_id." while removing staff ".$staff_id.".", '');
 			}
+			MyHelper::LogStaffActionResult(Auth::user()->id, 'Decreased job_total_active_assistants for job '.$job_id.' OK.', '');
 			MyHelper::LogStaffActionResult(Auth::user()->id, 'Removed the association of job '.$job_id." and assistant ".$staff_id." OK.", '');
 		}
 		return "staffRemoveOK=true";	
@@ -268,6 +284,7 @@ Route::post('job_dispatch_to_staff', function (Request $request) {
 					Log::Info('Failed to update job_total_assistants and job_total_active_assistants while dispatch job '.$job_id.'to staff '.$staff_id."!");
 					return "jobDispatchOK=false";	
 				} else {
+					MyHelper::LogStaffActionResult(Auth::user()->id, 'Increased job_total_active_assistants for job '.$job_id.' OK.', '');
                     MyHelper::LogStaffActionResult(Auth::user()->id, 'Dispatched job '.$job_id.' to staff '.$staff_id.' OK.', '');
 					Log::Info('Successfully dispatched job '.$job_id.' to staff '.$staff_id."!");
 					return "jobDispatchOK=true";	

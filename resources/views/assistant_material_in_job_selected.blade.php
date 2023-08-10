@@ -21,14 +21,28 @@
         use Illuminate\Support\Facades\Auth;
 
         $material_name = "";
+        $roll = "";
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
             $staff_id = Auth::user()->id;
             $msg_to_show = "";
             $material = Material::where('id', $id)->first();
             if ($material) {
+                $staff = Staff::where('id', $staff_id)->first();
+                $roll = $staff->roll;
+
                 $material_name = $material->mtrl_name;
                 $association = JobDispatch::where('jobdsp_job_id', $material->mtrl_job_id)->where('jobdsp_staff_id', $staff_id)->first();
+                if (!$association) {
+                    $err_msg = "JobDispatch object cannot be accessed for job ".$material->mtrl_job_id." and staff ".$staff_id;
+                    Log::Info($err_msg);
+                }
+
+                $job = Job::where('id', $material->mtrl_job_id)->first();
+                if (!$job) {
+                    $err_msg = "Job object cannot be accessed for job ".$material->mtrl_job_id;
+                    Log::Info($err_msg);
+                }
 
                 if (isset($_GET['msgToAdminOK'])) {
                     $result = $_GET['msgToAdminOK'];
@@ -139,6 +153,10 @@
                     <div class="row" style="max-height: 400px;">
                         <div class="col-3"><label class="col-form-label">&nbsp;</label></div>
                         <div class="col-9"><input class="form-control mt-1 my-text-height" type="hidden" id="mtrl_id" name="mtrl_id" value="{{$material->id}}"></div>
+                    </div>
+                    <div class="row">
+						<div class="col"><label class="col-form-label">&nbsp;</label></div>
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="job_name" name="job_name" value="{{$job->job_name}}"></div>
                     </div>
                     <div class="row my-3">
                         <div class="w-25"></div>
@@ -252,7 +270,13 @@
         }
 
         function doCompleteThisJob() {
-            if(!confirm("Are you sure to complete this job?")) {
+            roll = {!!json_encode($roll)!!}
+            if (roll == 'SUPERINTENDENT') {
+                promptMsg = "You have to update the Amount Left value of each material before you complete this job.\r\n\r\nAre you sure to complete this job?";
+            } else {
+                promptMsg = "Are you sure to complete this job?";
+            }
+            if(!confirm(promptMsg)) {
                 //event.preventDefault();
             } else {
                 $.ajax({
