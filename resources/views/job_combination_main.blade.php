@@ -119,7 +119,7 @@
                                     <div class="row text-white" style="max-height: 400px; background-color:grey; font-weight:bold !important;">
                                         <div class="col">First Name</div>
                                         <div class="col">Last Name</div>
-                                        <div class="col">Roll</div>
+                                        <div class="col">Role</div>
                                     </div>
                                     <?php 
                                         $listed_items = 0;
@@ -151,10 +151,10 @@
                                             $outContents .= "<div class=\"col mt-1\">";
                                             if ($association->jobdsp_status == "COMPLETED") {
                                                 $outContents .= "<span style=\"text-decoration: line-through;color: blue;\">";
-                                                $outContents .= $staff_origin->roll."</span></div>";
+                                                $outContents .= $staff_origin->role."</span></div>";
                                             } else {
                                                 $outContents .= "<a href=\"job_combination_staff_selected?jobId=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
-                                                $outContents .= $staff_origin->roll."</a></div>";
+                                                $outContents .= $staff_origin->role."</a></div>";
                                             }
                                             $outContents .= "</div>";
                                             echo $outContents;

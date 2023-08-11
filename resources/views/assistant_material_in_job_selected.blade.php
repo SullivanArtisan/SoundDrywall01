@@ -21,7 +21,7 @@
         use Illuminate\Support\Facades\Auth;
 
         $material_name = "";
-        $roll = "";
+        $role = "";
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
             $staff_id = Auth::user()->id;
@@ -29,7 +29,7 @@
             $material = Material::where('id', $id)->first();
             if ($material) {
                 $staff = Staff::where('id', $staff_id)->first();
-                $roll = $staff->roll;
+                $role = $staff->role;
 
                 $material_name = $material->mtrl_name;
                 $association = JobDispatch::where('jobdsp_job_id', $material->mtrl_job_id)->where('jobdsp_staff_id', $staff_id)->first();
@@ -270,8 +270,8 @@
         }
 
         function doCompleteThisJob() {
-            roll = {!!json_encode($roll)!!}
-            if (roll == 'SUPERINTENDENT') {
+            role = {!!json_encode($role)!!}
+            if (role == 'SUPERINTENDENT') {
                 promptMsg = "You have to update the Amount Left value of each material before you complete this job.\r\n\r\nAre you sure to complete this job?";
             } else {
                 promptMsg = "Are you sure to complete this job?";

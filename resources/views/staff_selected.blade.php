@@ -97,11 +97,11 @@
 						<div class="row">
 							<div class="col"><label class="col-form-label">Country:&nbsp;</label></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" id="country" name="country" value="{{$staff->country}}"></div>
-							<div class="col"><label class="col-form-label">Roll:&nbsp;</label><span class="text-danger">*</span></div>
+							<div class="col"><label class="col-form-label">Role:&nbsp;</label><span class="text-danger">*</span></div>
 							<div class="col">
 								<?php
-								$tagHead = "<input list=\"roll\" name=\"roll\" id=\"rollinput\" class=\"form-control mt-1 my-text-height\" ";
-								$tagTail = "><datalist id=\"roll\">";
+								$tagHead = "<input list=\"role\" name=\"role\" id=\"roleinput\" class=\"form-control mt-1 my-text-height\" ";
+								$tagTail = "><datalist id=\"role\">";
 
 								$tagTail.= "<option value=\"ADMINISTRATOR\">";
 								$tagTail.= "<option value=\"SUPERINTENDENT\">";
@@ -111,7 +111,7 @@
 								// if (isset($_GET['selJobId'])) {
 								// 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
 								// } else {
-									echo $tagHead."placeholder=\"\" value=\"".$staff->roll."\"".$tagTail;
+									echo $tagHead."placeholder=\"\" value=\"".$staff->role."\"".$tagTail;
 								// }
 								?>
 							</div>

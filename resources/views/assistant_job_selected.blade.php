@@ -22,7 +22,7 @@
         use Illuminate\Support\Facades\Auth;
 
         $client_name = "";
-        $roll = "";
+        $role = "";
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
             $staff_id = Auth::user()->id;
@@ -30,7 +30,7 @@
             $msg_to_show = "";
             if ($job) {
                 $staff = Staff::where('id', $staff_id)->first();
-                $roll = $staff->roll;
+                $role = $staff->role;
 
                 $association = JobDispatch::where('jobdsp_job_id', $id)->where('jobdsp_staff_id', $staff_id)->first();
                 if (!$association) {
@@ -190,45 +190,45 @@
                     foreach ($materials as $material) {
                             $outContents = "<div class=\"row\">";
                             $outContents .= "<div class=\"col-2\">";
-                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                            if (Auth::user()->role == 'SUPERINTENDENT')
                                 $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
                             $outContents .= $material->mtrl_name;
-                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                            if (Auth::user()->role == 'SUPERINTENDENT')
                                 $outContents .= "</a>";
                             $outContents .= "</div>";
                             $outContents .= "<div class=\"col-2\">";
-                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                            if (Auth::user()->role == 'SUPERINTENDENT')
                                 $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
                                 $outContents .= $material->mtrl_type;
-                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                            if (Auth::user()->role == 'SUPERINTENDENT')
                                 $outContents .= "</a>";
                             $outContents .= "</div>";
                             $outContents .= "<div class=\"col-2\">";
-                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                            if (Auth::user()->role == 'SUPERINTENDENT')
                                 $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
                                 $outContents .= $material->mtrl_model;
-                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                            if (Auth::user()->role == 'SUPERINTENDENT')
                                 $outContents .= "</a>";
                             $outContents .= "</div>";
                             $outContents .= "<div class=\"col-2\">";
-                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                            if (Auth::user()->role == 'SUPERINTENDENT')
                                 $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
                                 $outContents .= $material->mtrl_size;
-                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                            if (Auth::user()->role == 'SUPERINTENDENT')
                                 $outContents .= "</a>";
                             $outContents .= "</div>";
                             $outContents .= "<div class=\"col-2\">";
-                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                            if (Auth::user()->role == 'SUPERINTENDENT')
                                 $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
                                 $outContents .= $material->mtrl_amount;
-                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                            if (Auth::user()->role == 'SUPERINTENDENT')
                                 $outContents .= "</a>";
                             $outContents .= "</div>";
                             $outContents .= "<div class=\"col-2\">";
-                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                            if (Auth::user()->role == 'SUPERINTENDENT')
                                 $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
                                 $outContents .= $material->mtrl_amount_left;
-                            if (Auth::user()->roll == 'SUPERINTENDENT')
+                            if (Auth::user()->role == 'SUPERINTENDENT')
                                 $outContents .= "</a>";
                             $outContents .= "</div>";
                             $outContents .= "</div><hr class=\"m-1\"/>";
@@ -347,8 +347,8 @@
         }
 
         function doCompleteThisJob() {
-            roll = {!!json_encode($roll)!!}
-            if (roll == 'SUPERINTENDENT') {
+            role = {!!json_encode($role)!!}
+            if (role == 'SUPERINTENDENT') {
                 promptMsg = "You have to update the Amount Left value of each material before you complete this job.\r\n\r\nAre you sure to complete this job?";
             } else {
                 promptMsg = "Are you sure to complete this job?";

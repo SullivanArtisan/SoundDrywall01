@@ -30,7 +30,7 @@
         <!-- Header Section -->
         <div class="row mb-4">
             <div class="col-md-9" style="background: var(--bs-success-bg-subtle);">
-                @if (Auth::user()->roll == 'ASSISTANT')
+                @if (Auth::user()->role == 'ASSISTANT')
                     <h1>Assistant <span style="color:maroon; font-family: Georgia;">{{Auth::user()->f_name}}&nbsp;{{Auth::user()->l_name}}</span>'s Jobs List</h1>
                 @else
                     <h1>Superintendent <span style="color:maroon; font-family: Georgia;">{{Auth::user()->f_name}}&nbsp;{{Auth::user()->l_name}}</span>'s Jobs List</h1>

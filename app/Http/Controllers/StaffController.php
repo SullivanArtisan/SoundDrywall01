@@ -18,7 +18,7 @@ class StaffController extends Controller
 			'f_name' => 'required',
 			'l_name' => 'required',
 			'email'  => 'required',
-			'roll'   => 'required',
+			'role'   => 'required',
 			'password'  => 'required',
             'password2' => 'required',
 		]);
@@ -43,7 +43,7 @@ class StaffController extends Controller
 				$staff->postcode 	= $request->postcode;
 				$staff->country 	= $request->country;
 				$staff->email 		= $request->email;
-				$staff->roll 		= $request->roll;
+				$staff->role 		= $request->role;
 				$staff->work_phone 		= $request->work_phone;
 				$staff->home_phone 		= $request->home_phone;
 				$staff->mobile_phone	= $request->mobile_phone;
@@ -69,7 +69,7 @@ class StaffController extends Controller
 			'f_name' => 'required',
 			'l_name' => 'required',
 			'email'  => 'required',
-			'roll'   => 'required',
+			'role'   => 'required',
 		]);
 
 		MyHelper::LogStaffAction(Auth::user()->id, 'Updated staff '.$request->f_name.' '.$request->l_name.' (email= '.$request->email.').', '');
@@ -85,7 +85,7 @@ class StaffController extends Controller
 			$staff->postcode 	= $request->postcode;
 			$staff->country 	= $request->country;
 			$staff->email 		= $request->email;
-			$staff->roll 		= $request->roll;
+			$staff->role 		= $request->role;
 			$staff->work_phone 		= $request->work_phone;
 			$staff->home_phone 		= $request->home_phone;
 			$staff->mobile_phone	= $request->mobile_phone;

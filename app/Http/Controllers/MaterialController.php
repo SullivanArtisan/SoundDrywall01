@@ -119,7 +119,7 @@ class MaterialController extends Controller
                 return redirect()->route('op_result.material')->with('status', ' <span style="color:red">Material Has NOT Been updated!</span>');
             } else {
                 MyHelper::LogStaffActionResult(Auth::user()->id, 'Updated material '.$material->id.' OK.', '');
-                if (Auth::user()->roll == 'ADMINISTRATOR') {
+                if (Auth::user()->role == 'ADMINISTRATOR') {
                     return redirect()->route('op_result.material')->with('status', 'The material of type <span style="font-weight:bold;font-style:italic;color:blue">'.$request->mtrl_type.'</span>, has been updated successfully.');
                 } else {
                     return redirect()->route('op_result.material_for_assistant')->with('status', 'The material of type <span style="font-weight:bold;font-style:italic;color:blue">'.$request->mtrl_type.'</span>, has been updated successfully.');

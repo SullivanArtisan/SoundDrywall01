@@ -151,7 +151,7 @@ Route::post('job_assistants_complete', function (Request $request) {
 
 			// Change all associated materials' statuses to 'COMPLETED', if this JobDispatch entry is completed by the superintendent
 			$staff = Staff::where('id', $staff_id)->first();
-			if ($staff->roll == 'SUPERINTENDENT') {
+			if ($staff->role == 'SUPERINTENDENT') {
 				$materials = Material::where('mtrl_job_id', $job_id)->get();
 				foreach($materials as $material) {
 					$material->mtrl_status = 'COMPLETED';

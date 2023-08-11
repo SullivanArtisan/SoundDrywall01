@@ -76,7 +76,7 @@
 				}
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2\">";
-				$outContents .= "Roll";
+				$outContents .= "Role";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2\">";
 				$outContents .= "Assigned Jobs";
@@ -105,7 +105,7 @@
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-2\">";
 					$outContents .= "<a href=\"staff_selected?id=$staff->id\">";
-					$outContents .= $staff->roll;
+					$outContents .= $staff->role;
 					$outContents .= "</a>";
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-2\">";
