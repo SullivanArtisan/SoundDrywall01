@@ -17,7 +17,7 @@
                         <div><button class="btn btn-success mr-4" type="submit" onclick="doAddJob()">Add a Job to Project:&nbsp;</button></div>
                         <div>
                         <?php
-                            $tagHead = "<input list=\"proj_id\" name=\"proj_id\" id=\"projidinput\" class=\"form-control my-text-height\" ";
+                            $tagHead = "<input list=\"proj_id\" name=\"proj_id\" id=\"projidinput\" onfocus=\"this.value='';\" class=\"form-control my-text-height\" ";
                             $tagTail = "><datalist id=\"proj_id\">";
 
                             $projects = App\Models\Project::where('proj_status', '<>', 'CANCELED')->where('proj_status', '<>', 'DELETED')->get()->sortBy('id');

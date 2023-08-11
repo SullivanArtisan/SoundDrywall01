@@ -59,7 +59,7 @@
                                 <div class="col"><label class="col-form-label">Job Type:&nbsp;</label><span class="text-danger">*</span></div>
                                 <div class="col">
                                     <?php
-                                    $tagHead = "<input list=\"job_type\" name=\"job_type\" id=\"jobtypeinput\" class=\"form-control mt-1 my-text-height\" ";
+                                    $tagHead = "<input list=\"job_type\" name=\"job_type\" id=\"jobtypeinput\" onfocus=\"this.value='';\" class=\"form-control mt-1 my-text-height\" ";
                                     $tagTail = "><datalist id=\"job_type\">";
 
                                     $types = JobType::all()->sortBy('job_type');

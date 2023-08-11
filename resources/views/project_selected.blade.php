@@ -86,7 +86,7 @@
                             <div class="col"><label class="col-form-label">Customer Name:&nbsp;</label><span class="text-danger">*</span></div>
                             <div class="col">
                                 <?php
-                                $tagHead = "<input list=\"proj_cstmr_name\" name=\"proj_cstmr_name\" id=\"projcstmrnameinput\" class=\"form-control mt-1 my-text-height\" value=\"".$client_name."\"";
+                                $tagHead = "<input list=\"proj_cstmr_name\" name=\"proj_cstmr_name\" id=\"projcstmrnameinput\" onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$client_name."';\" class=\"form-control mt-1 my-text-height\" value=\"".$client_name."\"";
                                 $tagTail = "><datalist id=\"proj_cstmr_name\">";
 
                                 $clients = Client::all()->sortBy('clnt_name');
@@ -110,7 +110,7 @@
                             <div class="col"><label class="col-form-label">Status:&nbsp;</label></div>
                             <div class="col">
                                 <?php
-                                $tagHead = "<input list=\"proj_status\" name=\"proj_status\" id=\"projstatusinput\" class=\"form-control mt-1 my-text-height\" value=\"".$project->proj_status."\"";
+                                $tagHead = "<input list=\"proj_status\" name=\"proj_status\" id=\"projstatusinput\" onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$project->proj_status."';\" class=\"form-control mt-1 my-text-height\" value=\"".$project->proj_status."\"";
                                 $tagTail = "><datalist id=\"proj_status\">";
 
                                 $statuses = Status::all();

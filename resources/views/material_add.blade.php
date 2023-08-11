@@ -52,7 +52,7 @@
 						<div class="col">
 							<?php
 								$types = MaterialType::all()->sortBy('mtrl_type');
-								$tagHead = "<input list=\"mtrl_type\" name=\"mtrl_type\" id=\"mtrltypeinput\" class=\"form-control mt-1 my-text-height\" ";
+								$tagHead = "<input list=\"mtrl_type\" name=\"mtrl_type\" id=\"mtrltypeinput\" onfocus=\"this.value='';\" class=\"form-control mt-1 my-text-height\" ";
 								$tagTail = "><datalist id=\"mtrl_type\">";
 								foreach($types as $type) {
 									$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $type->mtrl_type).">";
@@ -69,7 +69,7 @@
 						<div class="col">
 							<?php
 								if ($job_id == "") {
-									$tagHead = "<input list=\"job_name\" name=\"job_name\" id=\"jobnameinput\" class=\"form-control mt-1 my-text-height\" ";
+									$tagHead = "<input list=\"job_name\" name=\"job_name\" id=\"jobnameinput\" onfocus=\"this.value='';\" class=\"form-control mt-1 my-text-height\" ";
 									$tagTail = "><datalist id=\"job_name\">";
 		
 									$jobs = Job::all()->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'COMPLETED')->sortBy('job_name');
@@ -96,7 +96,7 @@
                         <div class="col"><label class="col-form-label">Size Unit:&nbsp;</label></div>
 						<div class="col">
 							<?php
-								$tagHead = "<input list=\"mtrl_size_unit\" name=\"mtrl_size_unit\" id=\"mtrlsizeunitinput\" class=\"form-control mt-1 my-text-height\" ";
+								$tagHead = "<input list=\"mtrl_size_unit\" name=\"mtrl_size_unit\" id=\"mtrlsizeunitinput\" onfocus=\"this.value='';\" class=\"form-control mt-1 my-text-height\" ";
 								$tagTail = "><datalist id=\"mtrl_size_unit\">";
 
 		
@@ -115,7 +115,7 @@
                         <div class="col"><label class="col-form-label">Amount Unit:&nbsp;</label></div>
 						<div class="col">
 							<?php
-								$tagHead = "<input list=\"mtrl_amount_unit\" name=\"mtrl_amount_unit\" id=\"mtrlsizeunitinput\" class=\"form-control mt-1 my-text-height\" ";
+								$tagHead = "<input list=\"mtrl_amount_unit\" name=\"mtrl_amount_unit\" id=\"mtrlsizeunitinput\" onfocus=\"this.value='';\" class=\"form-control mt-1 my-text-height\" ";
 								$tagTail = "><datalist id=\"mtrl_amount_unit\">";
 
 		
@@ -132,7 +132,7 @@
 						<div class="col"><label class="col-form-label">Provider:&nbsp;</label></div>
 						<div class="col">
 							<?php
-								$tagHead = "<input list=\"mtrl_source\" name=\"mtrl_source\" id=\"mtrlsourceinput\" class=\"form-control mt-1 my-text-height\" ";
+								$tagHead = "<input list=\"mtrl_source\" name=\"mtrl_source\" id=\"mtrlsourceinput\" onfocus=\"this.value='';\" class=\"form-control mt-1 my-text-height\" ";
 								$tagTail = "><datalist id=\"mtrl_source\">";
 
 		

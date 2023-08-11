@@ -90,7 +90,7 @@
                                 <div class="col"><label class="col-form-label">Job Type:&nbsp;</label><span class="text-danger">*</span></div>
                                 <div class="col">
                                     <?php
-                                    $tagHead = "<input list=\"job_type\" name=\"job_type\" id=\"jobtypeinput\" class=\"form-control mt-1 my-text-height\" value=\"".$job->job_type."\"";
+                                    $tagHead = "<input list=\"job_type\" name=\"job_type\" id=\"jobtypeinput\" onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$job->job_type."';\" class=\"form-control mt-1 my-text-height\" value=\"".$job->job_type."\"";
                                     $tagTail = "><datalist id=\"job_type\">";
 
                                     $types = JobType::all()->sortBy('job_type');
@@ -120,7 +120,7 @@
                                 <div class="col"><label class="col-form-label">Job Status:&nbsp;</label></div>
                                 <div class="col">
                                     <?php
-                                    $tagHead = "<input list=\"job_status\" name=\"job_status\" id=\"jobstatusinput\" class=\"form-control mt-1\" value=\"".$job->job_status."\"";
+                                    $tagHead = "<input list=\"job_status\" name=\"job_status\" id=\"jobstatusinput\" onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$job->job_status."';\" class=\"form-control mt-1\" value=\"".$job->job_status."\"";
                                     $tagTail = "><datalist id=\"job_status\">";
 
                                     $statuses = Status::all()->sortBy('status_name');

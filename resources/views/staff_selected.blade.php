@@ -100,7 +100,7 @@
 							<div class="col"><label class="col-form-label">Role:&nbsp;</label><span class="text-danger">*</span></div>
 							<div class="col">
 								<?php
-								$tagHead = "<input list=\"role\" name=\"role\" id=\"roleinput\" class=\"form-control mt-1 my-text-height\" ";
+								$tagHead = "<input list=\"role\" name=\"role\" id=\"roleinput\" onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$staff->role."';\" class=\"form-control mt-1 my-text-height\" ";
 								$tagTail = "><datalist id=\"role\">";
 
 								$tagTail.= "<option value=\"ADMINISTRATOR\">";
