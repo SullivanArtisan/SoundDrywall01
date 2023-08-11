@@ -92,6 +92,10 @@
                             <?php 
                                 $listed_items = 0;
                                 foreach ($assistants as $assistant) {
+                                    if ($assistant->status == 'DELETED') {
+                                        continue;
+                                    }
+
                                     $dispatchExisting = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $assistant->id)->where('jobdsp_status', '<>', 'COMPLETED')->where('jobdsp_status', '<>', 'CANCELED')->where('jobdsp_status', '<>', 'DELETED')->first();
                                     if ($dispatchExisting) {
                                         continue;

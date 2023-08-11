@@ -95,6 +95,10 @@
                         <?php 
                             $listed_items = 0;
                             foreach ($assistants as $assistant) {
+                                if ($assistant->status == 'DELETED') {
+                                    continue;
+                                }
+
                                 $staff_origin = Staff::where('id', $assistant->jobdsp_staff_id)->first();
                                 $listed_items++;
                                 if ($listed_items % 2) {
@@ -110,7 +114,7 @@
                                 $outContents .= "<div class=\"col-4\" style=\"cursor:default\">".$assistant->f_name."</div>";
                                 $outContents .= "<div class=\"col-4\" style=\"cursor:default\">".$assistant->l_name."</div>";
                                 $outContents .= "<div class=\"col-4\" style=\"cursor:default\">".$assistant->roll."</div>";
-                        $outContents .= "</div>";
+                                $outContents .= "</div>";
                                 echo $outContents;
                             }
                         ?>

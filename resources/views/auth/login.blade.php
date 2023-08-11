@@ -44,6 +44,14 @@
 
 										<!-- Validation Errors -->
 										<x-auth-validation-errors class="mb-4" :errors="$errors" />
+										@if (session('usr_status_error') != '')
+										<div class="alert alert-danger">
+											<?php
+												$text = session('usr_status_error');
+												echo $text;
+											?>
+										</div>
+										@endif
 
 										<form method="POST" action="{{ route('login') }}">
 											@csrf

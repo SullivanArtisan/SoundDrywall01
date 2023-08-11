@@ -53,7 +53,7 @@ Route::get('/after_login', function () {
 Route::get('/home_page', function () {
 	session_start();
     return view('home_page');
-})->middleware(['auth'])->name('home_page');
+})->middleware(['auth', 'ChkUsrStatus'])->name('home_page');
 
 Route::get('/assistant_home_page', function () {
 	session_start();
