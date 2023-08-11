@@ -123,12 +123,12 @@
 							
 							if ($job_origin) {
 								$jobs_total++;
-						 		$outContents .= $jobs_total;
 							} else {
 								$err_msg = "Job ID ".$job->jobdsp_job_id."'s object cannot be found from JobDispatch when counting total jobs in staff_main.blade.";
 								Log::Info($err_msg);
 							}
 						}	
+						$outContents .= $jobs_total;
 					}
 			$outContents .= "</div>";
                 $outContents .= "<div class=\"col-3\">";
