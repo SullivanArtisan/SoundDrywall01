@@ -44,7 +44,7 @@
                     <a href="#controlSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Control</a>
                     <ul class="collapse list-unstyled" id="controlSubmenu">
                         <li> <a href="{{route('material_associate')}}">Material Association</a> </li>
-                        <li> <a href="{{route('job_dispatch')}}">Job Dispatch</a> </li>
+                        <li> <a href="{{route('job_dispatch')}}">Task Dispatch</a> </li>
                     </ul>
                 </li>
                 <li>
@@ -53,9 +53,9 @@
                         <li> <a href="{{route('client_main')}}">Customers</a> </li>
                         <li> <a href="{{route('provider_main')}}">Providers</a> </li>
                         <li> <a href="{{route('staff_main')}}">Staffs</a> </li>
-                        <li> <a href="{{route('material_main', ['display_filter'=>'active'])}}">Materials for Jobs</a> </li>
+                        <li> <a href="{{route('material_main', ['display_filter'=>'active'])}}">Materials for Tasks</a> </li>
                         <!--					
-                        <li> <a href="#materialsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Materials for Jobs</a> </li>
+                        <li> <a href="#materialsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Materials for Tasks</a> </li>
 							<ul class="collapse list-unstyled mx-4" id="materialsSubmenu">
                                 <li><a href="{{route('under_construction')}}">Drywall Sheets</a></li>
                                 <li><a href="{{route('under_construction')}}">Drywall Joint Compound</a></li>

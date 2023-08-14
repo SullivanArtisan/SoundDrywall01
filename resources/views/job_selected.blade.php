@@ -41,7 +41,7 @@
 		<div>
 			<div class="row">
 				<div class="col col-sm-auto">
-					<h2 class="text-muted pl-2">Result of the Job</h2>
+					<h2 class="text-muted pl-2">Result of the Task</h2>
 				</div>
 				<div class="col"></div>
 			</div>
@@ -59,7 +59,7 @@
 		<div>
 			<div class="row m-4">
 				<div>
-					<h2 class="text-muted pl-2">Job {{$job->job_name}} (for Customer <span style="color:maroon; font-family: Georgia; font-style: italic;">{{$client->clnt_name}}</span>):</h2>
+					<h2 class="text-muted pl-2">Task {{$job->job_name}} (for Customer <span style="color:maroon; font-family: Georgia; font-style: italic;">{{$client->clnt_name}}</span>):</h2>
 				</div>
 				<div class="col my-auto ml-5">
 					<button class="btn btn-danger" type="button"><a href="job_delete?id={{$job->id}}" onclick="return myConfirmation();">Delete</a></button>
@@ -83,11 +83,11 @@
                             <div class="row">
                                 <div class="col"><label class="col-form-label">Project Id:&nbsp;</label></div>
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="number" readonly id="job_proj_id" name="job_proj_id" value="{{$job->job_proj_id}}"></div>
-                                <div class="col"><label class="col-form-label">Job Name:&nbsp;</label></div>
+                                <div class="col"><label class="col-form-label">Task Name:&nbsp;</label></div>
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_name" name="job_name" value="{{$job->job_name}}"></div>
                             </div>
                             <div class="row">
-                                <div class="col"><label class="col-form-label">Job Type:&nbsp;</label><span class="text-danger">*</span></div>
+                                <div class="col"><label class="col-form-label">Task Type:&nbsp;</label><span class="text-danger">*</span></div>
                                 <div class="col">
                                     <?php
                                     $tagHead = "<input list=\"job_type\" name=\"job_type\" id=\"jobtypeinput\" onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$job->job_type."';\" class=\"form-control mt-1 my-text-height\" value=\"".$job->job_type."\"";
@@ -105,19 +105,19 @@
                                     // }
                                     ?>
                                 </div>
-                                <div class="col"><label class="col-form-label">Job Address:&nbsp;</label><span class="text-danger">*</span></div>
+                                <div class="col"><label class="col-form-label">Task Address:&nbsp;</label><span class="text-danger">*</span></div>
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="job_address" name="job_address" value="{{$job->job_address}}"></div>
                             </div>
                             <div class="row">
-                                <div class="col"><label class="col-form-label">Job City:&nbsp;</label><span class="text-danger">*</span></div>
+                                <div class="col"><label class="col-form-label">Task City:&nbsp;</label><span class="text-danger">*</span></div>
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="job_city" name="job_city" value="{{$job->job_city}}"></div>
-                                <div class="col"><label class="col-form-label">Job Province:&nbsp;</label></div>
+                                <div class="col"><label class="col-form-label">Task Province:&nbsp;</label></div>
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="job_province" name="job_province" value="{{$job->job_province}}"></div>
                             </div>
                             <div class="row">
-                                <div class="col"><label class="col-form-label">Job Description:&nbsp;</label></div>
+                                <div class="col"><label class="col-form-label">Task Description:&nbsp;</label></div>
                                 <div class="col"><textarea class="form-control mt-1 my-text-height" rows = "5" id="job_desc" name="job_desc" placeholder="{{$job->job_desc}}">{{$job->job_desc}}</textarea></div>
-                                <div class="col"><label class="col-form-label">Job Status:&nbsp;</label></div>
+                                <div class="col"><label class="col-form-label">Task Status:&nbsp;</label></div>
                                 <div class="col">
                                     <?php
                                     $tagHead = "<input list=\"job_status\" name=\"job_status\" id=\"jobstatusinput\" onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$job->job_status."';\" class=\"form-control mt-1\" value=\"".$job->job_status."\"";
@@ -145,7 +145,7 @@
                                 <div class="col">
                                     <div class="row">
                                         <button class="btn btn-success mx-4" type="submit" id="btn_save">Save</button>
-                                        <button class="btn btn-info mx-3 mr-2" type="button" onclick="DoJobCombination();">Edit Job Association</button>
+                                        <button class="btn btn-info mx-3 mr-2" type="button" onclick="DoJobCombination();">Edit Task Dispatch</button>
                                         <button class="btn btn-secondary mx-3 ml-2" type="button"><a href="{{route('project_selected', ['id'=>$job->job_proj_id])}}">Cancel</a></button>
                                     </div>
                                 </div>
@@ -159,7 +159,7 @@
 		
 		<script>
 			function myConfirmation() {
-				if(!confirm("Are you sure to delete this job?"))
+				if(!confirm("Are you sure to delete this task?"))
 				    event.preventDefault();
 			}
 

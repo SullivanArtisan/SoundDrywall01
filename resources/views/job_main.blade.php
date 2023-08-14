@@ -8,13 +8,13 @@
     <div>
         <div class="row m-4">
             <div>
-				<h2 class="text-muted pl-2">All Jobs</h2>
+				<h2 class="text-muted pl-2">All Tasks</h2>
             </div>
             <div class="col my-auto ml-5">
                 <form method="post" action="{{url('job_add')}}">
                     @csrf
                     <div class="row">
-                        <div><button class="btn btn-success mr-4" type="submit" onclick="doAddJob()">Add a Job to Project:&nbsp;</button></div>
+                        <div><button class="btn btn-success mr-4" type="submit" onclick="doAddJob()">Add a Task to Project:&nbsp;</button></div>
                         <div>
                         <?php
                             $tagHead = "<input list=\"proj_id\" name=\"proj_id\" id=\"projidinput\" onfocus=\"this.value='';\" class=\"form-control my-text-height\" ";
@@ -86,10 +86,10 @@
 		$outContents = "<div class=\"container mw-100\">";
         $outContents .= "<div class=\"row bg-info text-white fw-bold\">";
 			$outContents .= "<div class=\"col-1\">";
-				$outContents .= "Job Name";
+				$outContents .= "Task Name";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2 align-middle\">";
-				$outContents .= "Job Type";
+				$outContents .= "Task Type";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-1\">";
 				$outContents .= "Status";
@@ -174,7 +174,7 @@
         event.preventDefault();
 		projId = document.getElementById('projidinput').value;
 		if (projId.length == 0) {
-			alert('Please select the target project first befor you add a new job to it.');
+			alert('Please select the target project first befor you add a new task to it.');
 		} else {
 			window.location='./job_add?projId='+projId;
         }

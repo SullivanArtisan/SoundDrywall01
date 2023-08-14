@@ -79,7 +79,7 @@
 				$outContents .= "Role";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2\">";
-				$outContents .= "Assigned Jobs";
+				$outContents .= "Dispatched Tasks";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-3\">";
 				$outContents .= "Email";
@@ -124,7 +124,7 @@
 							if ($job_origin) {
 								$jobs_total++;
 							} else {
-								$err_msg = "Job ID ".$job->jobdsp_job_id."'s object cannot be found from JobDispatch when counting total jobs in staff_main.blade.";
+								$err_msg = "Task ID ".$job->jobdsp_job_id."'s object cannot be found from JobDispatch when counting total tasks in staff_main.blade.";
 								Log::Info($err_msg);
 							}
 						}	

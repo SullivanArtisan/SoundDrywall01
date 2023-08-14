@@ -101,7 +101,7 @@
                                 // }
                                 ?>
                             </div>
-                            <div class="col"><label class="col-form-label">Total Jobs:&nbsp;</label></div>
+                            <div class="col"><label class="col-form-label">Total Tasks:&nbsp;</label></div>
                             <div class="col"><input class="form-control mt-1 my-text-height" type="number" readonly id="proj_total_active_jobs" name="proj_total_active_jobs" value="{{$project->proj_total_active_jobs}}"></div>
                         </div>
                         <div class="row">
@@ -148,19 +148,19 @@
             <div class="card-body" style="background: #BAD8D8;">
                 <div class="row">
                     <div class="col-3">
-                        <h4 class="card-title">Associated Jobs: </h4>
+                        <h4 class="card-title">Dispatched Tasks: </h4>
                     </div>
 				</div>
 
                 <?php
-                // Jobs' Title Line
+                // Tasks' Title Line
                 $outContents = "<div class=\"container mw-100 mt-3\">";
                 $outContents .= "<div class=\"row bg-info text-white fw-bold mb-2\">";
                     $outContents .= "<div class=\"col-1 mt-1 align-middle\">";
-                        $outContents .= "Job Name";
+                        $outContents .= "Task Name";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-2 mt-1 align-middle\">";
-                        $outContents .= "Job Type";
+                        $outContents .= "Task Type";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-1 mt-1 align-middle\">";
                         $outContents .= "Crew#";
@@ -169,13 +169,13 @@
                         $outContents .= "Materail#";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-2 mt-1 align-middle\">";
-                        $outContents .= "Job Status";
+                        $outContents .= "Task Status";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-2 mt-1 align-middle\">";
-                        $outContents .= "Job Address";
+                        $outContents .= "Task Address";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-1 mt-1 align-middle\">";
-                        $outContents .= "Job City";
+                        $outContents .= "Task City";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-2 align-middle\">";
                         $outContents .= "Province";
@@ -183,7 +183,7 @@
                 $outContents .= "</div>";
                 echo $outContents;
 
-                // All Jobs' Body Lines
+                // All Tasks' Body Lines
                 $listed_jobs = 0;
                 foreach ($jobs as $job) {
                     $listed_jobs++;
@@ -238,7 +238,7 @@
                 ?>
                 <div class="row mt-5 d-flex justify-content-center">
                     <div class="col-3 my-4 ml-5">
-					    <button class="btn btn-success me-2" type="button"><a href="{{route('job_add', ['projId'=>$project->id])}}">Add a Job</a></button>
+					    <button class="btn btn-success me-2" type="button"><a href="{{route('job_add', ['projId'=>$project->id])}}">Add a Task</a></button>
 				    </div>
 				</div>
             </div>
@@ -249,13 +249,13 @@
             var jobUpdateOk = {!!json_encode($job_update_ok)!!};
             var jobDeleteOk = {!!json_encode($job_delete_ok)!!};
             if (jobAddOk.length > 0) {
-                alert("Job "+jobAddOk+" is associated successfully.");
+                alert("Task "+jobAddOk+" is associated successfully.");
             }
             if (jobUpdateOk.length > 0) {
-                alert("Job "+jobUpdateOk+" is updated successfully.");
+                alert("Task "+jobUpdateOk+" is updated successfully.");
             }
             if (jobDeleteOk.length > 0) {
-                alert("Job "+jobDeleteOk+" is deleted successfully.");
+                alert("Task "+jobDeleteOk+" is deleted successfully.");
             }
 
 			function myConfirmation() {

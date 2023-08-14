@@ -31,7 +31,7 @@
     <div>
         <div class="row m-4">
             <div>
-                <h2 class="text-muted pl-2">Associate Material with a Job:</h2>
+                <h2 class="text-muted pl-2">Dispatch Material To a Task:</h2>
             </div>
         </div>
         <div class="row m-4">
@@ -86,18 +86,18 @@
                 </div>
             </div>
             <div class="col-6">
-                <!-- Available Jobs Section -->
+                <!-- Available Tasks Section -->
                 <div class="container">
                     <div class="row">
-                        <div class="col bg-info text-white"><h5 class="mt-1">Available Jobs:&nbsp;</h5></div>
+                        <div class="col bg-info text-white"><h5 class="mt-1">Available Tasks:&nbsp;</h5></div>
                     </div>
                     <div class="row my-2">
                     <div class="col">
                         <div class="row text-white" style="max-height: 400px; background-color:grey; font-weight:bold !important;">
-                            <div class="col">Job Name</div>
-                            <div class="col">Job Type</div>
+                            <div class="col">Task Name</div>
+                            <div class="col">Task Type</div>
                             <div class="col">Material#</div>
-                            <div class="col">Job Address</div>
+                            <div class="col">Task Address</div>
                         </div>
                         <?php 
                             $listed_items = 0;
@@ -155,11 +155,11 @@
                 document.getElementById(oldInputJobId).style.backgroundColor = oldJobBgColor;
             }
 
-            // save the new selected job element's background color
+            // save the new selected task element's background color
             oldInputJobId = inputId;
             oldJobBgColor = document.getElementById(inputId).style.backgroundColor;
 
-            // set new background color to the new selected job element
+            // set new background color to the new selected task element
             document.getElementById(inputId).style.backgroundColor = 'pink';
         }
 
@@ -185,7 +185,7 @@
                 jobId = {!!json_encode($job_id)!!};
             }
             if (jobId == "" || mtrlId == "") {
-                alert('Please select Material and Job first befor you do the association!')
+                alert('Please select Material and Task first befor you do the dispatch!')
             } else {
                 $.ajax({
                     url: '/mtrl_associate_with_job',

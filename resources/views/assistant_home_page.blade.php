@@ -31,9 +31,9 @@
         <div class="row mb-4">
             <div class="col-md-9" style="background: var(--bs-success-bg-subtle);">
                 @if (Auth::user()->role == 'ASSISTANT')
-                    <h1>Assistant <span style="color:maroon; font-family: Georgia;">{{Auth::user()->f_name}}&nbsp;{{Auth::user()->l_name}}</span>'s Jobs List</h1>
+                    <h1>Assistant <span style="color:maroon; font-family: Georgia;">{{Auth::user()->f_name}}&nbsp;{{Auth::user()->l_name}}</span>'s Tasks List</h1>
                 @else
-                    <h1>Superintendent <span style="color:maroon; font-family: Georgia;">{{Auth::user()->f_name}}&nbsp;{{Auth::user()->l_name}}</span>'s Jobs List</h1>
+                    <h1>Superintendent <span style="color:maroon; font-family: Georgia;">{{Auth::user()->f_name}}&nbsp;{{Auth::user()->l_name}}</span>'s Tasks List</h1>
                 @endif
             </div>
             <div class="col-md-1">
@@ -44,10 +44,10 @@
             </div>
         </div>
 
-        <!-- Jobs Section -->
+        <!-- Tasks Section -->
         <div class="row text-white" style="max-height: 400px; background-color:grey; font-weight:bold !important;">
-            <div class="col-2">Job Type</div>
-            <div class="col-1">Job Name</div>
+            <div class="col-2">Task Type</div>
+            <div class="col-1">Task Name</div>
             <div class="col-2">Status</div>
             <div class="col-3">Address</div>
             <div class="col-2">City</div>
@@ -98,7 +98,7 @@
                     $outContents .= "</div>";
                     echo $outContents;
                 } else {
-                    $err_msg = "Job ID ".$job->jobdsp_job_id."'s object cannot be found from JobDispatch.";
+                    $err_msg = "Task ID ".$job->jobdsp_job_id."'s object cannot be found from JobDispatch.";
                     Log::Info($err_msg);
                 }
             }

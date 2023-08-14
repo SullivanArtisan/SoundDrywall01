@@ -105,7 +105,7 @@
 				$outContents .= "Status";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-1\">";
-				$outContents .= "Total Jobs";
+				$outContents .= "Total Tasks";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2\">";
 				$sortParms = "?display_filter=".$display_filter."&sort_key_project=created_at&sort_time=".time();

@@ -34,7 +34,7 @@
 
                 $association = JobDispatch::where('jobdsp_job_id', $id)->where('jobdsp_staff_id', $staff_id)->first();
                 if (!$association) {
-                    Log::Info("JobDispatch object cannot be found for job ".$id);
+                    Log::Info("JobDispatch object cannot be found for task ".$id);
                     url()->previous();
                 } else {
                     if ($association->jobdsp_status == 'CREATED') {
@@ -42,9 +42,9 @@
 
                         $result = $association->save();
                         if (!$result) {
-                            MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to updated JobDispatch status to RECEIVED OK for job '.$id.'.', '900');
+                            MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to updated JobDispatch status to RECEIVED OK for task '.$id.'.', '900');
                         } else {
-                            MyHelper::LogStaffActionResult(Auth::user()->id, 'Updated JobDispatch status to RECEIVED OK for job '.$id.'.', '');
+                            MyHelper::LogStaffActionResult(Auth::user()->id, 'Updated JobDispatch status to RECEIVED OK for task '.$id.'.', '');
 
                             $total_received = 0;
                             $associations = JobDispatch::where('jobdsp_job_id', $id)->get();
@@ -55,7 +55,7 @@
                             }
 
                             if (strstr($job->job_status, 'COMPLETED')) {
-                                // If anybody associated with that job had completed it, keep that ?/? COMPLETED status
+                                // If anybody associated with that task had completed it, keep that ?/? COMPLETED status
                             } else {
                                 $job->job_status = $total_received.'/'.$job->job_total_assistants.' RECEIVED';
                                 $result = $job->save();
@@ -74,17 +74,17 @@
 
                 $project = Project::where('id', $job->job_proj_id)->first();
                 if (!$project) {
-                    Log::Info("Project object cannot be found for job ".$id);
+                    Log::Info("Project object cannot be found for task ".$id);
                 }
                 $client  = Client::where('id', $project->proj_cstmr_id)->first();
                 if (!$client) {
-                    Log::Info("Client object cannot be found for job ".$id);
+                    Log::Info("Client object cannot be found for task ".$id);
                 } else {
                     $client_name = $client->clnt_name;
                 }
                 $materials  = Material::where('mtrl_job_id', $id)->where('mtrl_status', '<>', 'DELETED')->where('mtrl_status', '<>', 'CANCELED')->orderBy('mtrl_type')->get();
             } else {
-                $err_msg = "Job ".$id."'s object cannot be accessed while just entering the job's main page.";
+                $err_msg = "Task ".$id."'s object cannot be accessed while just entering the task's main page.";
                 Log::Info($err_msg);
             }
         }
@@ -94,7 +94,7 @@
         <!-- Header Section -->
         <div class="row">
             <div class="col-md-9 my-2" style="">
-                <h1>Hi, <span style="font-family: 'Times New Roman';font-weight: bold;font-style: italic; color:brown !important">{{Auth::user()->f_name}} {{Auth::user()->l_name}}</span>!    Job {{$job->job_name}}'s Details:</h1>
+                <h1>Hi, <span style="font-family: 'Times New Roman';font-weight: bold;font-style: italic; color:brown !important">{{Auth::user()->f_name}} {{Auth::user()->l_name}}</span>!    Task {{$job->job_name}}'s Details:</h1>
             </div>
             <div class="col-md-1 my-4">
                         <button class="btn btn-secondary text-center" type="button">
@@ -115,17 +115,17 @@
             </div>
         </div>
 
-        <!-- Jobs Section -->
+        <!-- Tasks Section -->
         <div class="row" style="max-height: 400px;">
             <div class="col-3"><label class="col-form-label">Customer Name:&nbsp;</label></div>
             <div class="col-9"><input class="form-control mt-1 my-text-height" type="text" readonly id="clnt_name" name="clnt_name" value="{{$client_name}}"></div>
         </div>
         <div class="row" style="max-height: 400px;">
-            <div class="col-3"><label class="col-form-label">Job Name:&nbsp;</label></div>
+            <div class="col-3"><label class="col-form-label">Task Name:&nbsp;</label></div>
             <div class="col-9"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_name" name="job_name" value="{{$job->job_name}}"></div>
         </div>
         <div class="row" style="max-height: 400px;">
-            <div class="col-3"><label class="col-form-label">Job Type:&nbsp;</label></div>
+            <div class="col-3"><label class="col-form-label">Task Type:&nbsp;</label></div>
             <div class="col-9"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_type" name="job_type" value="{{$job->job_type}}"></div>
         </div>
         <div class="row" style="max-height: 400px;">
@@ -282,7 +282,7 @@
         </div>
         <div class="row text-dark" style="background-color:lightpink;">
             <div class="col my-4 text-center" style="position: static; display: flex; justify-content: right;">
-                <button class="btn m-2 text-white rounded" style="background-color:lightcoral;" onclick="return doCompleteThisJob();">Complete This Job</button>
+                <button class="btn m-2 text-white rounded" style="background-color:lightcoral;" onclick="return doCompleteThisJob();">Complete This Task</button>
             </div>
         </div>
     </div>
@@ -349,9 +349,9 @@
         function doCompleteThisJob() {
             role = {!!json_encode($role)!!}
             if (role == 'SUPERINTENDENT') {
-                promptMsg = "You have to update the Amount Left value of each material before you complete this job.\r\n\r\nAre you sure to complete this job?";
+                promptMsg = "You have to update the Amount Left value of each material before you complete this task.\r\n\r\nAre you sure to complete this task?";
             } else {
-                promptMsg = "Are you sure to complete this job?";
+                promptMsg = "Are you sure to complete this task?";
             }
             if(!confirm(promptMsg)) {
                 //event.preventDefault();
@@ -365,11 +365,11 @@
                         staff_id:staffId,
                     },    // the _token:token is for Laravel
                     success: function(dataRetFromPHP) {
-                        alert('Job is completed successfully.')
+                        alert('Task is completed successfully.')
                         window.location = './assistant_home_page';
                     },
                     error: function(err) {
-                        alert('Failed to complete this job.\r\nPlease tyr again.')
+                        alert('Failed to complete this task.\r\nPlease tyr again.')
                         window.location = './assistant_job_selected?id='+jobId+'&jobCompleteOK=false';
                     }
                 });

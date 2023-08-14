@@ -31,23 +31,23 @@
     <div>
         <div class="row m-4">
             <div>
-                <h2 class="text-muted pl-2">Dispatch a Job to an Assistant:</h2>
+                <h2 class="text-muted pl-2">Dispatch a Task to an Assistant:</h2>
             </div>
         </div>
         <div class="row m-4">
             <div class="col-6">
-                <!-- Available Jobs Section -->
+                <!-- Available Tasks Section -->
                 <div class="container">
                     <div class="row">
-                        <div class="col bg-info text-white"><h5 class="mt-1">Available Jobs:&nbsp;</h5></div>
+                        <div class="col bg-info text-white"><h5 class="mt-1">Available Tasks:&nbsp;</h5></div>
                     </div>
                     <div class="row my-2">
                     <div class="col">
                         <div class="row text-white" style="max-height: 400px; background-color:grey; font-weight:bold !important;">
-                            <div class="col-2">Job Name</div>
-                            <div class="col-4">Job Type</div>
+                            <div class="col-2">Task Name</div>
+                            <div class="col-4">Task Type</div>
                             <div class="col-2">Crew#</div>
-                            <div class="col-4">Job Address</div>
+                            <div class="col-4">Task Address</div>
                         </div>
                         <?php 
                             $listed_items = 0;
@@ -137,19 +137,19 @@
         var oldStaffBgColor = "";
 
         function JobSelected(inputId) {
-            // prepare the job data for the ajax post function
+            // prepare the task data for the ajax post function
             jobId = inputId.substring(2, inputId.length);
 
             if (oldInputJobId != "") {
-                // restore old selected job element's background color
+                // restore old selected task element's background color
                 document.getElementById(oldInputJobId).style.backgroundColor = oldJobBgColor;
             }
 
-            // save the new selected job element's background color
+            // save the new selected task element's background color
             oldInputJobId = inputId;
             oldJobBgColor = document.getElementById(inputId).style.backgroundColor;
 
-            // set new background color to the new selected job element
+            // set new background color to the new selected task element
             document.getElementById(inputId).style.backgroundColor = 'pink';
         }
 
@@ -172,7 +172,7 @@
 
         function doJobDispatch(inputId) {
             if (jobId == "" || staffId == "") {
-                alert('Please select Job and Assistant first befor you do the dispatch!')
+                alert('Please select Task and Assistant first befor you do the dispatch!')
             } else {
                 $.ajax({
                     url: '/job_dispatch_to_staff',
@@ -183,11 +183,11 @@
                         staff_id:staffId,
                     },    // the _token:token is for Laravel
                     success: function(dataRetFromPHP) {
-                        alert('Job dispatched successfully.')
+                        alert('Task dispatched successfully.')
                         window.location = './job_dispatch';
                     },
                     error: function(err) {
-                        alert('Failed to dispatch the job.\r\nPlease try again!')
+                        alert('Failed to dispatch the task.\r\nPlease try again!')
                         //window.location = './job_dispatch?jobDispatchOK=false';
                     }
                 });

@@ -126,7 +126,7 @@
 				$outContents .= "Model";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-1\">";
-				$outContents .= "for Job";
+				$outContents .= "for Task";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-1\">";
 				$outContents .= "Size";

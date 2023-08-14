@@ -65,7 +65,7 @@
                     <div class="row">
 						<div class="col"><label class="col-form-label">Model:&nbsp;</label><span class="text-danger">*</span></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="mtrl_model" name="mtrl_model"></div>
-                        <div class="col"><label class="col-form-label">Used for Job:&nbsp;</label></div>
+                        <div class="col"><label class="col-form-label">Used for Task:&nbsp;</label></div>
 						<div class="col">
 							<?php
 								if ($job_id == "") {
@@ -83,8 +83,8 @@
 									if ($job) {
 										echo "<input class=\"form-control mt-1 my-text-height\" readonly type=\"text\" id=\"job_name\" name=\"job_name\" value=\"".$job->job_name."\">";
 									} else {
-										Log::Info('Failed to access the target job object while doing the "Add a New Material to This Job" button (for job '.$job_id.'".');
-										MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to access the target job object while doing the "Add a New Material to This Job" button (for job '.$job_id.').', '900');
+										Log::Info('Failed to access the target task object while doing the "Add a New Material to This Task" button (for job '.$job_id.'".');
+										MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to access the target task object while doing the "Add a New Material to This Task" button (for Task '.$job_id.').', '900');
 									}
 								}
 							?>

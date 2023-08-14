@@ -89,13 +89,13 @@
 						<div class="row">
 							<div class="col"><label class="col-form-label">Model:&nbsp;</label><span class="text-danger">*</span></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" id="mtrl_model" name="mtrl_model" value="{{$material->mtrl_model}}"></div>
-							<div class="col"><label class="col-form-label">Used for Job:&nbsp;</label></div>
+							<div class="col"><label class="col-form-label">Used for Task:&nbsp;</label></div>
 							<div class="col">
 								<?php
 								$selJob = Job::where('id', $material->mtrl_job_id)->first();
 								$jobs = Job::all()->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'COMPLETED')->sortBy('job_name');
 								
-								$tagHead = "<input list=\"job_name\" name=\"job_name\" id=\"jobnameinput\" onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$selJob->job_name."';\" class=\"form-control mt-1 my-text-height\" ";
+								$tagHead = "<input list=\"job_name\" name=\"job_name\" id=\"jobnameinput\" onfocus=\"this.value='';\" class=\"form-control mt-1 my-text-height\" ";
 								$tagTail = "><datalist id=\"job_name\">";
 								foreach($jobs as $job) {
 									$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $job->job_name).">";
@@ -205,7 +205,7 @@
 
 			function CheckMtrlStatusFirst(mtrlStatus) {
 				if(mtrlStatus.includes('COMPLETED')) {
-					alert('You cannot update this material, as the associated job has been COMPLETED.');
+					alert('You cannot update this material, as the dispatched task has been COMPLETED.');
 					event.preventDefault();
 				}
 			}

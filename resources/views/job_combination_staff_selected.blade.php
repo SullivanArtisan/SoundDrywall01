@@ -34,7 +34,7 @@
 		<div>
 			<div class="row">
 				<div class="col col-sm-auto">
-					<h2 class="text-muted pl-2">Result of the Job-Staff Combination</h2>
+					<h2 class="text-muted pl-2">Result of the Task-Staff Combination</h2>
 				</div>
 				<div class="col"></div>
 			</div>
@@ -51,12 +51,29 @@
 	@section('function_page')
 		<div>
 			<div class="row m-4">
-				<div>
+				<div class="col-3 my-auto">
 					<h2 class="text-muted pl-2">Assistant {{$staff->f_name}} {{$staff->l_name}}:</h2>
 				</div>
                 <div class="col-1 my-auto ml-5">
 				    <button class="btn btn-danger me-2" type="button" onclick="return doRemoveStaff();">Remove</button>
 			    </div>
+                <div class="col-1 my-auto">
+			    </div>
+                <div class="col-2 my-auto">
+				    <button class="btn btn-success me-2" type="button" onclick="return changeStaffAssociation();">Re-dispatch this Task to: </button>
+			    </div>
+                <div class="col my-auto">
+                    <?php
+                    $staffs = \App\Models\Staff::where('role', 'ASSISTANT')->orwhere('role', 'SUBCONTRACTOR')->orwhere('role', 'SUPERINTENDENT')->where('status', '<>', 'DELETED')->orderBy('f_name', 'asc')->get();
+                    
+                    $tagHead = "<input list=\"staff_name\" name=\"staff_name\" id=\"staffnameinput\" onfocus=\"this.value='';\" class=\"form-control mt-1 my-text-height\" ";
+                    $tagTail = "><datalist id=\"staff_name\">";
+                    foreach($staffs as $staff) {
+                        $tagTail.= "<option value=\"".$staff->f_name." ".$staff->l_name." (".$staff->role.")\">";
+                    }
+                    echo $tagHead."placeholder=\"\" value=\"\"".$tagTail;
+                    ?>
+                </div>
 			</div>
             <div>
                 @if ($errors->any())
@@ -155,7 +172,7 @@
             }
             
             function doRemoveStaff() {
-                if(!confirm("Are you sure to remove this assistant from this job?")) {
+                if(!confirm("Are you sure to remove this assistant from this task?")) {
 			        event.preventDefault();
                 } else {
                     var jobId = {!!json_encode($job_id)!!};
@@ -177,6 +194,36 @@
                     });
                 }
 			}
+            
+            function changeStaffAssociation() {
+                newStaff = document.getElementById('staffnameinput').value;
+                if (newStaff.length > 0) {
+                    if(!confirm("Are you sure to re-dispatch this task to this staff?")) {
+                        event.preventDefault();
+                    } else {
+                        var jobId = {!!json_encode($job_id)!!};
+                        var staffId = {!!json_encode($staff_id)!!};
+                        $.ajax({
+                            url: '/job_combination_staff_reassociate',
+                            type: 'POST',
+                            data: {
+                                _token:"{{ csrf_token() }}", 
+                                job_id:jobId,
+                                staff_id:staffId,
+                                new_staff:newStaff
+                            },    // the _token:token is for Laravel
+                            success: function(dataRetFromPHP) {
+                                window.location = './job_combination_main?jobId='+jobId;
+                            },
+                            error: function(err) {
+                                window.location = './job_combination_staff_selected?jobId='+jobId;
+                            }
+                        });
+                    }
+                } else {
+                    alert("You have to select the new staff before you re-dispatch the task.");
+                }
+            }
 		</script>
 	@endsection
 }

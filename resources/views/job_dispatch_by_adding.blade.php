@@ -37,23 +37,23 @@
     <div>
         <div class="row m-4">
             <div>
-                <h2 class="text-muted pl-2">Dispatch the following Job to the desired Assistant:</h2>
+                <h2 class="text-muted pl-2">Dispatch the following Task to the desired Assistant:</h2>
             </div>
         </div>
         <div class="row m-4">
             <div class="col-6">
-                <!-- Available Jobs Section -->
+                <!-- Available Tasks Section -->
                 <div class="container">
                     <div class="row">
-                        <div class="col bg-info text-white"><h5 class="mt-1">Jobs:&nbsp;</h5></div>
+                        <div class="col bg-info text-white"><h5 class="mt-1">Tasks:&nbsp;</h5></div>
                     </div>
                     <div class="row my-2">
                         <div class="col">
                             <div class="row text-white" style="max-height: 400px; background-color:grey; font-weight:bold !important;">
-                                <div class="col-2">Job Name</div>
-                                <div class="col-4">Job Type</div>
+                                <div class="col-2">Task Name</div>
+                                <div class="col-4">Task Type</div>
                                 <div class="col-2">Crew#</div>
-                                <div class="col-4">Job Address</div>
+                                <div class="col-4">Task Address</div>
                             </div>
                             <?php 
                                 $outContents = "<div class=\"row\" id=\"j_".$job->id."\" style=\"background-color:pink\">";
@@ -156,7 +156,7 @@
 
         function doJobDispatch(inputId) {
             if (jobId == "" || staffId == "") {
-                alert('Please select Job and Assistant first befor you do the dispatch!')
+                alert('Please select Task and Assistant first befor you do the dispatch!')
             } else {
                 $.ajax({
                     url: '/job_dispatch_to_staff',
@@ -167,11 +167,11 @@
                         staff_id:staffId,
                     },    // the _token:token is for Laravel
                     success: function(dataRetFromPHP) {
-                        alert('Job dispatched successfully.')
+                        alert('Task dispatched successfully.')
                         window.location = './job_combination_main?jobId='+inputId;
                     },
                     error: function(err) {
-                        alert('Failed to dispatch the job.\r\nPlease try again!')
+                        alert('Failed to dispatch the Task.\r\nPlease try again!')
                         //window.location = './job_dispatch?jobDispatchOK=false';
                     }
                 });

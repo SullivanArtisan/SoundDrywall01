@@ -17,7 +17,7 @@
         $staff_id = $_GET['staffId'];
         if ($staffRemoveResult=='true' && $staff_id) {
             $staff = Staff::where('id', $staff_id)->first();
-            $msg_to_show = "Staff ".$staff->f_name." ".$staff->l_name." is successfully removed from job ".$job_id;
+            $msg_to_show = "Staff ".$staff->f_name." ".$staff->l_name." is successfully removed from task ".$job_id;
             Log::Info($msg_to_show);
         }
     }
@@ -37,7 +37,7 @@
 		<div>
 			<div class="row">
 				<div class="col col-sm-auto">
-					<h2 class="text-muted pl-2">Result of the Job Combination</h2>
+					<h2 class="text-muted pl-2">Result of the Task Dispatch</h2>
 				</div>
 				<div class="col"></div>
 			</div>
@@ -55,7 +55,7 @@
 		<div>
 			<div class="row m-4">
 				<div>
-					<h2 class="text-muted pl-2">Combination of Job <span style="font-family: 'Times New Roman';font-weight: bold;font-style: italic; color:black !important">{{$job->job_name}}</span>:</h2>
+					<h2 class="text-muted pl-2">Dispatch of Task <span style="font-family: 'Times New Roman';font-weight: bold;font-style: italic; color:black !important">{{$job->job_name}}</span>:</h2>
 				</div>
 			</div>
             <div>
@@ -104,7 +104,7 @@
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-center">
-                                <button class="btn-success m-3 p-2 rounded" onclick="AddMaterial('{{$job->job_status}}')">Add a New Material to This Job</button>
+                                <button class="btn-success m-3 p-2 rounded" onclick="AddMaterial('{{$job->job_status}}')">Add a New Material to This Task</button>
                             </div>
                         </div>
                     </div>
@@ -163,7 +163,7 @@
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-center">
-                                <button class="btn-success m-3 p-2 rounded" onclick="AddAssistant('{{$job->job_status}}')">Add an Assistant to This Job</button>
+                                <button class="btn-success m-3 p-2 rounded" onclick="AddAssistant('{{$job->job_status}}')">Add an Assistant to This Task</button>
                             </div>
                         </div>
                     </div>
@@ -189,7 +189,7 @@
 
 			function AddAssistant(jobStatus) {
                 if (jobStatus.includes("COMPLETED")) {
-                    alert('You cannot add any new assistant, as the job has been COMPLETED.');
+                    alert('You cannot add any new assistant, as the task has been COMPLETED.');
                 } else {
                     jobId = {!!json_encode($job_id)!!};
                     event.preventDefault();
@@ -199,10 +199,10 @@
 
             function RemoveThisMaterial(inputId, mtrlStatus) {
                 if ('COMPLETED' == mtrlStatus) {
-                    alert('You cannot de-associate this material, as the job has been COMPLETED.');
+                    alert('You cannot de-associate this material, as the task has been COMPLETED.');
                 } else {
                     mtrlId = inputId.substring(2, inputId.length);
-                    if(!confirm("Are you sure to remove this material from this job?")) {
+                    if(!confirm("Are you sure to remove this material from this task?")) {
                         event.preventDefault();
                     } else {
                         var jobId = {!!json_encode($job_id)!!};

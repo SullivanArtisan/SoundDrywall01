@@ -26,7 +26,7 @@
 
 @section('function_page')
 	<div>
-		<h2 id="page_headline" class="text-muted pl-2 mb-2">Add a New Job</h2>
+		<h2 id="page_headline" class="text-muted pl-2 mb-2">Add a New Task</h2>
 	</div>
     <div>
 		@if ($errors->any())
@@ -49,14 +49,14 @@
                             <div class="row">
                                 <div class="col"><label class="col-form-label">Project Id:&nbsp;</label></div>
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="number" readonly id="job_proj_id" name="job_proj_id" value={{$proj_id}}></div>
-                                <div class="col"><label class="col-form-label">Job Name:&nbsp;</label></div>
+                                <div class="col"><label class="col-form-label">Task Name:&nbsp;</label></div>
                                 <?php
                                     $job_name = "P".$project->id."J".strval($project->proj_total_jobs+1);
                                 ?>
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_name" name="job_name" value={{$job_name}}></div>
                             </div>
                             <div class="row">
-                                <div class="col"><label class="col-form-label">Job Type:&nbsp;</label><span class="text-danger">*</span></div>
+                                <div class="col"><label class="col-form-label">Task Type:&nbsp;</label><span class="text-danger">*</span></div>
                                 <div class="col">
                                     <?php
                                     $tagHead = "<input list=\"job_type\" name=\"job_type\" id=\"jobtypeinput\" onfocus=\"this.value='';\" class=\"form-control mt-1 my-text-height\" ";
@@ -74,17 +74,17 @@
                                     // }
                                     ?>
                                 </div>
-                                <div class="col"><label class="col-form-label">Job Address:&nbsp;</label><span class="text-danger">*</span></div>
+                                <div class="col"><label class="col-form-label">Task Address:&nbsp;</label><span class="text-danger">*</span></div>
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="job_address" name="job_address"></div>
                             </div>
                             <div class="row">
-                                <div class="col"><label class="col-form-label">Job City:&nbsp;</label><span class="text-danger">*</span></div>
+                                <div class="col"><label class="col-form-label">Task City:&nbsp;</label><span class="text-danger">*</span></div>
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="job_city" name="job_city"></div>
-                                <div class="col"><label class="col-form-label">Job Province:&nbsp;</label></div>
+                                <div class="col"><label class="col-form-label">Task Province:&nbsp;</label></div>
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="job_province" name="job_province"></div>
                             </div>
                             <div class="row">
-                                <div class="col"><label class="col-form-label">Job Description:&nbsp;</label></div>
+                                <div class="col"><label class="col-form-label">Task Description:&nbsp;</label></div>
                                 <div class="col"><textarea class="form-control mt-1 my-text-height" rows = "5" id="job_desc" name="job_desc"></textarea></div>
                                 <div class="col"><label class="col-form-label">&nbsp;</label></div>
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" readonly id="proj_id" name="proj_id" value="{{$proj_id}}"></div>

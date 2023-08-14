@@ -22,11 +22,13 @@
 
         $material_name = "";
         $role = "";
+        $job_id = "";
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
             $staff_id = Auth::user()->id;
             $msg_to_show = "";
             $material = Material::where('id', $id)->first();
+            $job_id = $material->mtrl_job_id;
             if ($material) {
                 $staff = Staff::where('id', $staff_id)->first();
                 $role = $staff->role;
@@ -40,7 +42,7 @@
 
                 $job = Job::where('id', $material->mtrl_job_id)->first();
                 if (!$job) {
-                    $err_msg = "Job object cannot be accessed for job ".$material->mtrl_job_id;
+                    $err_msg = "Task object cannot be accessed for Task ".$material->mtrl_job_id;
                     Log::Info($err_msg);
                 }
 
@@ -205,7 +207,7 @@
         </div>
         <div class="row text-dark" style="background-color:lightpink;">
             <div class="col my-4 text-center" style="position: static; display: flex; justify-content: right;">
-                <button class="btn m-2 text-white rounded" style="background-color:lightcoral;" onclick="return doCompleteThisJob();">Complete This Job</button>
+                <button class="btn m-2 text-white rounded" style="background-color:lightcoral;" onclick="return doCompleteThisJob();">Complete This Task</button>
             </div>
         </div>
     </div>
@@ -213,7 +215,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script>
         var msgToShow = {!!json_encode($msg_to_show)!!};
-        var jobId = {!!json_encode($id)!!};
+        var jobId = {!!json_encode($job_id)!!};
         var staffId = {!!json_encode($staff_id)!!};
         if (msgToShow.length > 0) {
             alert(msgToShow);
@@ -272,9 +274,9 @@
         function doCompleteThisJob() {
             role = {!!json_encode($role)!!}
             if (role == 'SUPERINTENDENT') {
-                promptMsg = "You have to update the Amount Left value of each material before you complete this job.\r\n\r\nAre you sure to complete this job?";
+                promptMsg = "You have to update the Amount Left value of each material before you complete this Task.\r\n\r\nAre you sure to complete this Task?";
             } else {
-                promptMsg = "Are you sure to complete this job?";
+                promptMsg = "Are you sure to complete this Task?";
             }
             if(!confirm(promptMsg)) {
                 //event.preventDefault();
@@ -288,7 +290,7 @@
                         staff_id:staffId,
                     },    // the _token:token is for Laravel
                     success: function(dataRetFromPHP) {
-                        alert('Job is completed successfully.')
+                        alert('Task is completed successfully.')
                         window.location = './assistant_home_page';
                     },
                     error: function(err) {

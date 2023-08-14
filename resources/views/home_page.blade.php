@@ -79,17 +79,17 @@
             </div>
             <div class="card ml-1">
                 <div class="card-body">
-                    <button class="btn-grad" type="button" style="margin: 6px;"><a href="{{route('job_main')}}">All Jobs</a></button>
+                    <button class="btn-grad" type="button" style="margin: 6px;"><a href="{{route('job_main')}}">All Tasks</a></button>
                 </div>
             </div>
             <div class="card ml-1">
                 <div class="card-body">
-                    <button class="btn-grad-2" type="button" style="margin: 6px;"><a href="{{route('material_associate')}}">Associate Material with a Job</a></button>
+                    <button class="btn-grad-2" type="button" style="margin: 6px;"><a href="{{route('material_associate')}}">Dispatch Material To a Task</a></button>
                 </div>
             </div>
             <div class="card ml-1">
                 <div class="card-body">
-                    <button class="btn-grad-2" type="button" style="margin: 6px;"><a href="{{route('job_dispatch')}}">Dispatch a Staff To a Job</a></button>
+                    <button class="btn-grad-2" type="button" style="margin: 6px;"><a href="{{route('job_dispatch')}}">Dispatch a Staff To a Task</a></button>
                 </div>
             </div>
         </div>

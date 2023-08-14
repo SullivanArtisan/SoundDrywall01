@@ -133,7 +133,7 @@
                                             // }
                                             ?>
                                         </div>
-                                <div class="col"><label class="col-form-label">Total Jobs:&nbsp;</label></div>
+                                <div class="col"><label class="col-form-label">Total Tasks:&nbsp;</label></div>
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="number" readonly id="proj_total_active_jobs" name="proj_total_active_jobs" value=0></div>
                             </div>
                             <div class="row">
@@ -204,7 +204,7 @@
                     if (position >= 0) {
                         window.location = './op_result_project?status='+dataRetFromPHP.substr(statusKey.length);
                     } else {
-                        if(!confirm("The new project is created successfully.\r\nDo you want to add any job to it now?")) {
+                        if(!confirm("The new project is created successfully.\r\nDo you want to add any task to it now?")) {
                             window.location = './op_result_project?status=The project is added successfully!';
                         } else {
                             window.location = './project_selected?id='+dataRetFromPHP;
