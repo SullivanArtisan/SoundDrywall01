@@ -72,8 +72,8 @@
                     <div class="col">
                         <div class="container">
                             <div class="row bg-info text-white">
-                                <div class="col-3"><h5 class="mt-1">Materials:&nbsp;</h5></div>
-                                <div class="col-9 pt-2 font-italic text-warning"><h6>(Double click a row to cancel the dispatch)</h6></div>
+                                <div class="col-3"><h5 class="mt-1">Current Materials:&nbsp;</h5></div>
+                                <div class="col-9 pt-2 font-italic text-warning"><h6>(Double click a row to cancel that material)</h6></div>
                             </div>
                             <div class="row my-2">
                                 <div class="col">
@@ -104,15 +104,15 @@
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-center">
-                                <button class="btn-success m-3 p-2 rounded" onclick="AddMaterial('{{$job->job_status}}')">Add a New Material to This Task</button>
+                                <button class="btn-success m-3 p-2 rounded" onclick="AddMaterial('{{$job->job_status}}')">Dispatch a Material to This Task</button>
                             </div>
                         </div>
                     </div>
                     <div class="col">
                         <div class="container">
                             <div class="row bg-info text-white">
-                                <div class="col-3"><h5 class="mt-1">Assistants:&nbsp;</h5></div>
-                                <div class="col-9 pt-2 font-italic text-warning"><h6>(Click a row to chat or cancel the dispatch)</h6></div>
+                                <div class="col-3"><h5 class="mt-1">Current Staffs:&nbsp;</h5></div>
+                                <div class="col-9 pt-2 font-italic text-warning"><h6>(Click a row to chat or cancel that staff)</h6></div>
                             </div>
                             <div class="row my-2">
                                 <div class="col">
@@ -163,7 +163,7 @@
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-center">
-                                <button class="btn-success m-3 p-2 rounded" onclick="AddAssistant('{{$job->job_status}}')">Add an Assistant to This Task</button>
+                                <button class="btn-success m-3 p-2 rounded" onclick="AddAssistant('{{$job->job_status}}')">Dispatch a Staff to This Task</button>
                             </div>
                         </div>
                     </div>

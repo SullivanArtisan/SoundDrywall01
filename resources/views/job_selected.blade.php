@@ -17,7 +17,13 @@
 	if ($job_id) {
         $job = Job::where('id', $job_id)->first();
         $project = Project::where('id', $job->job_proj_id)->first();
+        if (!$project) {
+            Log::Info('Staff '.Auth::user()->id.' failed to access the project object while updating a task to the project '.$job->job_proj_id);
+        }
         $client = Client::where('id', $project->proj_cstmr_id)->first();
+        if (!$client) {
+            Log::Info('Staff '.Auth::user()->id.' failed to access the client object while updating a task to the project '.$job->job_proj_id);
+        }
 	} else {
         Log::Info('Failed to get jobId');
     }
@@ -105,14 +111,26 @@
                                     // }
                                     ?>
                                 </div>
-                                <div class="col"><label class="col-form-label">Task Address:&nbsp;</label><span class="text-danger">*</span></div>
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="job_address" name="job_address" value="{{$job->job_address}}"></div>
+                                <div class="col"><label class="col-form-label">Task Address:&nbsp;</label></div>
+                                @if (!$project)
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_address" name="job_address"></div>
+                                @else
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_address" name="job_address" value="{{$project->proj_address}}"></div>
+                                @endif
                             </div>
                             <div class="row">
-                                <div class="col"><label class="col-form-label">Task City:&nbsp;</label><span class="text-danger">*</span></div>
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="job_city" name="job_city" value="{{$job->job_city}}"></div>
+                                <div class="col"><label class="col-form-label">Task City:&nbsp;</label></div>
+                                @if (!$project)
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_city" name="job_city"></div>
+                                @else
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_city" name="job_city" value="{{$project->proj_city}}"></div>
+                                @endif
                                 <div class="col"><label class="col-form-label">Task Province:&nbsp;</label></div>
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="job_province" name="job_province" value="{{$job->job_province}}"></div>
+                                @if (!$project)
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_province" name="job_province"></div>
+                                @else
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_province" name="job_province" value="{{$project->proj_province}}"></div>
+                                @endif
                             </div>
                             <div class="row">
                                 <div class="col"><label class="col-form-label">Task Description:&nbsp;</label></div>

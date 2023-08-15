@@ -480,6 +480,10 @@ Route::post('/project_add', function (Request $request) {
 			$project->proj_cstmr_id 	= $client->id;
 			$project->proj_total_active_jobs	= $_POST['proj_total_active_jobs'];
 			// $project->proj_total_jobs	= strval($project->proj_total_jobs + 1);
+			$project->proj_address 		= $_POST['proj_address'];
+			$project->proj_city 		= $_POST['proj_city'];
+			$project->proj_province 	= $_POST['proj_province'];
+			$project->proj_postcode 	= $_POST['proj_postcode'];
 			$project->proj_status 		= $_POST['proj_status'];
 			$project->proj_notes		= $_POST['proj_notes'];
 			$project->proj_my_creation_timestamp = $_POST['proj_my_creation_timestamp'];

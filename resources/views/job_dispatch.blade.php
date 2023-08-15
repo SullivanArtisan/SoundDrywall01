@@ -83,7 +83,7 @@
                 <!-- Available Asststants Section -->
                 <div class="container">
                     <div class="row">
-                        <div class="col bg-info text-white"><h5 class="mt-1">Assistants:&nbsp;</h5></div>
+                        <div class="col bg-info text-white"><h5 class="mt-1">Available Staffs:&nbsp;</h5></div>
                     </div>
                     <div class="row my-2">
                     <div class="col">

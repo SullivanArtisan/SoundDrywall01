@@ -137,6 +137,18 @@
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="number" readonly id="proj_total_active_jobs" name="proj_total_active_jobs" value=0></div>
                             </div>
                             <div class="row">
+                                <div class="col"><label class="col-form-label">Task Address:&nbsp;</label><span class="text-danger">*</span></div>
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="proj_address" name="proj_address"></div>
+                                <div class="col"><label class="col-form-label">Task City:&nbsp;</label><span class="text-danger">*</span></div>
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="proj_city" name="proj_city"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col"><label class="col-form-label">Task Province:&nbsp;</label></div>
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="proj_province" name="proj_province"></div>
+                                <div class="col"><label class="col-form-label">Task Postcode:&nbsp;</label></div>
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="proj_postcode" name="proj_postcode"></div>
+                            </div>
+                            <div class="row">
                                 <div class="col"><label class="col-form-label">Description:&nbsp;</label></div>
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="proj_notes" name="proj_notes"></div>
                                 <div class="col"><label class="col-form-label">Status:&nbsp;</label></div>
@@ -186,35 +198,50 @@
 
         function addThisProject() {
             event.preventDefault();
-
-            $.ajax({
-                url: '/project_add',
-                type: 'POST',
-                data: {
-                    _token:"{{ csrf_token() }}", 
-                    proj_cstmr_name:document.getElementById('projcstmrnameinput').value,
-                    proj_total_active_jobs:document.getElementById('proj_total_active_jobs').value,
-                    proj_status:document.getElementById('proj_status').value, 
-                    proj_notes:document.getElementById('proj_notes').value,
-                    proj_my_creation_timestamp:document.getElementById('proj_my_creation_timestamp').value
-                },    // the _token:token is for Laravel
-                success: function(dataRetFromPHP) {
-                    let statusKey = new String("pausedReason = ");
-                    let position = dataRetFromPHP.indexOf(statusKey);
-                    if (position >= 0) {
-                        window.location = './op_result_project?status='+dataRetFromPHP.substr(statusKey.length);
-                    } else {
-                        if(!confirm("The new project is created successfully.\r\nDo you want to add any task to it now?")) {
-                            window.location = './op_result_project?status=The project is added successfully!';
+            var cstmrName = document.getElementById('projcstmrnameinput').value;
+            var address = document.getElementById('proj_address').value;
+            var city    = document.getElementById('proj_city').value;
+            if (cstmrName.length == 0) {
+                alert('The Customer Name field cannot be empty!');
+            } else if (address.length == 0) {
+                alert('The Task Address field cannot be empty!');
+            } else if (city.length == 0) {
+                alert('The Task City field cannot be empty!');
+            } else {
+                // event.preventDefault();
+                $.ajax({
+                    url: '/project_add',
+                    type: 'POST',
+                    data: {
+                        _token:"{{ csrf_token() }}", 
+                        proj_cstmr_name:cstmrName,
+                        proj_total_active_jobs:document.getElementById('proj_total_active_jobs').value,
+                        proj_address:address, 
+                        proj_city:city, 
+                        proj_province:document.getElementById('proj_province').value, 
+                        proj_postcode:document.getElementById('proj_postcode').value, 
+                        proj_status:document.getElementById('proj_status').value, 
+                        proj_notes:document.getElementById('proj_notes').value,
+                        proj_my_creation_timestamp:document.getElementById('proj_my_creation_timestamp').value  // The reason of using this own timestamp is to get the project's id immediately after it's created
+                    },    // the _token:token is for Laravel
+                    success: function(dataRetFromPHP) {
+                        let statusKey = new String("pausedReason = ");
+                        let position = dataRetFromPHP.indexOf(statusKey);
+                        if (position >= 0) {
+                            window.location = './op_result_project?status='+dataRetFromPHP.substr(statusKey.length);
                         } else {
-                            window.location = './project_selected?id='+dataRetFromPHP;
+                            if(!confirm("The new project is created successfully.\r\nDo you want to add any task to it now?")) {
+                                window.location = './op_result_project?status=The project is added successfully!';
+                            } else {
+                                window.location = './project_selected?id='+dataRetFromPHP;
+                            }
                         }
+                    },
+                    error: function(err) {
+                        window.location = './op_result_project?status='+err;
                     }
-                },
-                error: function(err) {
-                    window.location = './op_result_project?status='+err;
-                }
-            });
+                });
+            }
         }
     </script>
 			

@@ -105,6 +105,18 @@
                             <div class="col"><input class="form-control mt-1 my-text-height" type="number" readonly id="proj_total_active_jobs" name="proj_total_active_jobs" value="{{$project->proj_total_active_jobs}}"></div>
                         </div>
                         <div class="row">
+                            <div class="col"><label class="col-form-label">Task Address:&nbsp;</label><span class="text-danger">*</span></div>
+                            <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="proj_address" name="proj_address" value="{{$project->proj_address}}"></div>
+                            <div class="col"><label class="col-form-label">Task City:&nbsp;</label><span class="text-danger">*</span></div>
+                            <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="proj_city" name="proj_city" value="{{$project->proj_city}}"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><label class="col-form-label">Task Province:&nbsp;</label></div>
+                            <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="proj_province" name="proj_province" value="{{$project->proj_province}}"></div>
+                            <div class="col"><label class="col-form-label">Task Postcode:&nbsp;</label></div>
+                            <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="proj_postcode" name="proj_postcode" value="{{$project->proj_postcode}}"></div>
+                        </div>
+                        <div class="row">
                             <div class="col"><label class="col-form-label">Description:&nbsp;</label></div>
                             <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="proj_notes" name="proj_notes" value="{{$project->proj_notes}}"></div>
                             <div class="col"><label class="col-form-label">Status:&nbsp;</label></div>
@@ -156,30 +168,33 @@
                 // Tasks' Title Line
                 $outContents = "<div class=\"container mw-100 mt-3\">";
                 $outContents .= "<div class=\"row bg-info text-white fw-bold mb-2\">";
-                    $outContents .= "<div class=\"col-1 mt-1 align-middle\">";
+                    $outContents .= "<div class=\"col-2 mt-1 align-middle\">";
                         $outContents .= "Task Name";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-2 mt-1 align-middle\">";
                         $outContents .= "Task Type";
                     $outContents .= "</div>";
-                    $outContents .= "<div class=\"col-1 mt-1 align-middle\">";
+                    $outContents .= "<div class=\"col-2 mt-1 align-middle\">";
                         $outContents .= "Crew#";
                     $outContents .= "</div>";
-                    $outContents .= "<div class=\"col-1 mt-1 align-middle\">";
+                    $outContents .= "<div class=\"col-2 mt-1 align-middle\">";
                         $outContents .= "Materail#";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-2 mt-1 align-middle\">";
                         $outContents .= "Task Status";
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-2 mt-1 align-middle\">";
-                        $outContents .= "Task Address";
+                        $outContents .= "Description";
                     $outContents .= "</div>";
-                    $outContents .= "<div class=\"col-1 mt-1 align-middle\">";
-                        $outContents .= "Task City";
-                    $outContents .= "</div>";
-                    $outContents .= "<div class=\"col-2 align-middle\">";
-                        $outContents .= "Province";
-                    $outContents .= "</div>";
+                    // $outContents .= "<div class=\"col-2 mt-1 align-middle\">";
+                    //     $outContents .= "Task Address";
+                    // $outContents .= "</div>";
+                    // $outContents .= "<div class=\"col-1 mt-1 align-middle\">";
+                    //     $outContents .= "Task City";
+                    // $outContents .= "</div>";
+                    // $outContents .= "<div class=\"col-2 align-middle\">";
+                    //     $outContents .= "Province";
+                    // $outContents .= "</div>";
                 $outContents .= "</div>";
                 echo $outContents;
 
@@ -192,7 +207,7 @@
                     } else {
                         $outContents = "<div class=\"row\" style=\"background-color:PaleGreen\">";
                     }
-                    $outContents .= "<div class=\"col-1\">";
+                    $outContents .= "<div class=\"col-2\">";
                         $outContents .= "<a href=\"".route('job_selected', ['jobIdFromProj='.$job->id])."\">";
                         $outContents .= $job->job_name;
                         $outContents .= "</a>";
@@ -202,12 +217,12 @@
                         $outContents .= $job->job_type;
                         $outContents .= "</a>";
                     $outContents .= "</div>";
-                    $outContents .= "<div class=\"col-1\">";
+                    $outContents .= "<div class=\"col-2\">";
                         $outContents .= "<a href=\"".route('job_selected', ['jobIdFromProj='.$job->id])."\">";
                         $outContents .= $job->job_total_active_assistants;
                         $outContents .= "</a>";
                     $outContents .= "</div>";
-                    $outContents .= "<div class=\"col-1\">";
+                    $outContents .= "<div class=\"col-2\">";
                         $outContents .= "<a href=\"".route('job_selected', ['jobIdFromProj='.$job->id])."\">";
                         $outContents .= $job->job_total_active_materials;
                         $outContents .= "</a>";
@@ -219,19 +234,24 @@
                     $outContents .= "</div>";
                     $outContents .= "<div class=\"col-2\">";
                         $outContents .= "<a href=\"".route('job_selected', ['jobIdFromProj='.$job->id])."\">";
-                        $outContents .= $job->job_address;
+                        $outContents .= $job->job_desc;
                         $outContents .= "</a>";
                     $outContents .= "</div>";
-                    $outContents .= "<div class=\"col-1\">";
-                        $outContents .= "<a href=\"".route('job_selected', ['jobIdFromProj='.$job->id])."\">";
-                        $outContents .= $job->job_city;
-                        $outContents .= "</a>";
-                    $outContents .= "</div>";
-                    $outContents .= "<div class=\"col-2\">";
-                        $outContents .= "<a href=\"".route('job_selected', ['jobIdFromProj='.$job->id])."\">";
-                        $outContents .= $job->job_province;
-                        $outContents .= "</a>";
-                    $outContents .= "</div>";
+                    // $outContents .= "<div class=\"col-2\">";
+                    //     $outContents .= "<a href=\"".route('job_selected', ['jobIdFromProj='.$job->id])."\">";
+                    //     $outContents .= $job->job_address;
+                    //     $outContents .= "</a>";
+                    // $outContents .= "</div>";
+                    // $outContents .= "<div class=\"col-1\">";
+                    //     $outContents .= "<a href=\"".route('job_selected', ['jobIdFromProj='.$job->id])."\">";
+                    //     $outContents .= $job->job_city;
+                    //     $outContents .= "</a>";
+                    // $outContents .= "</div>";
+                    // $outContents .= "<div class=\"col-2\">";
+                    //     $outContents .= "<a href=\"".route('job_selected', ['jobIdFromProj='.$job->id])."\">";
+                    //     $outContents .= $job->job_province;
+                    //     $outContents .= "</a>";
+                    // $outContents .= "</div>";
                 $outContents .= "</div>";
                 echo $outContents;
                 }

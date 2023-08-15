@@ -98,7 +98,7 @@
 			$outContents .= "<div class=\"col-1\">";
 				$outContents .= "ID";
 			$outContents .= "</div>";
-			$outContents .= "<div class=\"col-3\">";
+			$outContents .= "<div class=\"col-2\">";
 				$outContents .= "Customer Name";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-1\">";
@@ -106,6 +106,12 @@
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-1\">";
 				$outContents .= "Total Tasks";
+			$outContents .= "</div>";
+			$outContents .= "<div class=\"col-2\">";
+				$outContents .= "Task Address";
+			$outContents .= "</div>";
+			$outContents .= "<div class=\"col-1\">";
+				$outContents .= "Task City";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2\">";
 				$sortParms = "?display_filter=".$display_filter."&sort_key_project=created_at&sort_time=".time();
@@ -117,7 +123,7 @@
 					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-down-square\"></a></i>";
 				}
 			$outContents .= "</div>";
-			$outContents .= "<div class=\"col-4\">";
+			$outContents .= "<div class=\"col-2\">";
 				$outContents .= "Notes";
 			$outContents .= "</div>";
 		$outContents .= "</div><hr class=\"m-1\"/>";
@@ -136,7 +142,7 @@
 					$outContents .= $project->id;
 					$outContents .= "</a>";
 				$outContents .= "</div>";
-				$outContents .= "<div class=\"col-3\">";
+				$outContents .= "<div class=\"col-2\">";
 					$outContents .= "<a href=\"project_selected?id=$project->id\">";
 					$outContents .= $client_name;
 					$outContents .= "</a>";
@@ -153,10 +159,20 @@
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-2\">";
 					$outContents .= "<a href=\"project_selected?id=$project->id\">";
+					$outContents .= $project->proj_address;
+					$outContents .= "</a>";
+				$outContents .= "</div>";
+                $outContents .= "<div class=\"col-1\">";
+					$outContents .= "<a href=\"project_selected?id=$project->id\">";
+					$outContents .= $project->proj_city;
+					$outContents .= "</a>";
+				$outContents .= "</div>";
+                $outContents .= "<div class=\"col-2\">";
+					$outContents .= "<a href=\"project_selected?id=$project->id\">";
 					$outContents .= $project->created_at;
 					$outContents .= "</a>";
 				$outContents .= "</div>";
-                $outContents .= "<div class=\"col-4\">";
+                $outContents .= "<div class=\"col-2\">";
 					$outContents .= "<a href=\"project_selected?id=$project->id\">";
 					$outContents .= $project->proj_notes;
 					$outContents .= "</a>";

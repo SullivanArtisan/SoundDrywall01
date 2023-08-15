@@ -50,6 +50,8 @@ class ProjectController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
+            'proj_address'      => 'required',
+            'proj_city'         => 'required',
             // 'proj_cstmr_id'     => 'required',
             // 'proj_total_jobs'   => 'required',
         ]);
@@ -68,6 +70,10 @@ class ProjectController extends Controller
             $project->proj_cstmr_id             = $client->id;
             // $project->proj_total_active_jobs    = $request->proj_total_active_jobs;
             // $project->proj_total_jobs           = $request->proj_total_active_jobs;
+            $project->proj_address              = $request->proj_address;
+            $project->proj_city                 = $request->proj_city;
+            $project->proj_province             = $request->proj_province;
+            $project->proj_postcode             = $request->proj_postcode;
             $project->proj_status               = $request->proj_status;
             $project->proj_notes                = $request->proj_notes;
             $saved = $project->save();

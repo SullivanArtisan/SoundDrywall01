@@ -10,6 +10,9 @@
     if (isset($_GET['projId'])) {
 		$proj_id = $_GET['projId'];
         $project = Project::where('id', $proj_id)->first();
+        if (!$project) {
+            Log::Info('Staff '.Auth::user()->id.' failed to access the project object while adding a task to the project '.$proj_id);
+        }
     } else {
         $proj_id = "";
     }
@@ -21,7 +24,7 @@
 </style>
 
 @section('goback')
-	<a class="text-primary" href="{{route('project_selected', ['id'=>$project->id])}}" style="margin-right: 10px;">Back</a>
+	<a class="text-primary" href="{{route('job_main')}}" style="margin-right: 10px;">Back</a>
 @show
 
 @section('function_page')
@@ -74,14 +77,26 @@
                                     // }
                                     ?>
                                 </div>
-                                <div class="col"><label class="col-form-label">Task Address:&nbsp;</label><span class="text-danger">*</span></div>
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="job_address" name="job_address"></div>
+                                <div class="col"><label class="col-form-label">Task Address:&nbsp;</label></div>
+                                @if (!$project)
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_address" name="job_address"></div>
+                                @else
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_address" name="job_address" value="{{$project->proj_address}}"></div>
+                                @endif
                             </div>
                             <div class="row">
-                                <div class="col"><label class="col-form-label">Task City:&nbsp;</label><span class="text-danger">*</span></div>
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="job_city" name="job_city"></div>
+                                <div class="col"><label class="col-form-label">Task City:&nbsp;</label></div>
+                                @if (!$project)
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_city" name="job_city"></div>
+                                @else
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_city" name="job_city" value="{{$project->proj_city}}"></div>
+                                @endif
                                 <div class="col"><label class="col-form-label">Task Province:&nbsp;</label></div>
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="job_province" name="job_province"></div>
+                                @if (!$project)
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_province" name="job_province"></div>
+                                @else
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_province" name="job_province" value="{{$project->proj_province}}"></div>
+                                @endif
                             </div>
                             <div class="row">
                                 <div class="col"><label class="col-form-label">Task Description:&nbsp;</label></div>
@@ -94,7 +109,7 @@
                                 <div class="col">
                                     <div class="row">
                                         <button class="btn btn-success mx-4" type="submit" id="btn_save">Save</button>
-                                        <button class="btn btn-secondary mx-3" type="button"><a href="{{route('project_selected', ['id'=>$project->id])}}">Cancel</a></button>
+                                        <button class="btn btn-secondary mx-3" type="button"><a href="{{route('job_main')}}">Cancel</a></button>
                                     </div>
                                 </div>
                                 <div class="col"></div>
