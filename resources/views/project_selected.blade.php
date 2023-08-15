@@ -249,7 +249,7 @@
             var jobUpdateOk = {!!json_encode($job_update_ok)!!};
             var jobDeleteOk = {!!json_encode($job_delete_ok)!!};
             if (jobAddOk.length > 0) {
-                alert("Task "+jobAddOk+" is associated successfully.");
+                alert("Task "+jobAddOk+" is didpatched successfully.");
             }
             if (jobUpdateOk.length > 0) {
                 alert("Task "+jobUpdateOk+" is updated successfully.");

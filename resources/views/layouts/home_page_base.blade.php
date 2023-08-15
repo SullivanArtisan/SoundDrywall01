@@ -43,7 +43,7 @@
                 <li class="active">
                     <a href="#controlSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Control</a>
                     <ul class="collapse list-unstyled" id="controlSubmenu">
-                        <li> <a href="{{route('material_associate')}}">Material Association</a> </li>
+                        <li> <a href="{{route('material_associate')}}">Material Dispatch</a> </li>
                         <li> <a href="{{route('job_dispatch')}}">Task Dispatch</a> </li>
                     </ul>
                 </li>
@@ -158,7 +158,7 @@
             <h3>Lorem Ipsum Dolor</h3>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 			-->
-            <footer class="text-center text-lg-start fixed-bottom" style="margin-left: 150px; background-color:#7386D5;">
+            <footer class="text-center text-lg-start fixed-bottom" style="margin-left: 200px; background-color:#7386D5;">
                 <!-- Copyright -->
                 <div class="text-center p-3 text-white">
                     © 2023 Copyright: TwentyTwenty Contracting Ltd.

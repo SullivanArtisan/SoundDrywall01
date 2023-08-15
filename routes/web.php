@@ -149,7 +149,7 @@ Route::post('job_assistants_complete', function (Request $request) {
 			MyHelper::LogStaffActionResult(Auth::user()->id, 'Completed task '.$job_id.' OK.', '');
 			Log::Info('Staff '.$staff_id.' completed the task '.$job_id." successfully.");
 
-			// Change all associated materials' statuses to 'COMPLETED', if this JobDispatch entry is completed by the superintendent
+			// Change all didpatched materials' statuses to 'COMPLETED', if this JobDispatch entry is completed by the superintendent
 			// and create a new material for the remainder if there is any
 			$staff = Staff::where('id', $staff_id)->first();
 			if ($staff->role == 'SUPERINTENDENT') {
@@ -199,7 +199,11 @@ Route::post('job_assistants_complete', function (Request $request) {
 			if ($job->job_assistants_complete == $job->job_total_active_assistants) {
 				$project = project::where('id', $job->job_proj_id)->first();
 				$project->proj_jobs_complete = $project->proj_jobs_complete + 1;
-				$project->proj_status = $project->proj_jobs_complete.'/'.$project->proj_total_active_jobs.' COMPLETED';
+				if ($project->proj_jobs_complete < $project->proj_total_active_jobs) {
+					$project->proj_status = $project->proj_jobs_complete.'/'.$project->proj_total_active_jobs.' COMPLETED';
+				} else {
+					$project->proj_status = 'COMPLETED';
+				}
 				$res = $project->save();
 				if (!$res) {
 					Log::Info('Failed to update proj_jobs_complete for staff '.$staff_id.' and task '.$job_id."!");
@@ -419,32 +423,32 @@ Route::get('/drywall_delete', function () {
 	$job 		= Job::where('id', $job_id)->first();
 	$material 	= Material::where('id', $mtrl_id)->first();
 
-	MyHelper::LogStaffAction(Auth::user()->id, 'To associate material '.$mtrl_id.' with the task '.$job_id.'.', '');
+	MyHelper::LogStaffAction(Auth::user()->id, 'To didpatch material '.$mtrl_id.' with the task '.$job_id.'.', '');
 	if ($material) {
 		$material->mtrl_job_id = $job_id;
 		$res = $material->save();
 		if (!$res) {
-			Log::Info('Failed to associate material '.$mtrl_id.' with the task '.$job_id."!");
+			Log::Info('Failed to didpatch material '.$mtrl_id.' with the task '.$job_id."!");
 			return "mtrlAssociateOK=false";	
 		} else {
 			if ($job) {
 				$job->job_total_active_materials++;
 				$res2 = $job->save();
 				if (!$res2) {
-					Log::Info('Failed to increase job_total_active_materials for task '.$job_id." while associate material ".$mtrl_id."!");
+					Log::Info('Failed to increase job_total_active_materials for task '.$job_id." while didpatch material ".$mtrl_id."!");
 					return "mtrlAssociateOK=false";	
 				} else {
 					MyHelper::LogStaffActionResult(Auth::user()->id, 'Increased job_total_active_materials for task '.$job_id.' OK.', '');
 				}
 			} else {
-				Log::Info('Failed to access the task '.$job_id." while associate material ".$mtrl_id."!");
+				Log::Info('Failed to access the task '.$job_id." while didpatching material ".$mtrl_id."!");
 				return "mtrlAssociateOK=false";	
 			}
-			MyHelper::LogStaffActionResult(Auth::user()->id, 'Associated material '.$mtrl_id.' with task '.$job_id.' OK.', '');
+			MyHelper::LogStaffActionResult(Auth::user()->id, 'didpatched material '.$mtrl_id.' with task '.$job_id.' OK.', '');
 			return "mtrlAssociateOK=true";	
 		}
 	} else {
-		Log::Info('Failed to access the material '.$mtrl_id." while associate it with task ".$job_id."!");
+		Log::Info('Failed to access the material '.$mtrl_id." while didpatching it with task ".$job_id."!");
 		return "mtrlAssociateOK=false";	
 	}
 })->middleware(['auth'])->name('mtrl_associate_with_job');

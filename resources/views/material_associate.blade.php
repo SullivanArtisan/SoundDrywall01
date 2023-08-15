@@ -82,7 +82,7 @@
             </div>
             <div class="col-1" style="position: relative;">
                 <div style="position: absolute; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%);">
-                    <button class="btn btn-success align-items-center" onclick="doMtrlAssociate()">Associate</button>
+                    <button class="btn btn-success align-items-center" onclick="doMtrlAssociate()">Dispatch</button>
                 </div>
             </div>
             <div class="col-6">
@@ -196,7 +196,7 @@
                         mtrl_id:mtrlId,
                     },    // the _token:token is for Laravel
                     success: function(dataRetFromPHP) {
-                        alert('Material associated successfully.')
+                        alert('Material didpatched successfully.')
                         parmJobId = {!!json_encode($job_id)!!};
                         if (parmJobId == "") {
                             window.location = './material_associate';
@@ -205,7 +205,7 @@
                         }
                     },
                     error: function(err) {
-                        alert('Failed to associate the material.\r\nPlease try again!')
+                        alert('Failed to didpatch the material.\r\nPlease try again!')
                     }
                 });
             }

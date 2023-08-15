@@ -73,7 +73,7 @@
                         <div class="container">
                             <div class="row bg-info text-white">
                                 <div class="col-3"><h5 class="mt-1">Materials:&nbsp;</h5></div>
-                                <div class="col-9 pt-2 font-italic text-warning"><h6>(Double click a row to de-associate it)</h6></div>
+                                <div class="col-9 pt-2 font-italic text-warning"><h6>(Double click a row to cancel the dispatch)</h6></div>
                             </div>
                             <div class="row my-2">
                                 <div class="col">
@@ -112,7 +112,7 @@
                         <div class="container">
                             <div class="row bg-info text-white">
                                 <div class="col-3"><h5 class="mt-1">Assistants:&nbsp;</h5></div>
-                                <div class="col-9 pt-2 font-italic text-warning"><h6>(Click a row to chat or de-associate it)</h6></div>
+                                <div class="col-9 pt-2 font-italic text-warning"><h6>(Click a row to chat or cancel the dispatch)</h6></div>
                             </div>
                             <div class="row my-2">
                                 <div class="col">
@@ -199,7 +199,7 @@
 
             function RemoveThisMaterial(inputId, mtrlStatus) {
                 if ('COMPLETED' == mtrlStatus) {
-                    alert('You cannot de-associate this material, as the task has been COMPLETED.');
+                    alert('You cannot cancel the dispatch of this material, as the task has been COMPLETED.');
                 } else {
                     mtrlId = inputId.substring(2, inputId.length);
                     if(!confirm("Are you sure to remove this material from this task?")) {
