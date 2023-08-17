@@ -208,20 +208,21 @@
                 $listed_jobs = 0;
                 foreach ($jobs as $job) {
                     if (Auth::user()->role != 'ADMINISTRATOR') {
-                        $one_association = JobDispatch::where('jobdsp_job_id', $job->id)->where('jobdsp_staff_id', Auth::user()->id)->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->first();
+                        //$one_association = JobDispatch::where('jobdsp_job_id', $job->id)->where('jobdsp_staff_id', Auth::user()->id)->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->first();
                         $associations = JobDispatch::where('jobdsp_job_id', $job->id)->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->get();
-                        $superintendent_num = 0;
+                        $other_superintendent_num = 0;
                         foreach ($associations as $association) {
                             $one_staff = Staff::where('id', $association->jobdsp_staff_id)->first();
                             if ($one_staff) {
-                                if ($one_staff->role == 'SUPERINTENDENT') {
-                                    $superintendent_num++;
+                                if (($one_staff->role == 'SUPERINTENDENT') && ($one_staff->id != Auth::user()->id)) {
+                                    $other_superintendent_num++;
                                 }
                             } else {
                                 Log::Info(Auth::user()->id.' failed to access the staff '.$association->jobdsp_staff_id.'\'s object for job '.$job->id.' while listing available jobs');
                             }
                         }
-                        if (!$one_association || ($superintendent_num > 0)) {
+                        //if (!$one_association || ($superintendent_num > 0)) {
+                        if ($other_superintendent_num > 0) {
                             continue;
                         }
                     }
