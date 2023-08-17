@@ -203,6 +203,7 @@
                     </div>
                 </div>
             </div>
+            @if ($association_staff_id != "") 
 			<div class="m-4" style="background: var(--bs-btn-bg); background-color:gold;">
                         @if (Auth::user()->role == 'ADMINISTRATOR')
                         <h3 class="ml-2">Conversation with the Task Superintendent</h3>
@@ -246,6 +247,7 @@
                     </div>
                 </div>
 			</div>
+            @endif
 		</div>
 		
 		<script>
