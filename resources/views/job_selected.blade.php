@@ -2,10 +2,15 @@
 	use App\Models\Project;
 	use App\Models\Client;
 	use App\Models\Status;
-	use App\Models\JobType;
+	use App\Models\Staff;
 	use App\Models\Job;
+	use App\Models\JobType;
+	use App\Models\JobDispatch;
 
     $job_id = "";
+    $staff_id = Auth::user()->id;
+    $association_staff_id = "";
+    $msg_to_show = "";
     if (isset($_GET['jobId'])) {
         $job_id = $_GET['jobId'];
     }
@@ -24,8 +29,35 @@
         if (!$client) {
             Log::Info('Staff '.Auth::user()->id.' failed to access the client object while updating a task to the project '.$job->job_proj_id);
         }
+
+        $associations = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->get();
+        foreach($associations as $association) {
+            $staff = Staff::where('id', $association->jobdsp_staff_id)->first();
+            if ($staff) {
+                if ($staff->role == 'SUPERINTENDENT') {
+                    $association_staff_id = $staff->id;
+                    break;
+                }
+            }
+        }
 	} else {
         Log::Info('Failed to get jobId');
+    }
+
+    if (isset($_GET['msgToStaffOK'])) {
+        $result = $_GET['msgToStaffOK'];
+        if ($result=='true' && $staff_id) {
+            $msg_to_show = 'Message sent to the task\'s superintendent successfully.';
+            Log::Info($msg_to_show);
+        }
+    }
+
+    if (isset($_GET['msgToAdminOK'])) {
+        $result = $_GET['msgToAdminOK'];
+        if ($result == 'true'){
+            $msg_to_show = 'Assistant '.Auth::user()->f_name.' '.Auth::user()->l_name.' sent a message to administrator successfully.';
+            Log::Info($msg_to_show);
+        }
     }
 ?>
 
@@ -65,7 +97,7 @@
 		<div>
 			<div class="row m-4">
 				<div>
-					<h2 class="text-muted pl-2">Task {{$job->job_name}} (for Customer <span style="color:maroon; font-family: Georgia; font-style: italic;">{{$client->clnt_name}}</span>):</h2>
+					<h2 class="text-muted pl-2">Task {{$job->job_name}} (for Client <span style="color:maroon; font-family: Georgia; font-style: italic;">{{$client->clnt_name}}</span>):</h2>
 				</div>
 				<div class="col my-auto ml-5">
 					<button class="btn btn-danger" type="button"><a href="job_delete?id={{$job->id}}" onclick="return myConfirmation();">Delete</a></button>
@@ -159,12 +191,53 @@
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" readonly id="job_id" name="job_id" value="{{$job->id}}"></div>
                             </div>
                             <div class="row my-3">
-                                <div class="w-25"></div>
                                 <div class="col">
-                                    <div class="row">
+                                    <div class="row d-flex justify-content-center">
                                         <button class="btn btn-success mx-4" type="submit" id="btn_save">Save</button>
                                         <button class="btn btn-info mx-3 mr-2" type="button" onclick="DoJobCombination();">Edit Task Dispatch</button>
                                         <button class="btn btn-secondary mx-3 ml-2" type="button"><a href="{{route('project_selected', ['id'=>$job->job_proj_id])}}">Cancel</a></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+			<div class="m-4" style="background: var(--bs-btn-bg); background-color:gold;">
+                        @if (Auth::user()->role == 'ADMINISTRATOR')
+                        <h3 class="ml-2">Conversation with the Task Superintendent</h3>
+                        @else
+                        <h3 class="ml-2">Conversation with Administrator</h3>
+                        @endif
+                <div class="row mx-2">
+                    <div class="col">
+                        <form method="post" action="{{url('job_combination_msg_to_staff')}}">
+                            @csrf
+                            <div class="row">
+                                <div class="col ml-1">
+                                    @if (Auth::user()->role == 'ADMINISTRATOR')
+                                    <div class="row"><label class="col-form-label">Message To Superintendent:&nbsp;</label></div>
+                                    <div class="row"><textarea class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$association->jobdsp_msg_from_admin}}</textarea></div>
+                                    @else
+                                    <div class="row"><label class="col-form-label">Message From Administrator:&nbsp;</label></div>
+                                    <div class="row"><textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$association->jobdsp_msg_from_admin}}</textarea></div>
+                                    @endif
+                                </div>
+                                <div class="col ml-1">
+                                    @if (Auth::user()->role == 'ADMINISTRATOR')
+                                    <div class="row"><label class="col-form-label">Message From Superintendent:&nbsp;</label></div>
+                                    <div class="row"><textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$association->jobdsp_msg_from_staff}}</textarea></div>
+                                    @else
+                                    <div class="row"><label class="col-form-label">Message To Administrator:&nbsp;</label></div>
+                                    <div class="row"><textarea class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$association->jobdsp_msg_from_staff}}</textarea></div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row my-3">
+                                <div class="w-25"></div>
+                                <div class="col">
+                                    <div class="row d-flex justify-content-start">
+                                        <button class="btn btn-success mx-4" type="submit" onclick="return doSendMsgToReceiver('{{Auth::user()->role}}');">Send</button>
                                     </div>
                                 </div>
                                 <div class="col"></div>
@@ -172,10 +245,18 @@
                         </form>
                     </div>
                 </div>
-            </div>
+			</div>
 		</div>
 		
 		<script>
+            var msgToShow = {!!json_encode($msg_to_show)!!};
+            var thisUserRole = {!!json_encode(Auth::user()->role)!!};
+            var jobId = {!!json_encode($job_id)!!};
+            var staffId = {!!json_encode($staff_id)!!};
+            if (msgToShow.length > 0) {
+                alert(msgToShow);
+            }
+
 			function myConfirmation() {
 				if(!confirm("Are you sure to delete this task?"))
 				    event.preventDefault();
@@ -185,6 +266,90 @@
                 event.preventDefault();
                 url   = './job_combination_main?jobId='+{!!json_encode($job_id)!!};
                 window.location = url;
+            }
+
+            setTimeout(ReloadJobMsg, 7500);
+
+            function ReloadJobMsg() {
+                if (thisUserRole == 'ADMINISTRATOR') {
+                    toThisUrl = '/reload_page_for_job_msg_from_staff';
+                } else {
+                    toThisUrl = '/reload_page_for_job_msg_from_admin';
+                }
+                $.ajax({
+                    url: toThisUrl,
+                    type: 'POST',
+                    data: {
+                        _token:"{{ csrf_token() }}", 
+                        job_id:jobId,
+                        staff_id:{!!json_encode($association_staff_id)!!},
+                    },    // the _token:token is for Laravel
+                    success: function(dataRetFromPHP) {
+                        setTimeout(ReloadJobMsg, 7500);
+                        if (thisUserRole == 'ADMINISTRATOR') {
+                            if (document.getElementById('msg_from_staff').value != dataRetFromPHP) {
+                                document.getElementById('msg_from_staff').value = dataRetFromPHP;
+                                document.getElementById('msg_from_staff').style.color = 'red';
+                            } else {
+                                document.getElementById('msg_from_staff').value = dataRetFromPHP;
+                                document.getElementById('msg_from_staff').style.color = 'white';
+                            }
+                        } else {
+                            if (document.getElementById('msg_from_admin').value != dataRetFromPHP) {
+                                document.getElementById('msg_from_admin').value = dataRetFromPHP;
+                                document.getElementById('msg_from_admin').style.color = 'red';
+                            } else {
+                                document.getElementById('msg_from_admin').value = dataRetFromPHP;
+                                document.getElementById('msg_from_admin').style.color = 'white';
+                            }
+                        }
+                    },
+                    error: function(err) {
+                        setTimeout(ReloadJobMsg, 7500);
+                    }
+                });
+            }
+
+            function doSendMsgToReceiver(senderRole) {
+                event.preventDefault();
+                if (senderRole == 'ADMINISTRATOR') {
+                    msg = document.getElementById('msg_from_admin').value;
+                    toThisUrl = '/job_combination_msg_to_staff';
+                    staffId = {!!json_encode($association_staff_id)!!};
+                    if (staffId == '') {
+                        alert('The task has not been dispatched to any superintendent yet, so the message cannot be sent now.');
+                        return;
+                    }
+                } else {
+                    msg = document.getElementById('msg_from_staff').value;
+                    toThisUrl = '/job_combination_msg_to_admin';
+                }
+                if (msg.length > 0) {
+                    $.ajax({
+                        url: toThisUrl,
+                        type: 'POST',
+                        data: {
+                            _token:"{{ csrf_token() }}", 
+                            job_id:jobId,
+                            staff_id:staffId,
+                            msg:msg
+                        },    // the _token:token is for Laravel
+                        success: function(dataRetFromPHP) {
+                            if (senderRole == 'ADMINISTRATOR') {
+                                window.location = './job_selected?jobId='+jobId+'&msgToStaffOK=true';
+                            } else {
+                                window.location = './job_selected?jobId='+jobId+'&msgToAdminOK=true';
+                            }
+                        },
+                        error: function(err) {
+                            if (senderRole == 'ADMINISTRATOR') {
+                                window.location = './job_selected?jobId='+jobId+'&msgToStaffOK=false';
+                            } else {
+                                window.location = './job_selected?jobId='+jobId+'&msgToAdminOK=false';
+                            }
+                        }
+                    });
+                }
             }
 		</script>
 	@endsection

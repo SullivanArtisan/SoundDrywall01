@@ -117,6 +117,13 @@
 		
 		// Body Lines
 		foreach ($jobs as $job) {
+			if (Auth::user()->role != 'ADMINISTRATOR') {
+				$association = \App\Models\JobDispatch::where('jobdsp_job_id', $job->id)->where('jobdsp_staff_id', Auth::user()->id)->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->first();
+				if (!$association) {
+					continue;
+				}
+			}
+
             $outContents = "<div class=\"row\">";
 				$outContents .= "<div class=\"col-1\">";
 					$outContents .= "<a href=\"job_selected?jobId=$job->id\">";

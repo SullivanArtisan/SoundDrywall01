@@ -18,7 +18,9 @@
 				<h2 class="text-muted pl-2">All Projects</h2>
             </div>
             <div class="col my-auto ml-5">
+				@if (Auth::user()->role == 'ADMINISTRATOR')
 				<button class="btn btn-success mr-4" type="button"><a href="{{route('project_add')}}">Add</a></button>
+				@endif
 			</div>
 			<div class="col mt-3 ml-2">
 				<label>Display Filter:</label>
@@ -99,7 +101,7 @@
 				$outContents .= "ID";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2\">";
-				$outContents .= "Customer Name";
+				$outContents .= "Client Name";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-1\">";
 				$outContents .= "Status";

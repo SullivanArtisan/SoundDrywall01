@@ -1,4 +1,5 @@
 <?php
+	use App\Models\JobDispatch;
 	use App\Models\Project;
 	use App\Models\Client;
 	use App\Models\Status;
@@ -63,7 +64,9 @@
 					<h2 class="text-muted pl-2">Project {{$id}}:</h2>
 				</div>
 				<div class="col my-auto ml-5">
+                    @if (Auth::user()->role == 'ADMINISTRATOR')
 					<button class="btn btn-danger me-2" type="button"><a href="project_delete?id={{$project->id}}" onclick="return myConfirmation();">Delete</a></button>
+                    @endif
 				</div>
 				<div class="col"></div>
 			</div>
@@ -83,7 +86,7 @@
 					<form method="post" action="{{url('project_update')}}">
 						@csrf
                         <div class="row">
-                            <div class="col"><label class="col-form-label">Customer Name:&nbsp;</label><span class="text-danger">*</span></div>
+                            <div class="col"><label class="col-form-label">Client Name:&nbsp;</label><span class="text-danger">*</span></div>
                             <div class="col">
                                 <?php
                                 $tagHead = "<input list=\"proj_cstmr_name\" name=\"proj_cstmr_name\" id=\"projcstmrnameinput\" onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$client_name."';\" class=\"form-control mt-1 my-text-height\" value=\"".$client_name."\"";
@@ -147,8 +150,10 @@
 						<div class="row my-3">
 							<div class="col"></div>
 							<div class="col">
-									<button class="btn btn-warning mx-3" type="submit">Update</button>
-									<button class="btn btn-secondary mx-3" type="button"><a href="{{route('project_main', ['display_filter'=>'active'])}}">Cancel</a></button>
+                                @if (Auth::user()->role == 'ADMINISTRATOR')
+                                <button class="btn btn-warning mx-3" type="submit">Update</button>
+                                @endif
+                                <button class="btn btn-secondary mx-3" type="button"><a href="{{route('project_main', ['display_filter'=>'active'])}}">Cancel</a></button>
 							</div>
 							<div class="col"></div>
 						</div>
@@ -201,6 +206,13 @@
                 // All Tasks' Body Lines
                 $listed_jobs = 0;
                 foreach ($jobs as $job) {
+                    if (Auth::user()->role != 'ADMINISTRATOR') {
+                        $association = JobDispatch::where('jobdsp_job_id', $job->id)->where('jobdsp_staff_id', Auth::user()->id)->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->first();
+                        if (!$association) {
+                            continue;
+                        }
+                    }
+        
                     $listed_jobs++;
                     if ($listed_jobs % 2) {
                         $outContents = "<div class=\"row\" style=\"background-color:Lavender\">";

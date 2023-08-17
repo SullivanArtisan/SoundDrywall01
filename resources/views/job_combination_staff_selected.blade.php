@@ -6,6 +6,7 @@
 
     $job_id = $_GET['jobId'];
     $staff_id = $_GET['staffId'];
+    $msg_to_show = "";
 	if ($job_id && $staff_id) {
         $job = Job::where('id', $job_id)->first();
         $staff = Staff::where('id', $staff_id)->first();
@@ -13,9 +14,10 @@
 	}
 
     if (isset($_GET['msgToStaffOK'])) {
-        $msgToStaffResult = $_GET['msgToStaffOK'];
-        if ($msgToStaffResult=='true' && $staff_id) {
-            Log::Info('Message sent to staff '.$staff->f_name.' '.$staff->l_name.' successfully.');
+        $result = $_GET['msgToStaffOK'];
+        if ($result=='true' && $staff_id) {
+            $msg_to_show = 'Message sent to staff '.$staff->f_name.' '.$staff->l_name.' successfully.';
+            Log::Info($msg_to_show);
         }
     }
 ?>
@@ -50,30 +52,32 @@
 @else {
 	@section('function_page')
 		<div>
-			<div class="row m-4">
-				<div class="col-3 my-auto">
-					<h2 class="text-muted pl-2">Assistant {{$staff->f_name}} {{$staff->l_name}}:</h2>
+			<div class="row m-2">
+				<div class="col-4 my-auto">
+					<h2 class="text-muted ">{{$staff->f_name}} {{$staff->l_name}} <span class="h6">({{$staff->role}}):</span></h2>
 				</div>
                 <div class="col-1 my-auto ml-5">
 				    <button class="btn btn-danger me-2" type="button" onclick="return doRemoveStaff();">Remove</button>
 			    </div>
                 <div class="col-1 my-auto">
 			    </div>
+                <!--
                 <div class="col-2 my-auto">
 				    <button class="btn btn-success me-2" type="button" onclick="return changeStaffAssociation();">Re-dispatch this Task to: </button>
 			    </div>
                 <div class="col my-auto">
                     <?php
-                    $staffs = \App\Models\Staff::where('role', 'ASSISTANT')->orwhere('role', 'SUBCONTRACTOR')->orwhere('role', 'SUPERINTENDENT')->where('status', '<>', 'DELETED')->orderBy('f_name', 'asc')->get();
+                    // $staffs = \App\Models\Staff::where('role', 'ASSISTANT')->orwhere('role', 'SUBCONTRACTOR')->orwhere('role', 'SUPERINTENDENT')->where('status', '<>', 'DELETED')->orderBy('f_name', 'asc')->get();
                     
-                    $tagHead = "<input list=\"staff_name\" name=\"staff_name\" id=\"staffnameinput\" onfocus=\"this.value='';\" class=\"form-control mt-1 my-text-height\" ";
-                    $tagTail = "><datalist id=\"staff_name\">";
-                    foreach($staffs as $staff) {
-                        $tagTail.= "<option value=\"".$staff->f_name." ".$staff->l_name." (".$staff->role.")\">";
-                    }
-                    echo $tagHead."placeholder=\"\" value=\"\"".$tagTail;
+                    // $tagHead = "<input list=\"staff_name\" name=\"staff_name\" id=\"staffnameinput\" onfocus=\"this.value='';\" class=\"form-control mt-1 my-text-height\" ";
+                    // $tagTail = "><datalist id=\"staff_name\">";
+                    // foreach($staffs as $single_staff) {
+                    //     $tagTail.= "<option value=\"".$single_staff->f_name." ".$single_staff->l_name." (".$single_staff->role.")\">";
+                    // }
+                    // echo $tagHead."placeholder=\"\" value=\"\"".$tagTail;
                     ?>
                 </div>
+                -->
 			</div>
             <div>
                 @if ($errors->any())
@@ -85,17 +89,18 @@
                         </ul>
                     </div>
                 @endif
-                <div class="row m-4">
+                <div class="row m-2">
                     <div class="col">
+                        @if ($staff->role != 'SUPERINTENDENT')
                         <form method="post" action="{{url('job_combination_msg_to_staff')}}">
                             @csrf
                             <div class="row">
-                                <div class="col m-1">
-                                    <div class="row"><label class="col-form-label">Message To Assistant:&nbsp;</label></div>
+                                <div class="col ml-3">
+                                    <div class="row"><label class="col-form-label">Message To <span class="font-italic">{{$staff->f_name}} {{$staff->l_name}}</span>:&nbsp;</label></div>
                                     <div class="row"><textarea class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$association->jobdsp_msg_from_admin}}</textarea></div>
                                 </div>
-                                <div class="col m-1">
-                                    <div class="row"><label class="col-form-label">Message From Assistant:&nbsp;</label></div>
+                                <div class="col ml-3">
+                                    <div class="row"><label class="col-form-label">Message From <span class="font-italic">{{$staff->f_name}} {{$staff->l_name}}</span>:&nbsp;</label></div>
                                     <div class="row"><textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$association->jobdsp_msg_from_staff}}</textarea></div>
                                 </div>
                             </div>
@@ -110,14 +115,19 @@
                                 <div class="col"></div>
                             </div>
                         </form>
+                        @endif
                     </div>
                 </div>
             </div>
 		</div>
 		
 		<script>
+            var msgToShow = {!!json_encode($msg_to_show)!!};
             var jobId = {!!json_encode($job_id)!!};
             var staffId = {!!json_encode($staff_id)!!};
+            if (msgToShow.length > 0) {
+                alert(msgToShow);
+            }
 
             setTimeout(ReloadPageForJobMsg, 7500);
 

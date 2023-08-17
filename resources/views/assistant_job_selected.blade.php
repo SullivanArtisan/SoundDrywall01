@@ -117,7 +117,7 @@
 
         <!-- Tasks Section -->
         <div class="row" style="max-height: 400px;">
-            <div class="col-3"><label class="col-form-label">Customer Name:&nbsp;</label></div>
+            <div class="col-3"><label class="col-form-label">Client Name:&nbsp;</label></div>
             <div class="col-9"><input class="form-control mt-1 my-text-height" type="text" readonly id="clnt_name" name="clnt_name" value="{{$client_name}}"></div>
         </div>
         <div class="row" style="max-height: 400px;">

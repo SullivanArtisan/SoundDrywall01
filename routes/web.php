@@ -110,7 +110,7 @@ Route::post('job_combination_msg_to_admin', function (Request $request) {
 	$staff_id	= $_POST['staff_id'];
 	$msg		= $_POST['msg'];
 
-	MyHelper::LogStaffAction(Auth::user()->id, 'To send msg:'.$msg.' to admin for task '.$job_id.'.', '');
+	MyHelper::LogStaffAction($staff_id, 'To send msg:'.$msg.' to admin for task '.$job_id.'.', '');
 
 	$association = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->first();
 	$association->jobdsp_msg_from_staff = $msg;

@@ -20,7 +20,7 @@
 					if ($key == 'id') {
 						$page_head .= "Client Id)</h2>";
 					} else if ($key == 'clnt_name') {
-						$page_head .= "Customer Name)</h2>";
+						$page_head .= "Client Name)</h2>";
 					} else if ($key == 'phone') {
 						$page_head .= "Client Phone)</h2>";
 					}
@@ -34,7 +34,7 @@
 					<button class="btn btn-info ml-2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Search</button>
 					<div class="dropdown-menu">
 					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('id')\" style=\"cursor: pointer;\">by Client Id</button>");</script>
-					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('clnt_name')\" style=\"cursor: pointer;\">by Customer Name</button>");</script>
+					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('clnt_name')\" style=\"cursor: pointer;\">by Client Name</button>");</script>
 					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('email')\" style=\"cursor: pointer;\">by Client Phone</button>");</script>
 					</div>
 				  </div>
@@ -49,7 +49,7 @@
 		$outContents = "<div class=\"container mw-100\">";
         $outContents .= "<div class=\"row bg-info text-white fw-bold\">";
             $outContents .= "<div class=\"col-3 align-middle\">";
-                $outContents .= "Customer Name";
+                $outContents .= "Client Name";
             $outContents .= "</div>";
 			$outContents .= "<div class=\"col-3 align-middle\">";
 				$outContents .= "City";

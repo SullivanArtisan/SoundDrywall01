@@ -11,7 +11,9 @@
 				<h2 class="text-muted pl-2">Clients</h2>
             </div>
             <div class="col my-auto ml-5">
+				@if (Auth::user()->role == 'ADMINISTRATOR')
 				<button class="btn btn-success mr-4" type="button"><a href="{{route('client_add')}}">Add</a></button>
+				@endif
 			</div>
             <div class="col">
 				<div class="input-group">
@@ -20,7 +22,7 @@
 					<button class="btn btn-info ml-2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Search</button>
 					<div class="dropdown-menu">
 					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('id')\" style=\"cursor: pointer;\">by Client Id</button>");</script>
-					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('clnt_name')\" style=\"cursor: pointer;\">by Customer Name</button>");</script>
+					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('clnt_name')\" style=\"cursor: pointer;\">by Client Name</button>");</script>
 					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('email')\" style=\"cursor: pointer;\">by Client Phone</button>");</script>
 					</div>
 				  </div>
@@ -65,7 +67,7 @@
 			$outContents .= "<div class=\"col-2 align-middle\">";
 				$sortParms = "?sort_key_client=clnt_name&sort_time=".time();
 				$outContents .= "<a href=\"client_main".$sortParms."\">";
-				$outContents .= "Customer Name";
+				$outContents .= "Client Name";
 				if ($sort_icon == 'asc') {
 					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-up-square\"></a></i>";
 				} else {

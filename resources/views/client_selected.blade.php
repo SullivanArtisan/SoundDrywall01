@@ -56,7 +56,9 @@
 					<h2 class="text-muted pl-2">Client: {{$client->clnt_name}}</h2>
 				</div>
 				<div class="col my-auto ml-5">
+					@if (Auth::user()->role == 'ADMINISTRATOR')
 					<button class="btn btn-danger me-2" type="button"><a href="client_delete?id={{$client->id}}" onclick="return myConfirmation();">Delete</a></button>
+					@endif
 				</div>
 				<div class="col"></div>
 			</div>
@@ -109,7 +111,9 @@
 							<div class="w-25"></div>
 							<div class="col">
 								<div class="row">
+									@if (Auth::user()->role == 'ADMINISTRATOR')
 									<button class="btn btn-warning mx-4" type="submit">Update</button>
+									@endif
 									<button class="btn btn-secondary mx-3" type="button"><a href="{{route('client_main')}}">Cancel</a></button>
 								</div>
 							</div>

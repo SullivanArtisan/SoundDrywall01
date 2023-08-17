@@ -115,7 +115,7 @@
                         <form method="post" action="{{route('op_result.project_add')}}">
                             @csrf
                             <div class="row">
-                                <div class="col"><label class="col-form-label">Customer Name:&nbsp;</label><span class="text-danger">*</span></div>
+                                <div class="col"><label class="col-form-label">Client Name:&nbsp;</label><span class="text-danger">*</span></div>
                                 <div class="col">
                                             <?php
                                             $tagHead = "<input list=\"proj_cstmr_name\" name=\"proj_cstmr_name\" id=\"projcstmrnameinput\" onfocus=\"this.value='';\" class=\"form-control mt-1 my-text-height\" ";
@@ -202,7 +202,7 @@
             var address = document.getElementById('proj_address').value;
             var city    = document.getElementById('proj_city').value;
             if (cstmrName.length == 0) {
-                alert('The Customer Name field cannot be empty!');
+                alert('The Client Name field cannot be empty!');
             } else if (address.length == 0) {
                 alert('The Task Address field cannot be empty!');
             } else if (city.length == 0) {

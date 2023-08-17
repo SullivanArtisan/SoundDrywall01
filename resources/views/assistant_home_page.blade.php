@@ -33,7 +33,7 @@
                 @if (Auth::user()->role == 'ASSISTANT')
                     <h1>Assistant <span style="color:maroon; font-family: Georgia;">{{Auth::user()->f_name}}&nbsp;{{Auth::user()->l_name}}</span>'s Tasks List</h1>
                 @else
-                    <h1>Superintendent <span style="color:maroon; font-family: Georgia;">{{Auth::user()->f_name}}&nbsp;{{Auth::user()->l_name}}</span>'s Tasks List</h1>
+                    <h1>Inspector <span style="color:maroon; font-family: Georgia;">{{Auth::user()->f_name}}&nbsp;{{Auth::user()->l_name}}</span>'s Tasks List</h1>
                 @endif
             </div>
             <div class="col-md-1">

@@ -50,9 +50,11 @@
                 <li>
                     <a href="#adminSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">DB Mgmnt</a>
                     <ul class="collapse list-unstyled" id="adminSubmenu">
-                        <li> <a href="{{route('client_main')}}">Customers</a> </li>
+                        <li> <a href="{{route('client_main')}}">Clients</a> </li>
                         <li> <a href="{{route('provider_main')}}">Providers</a> </li>
+                        @if (Auth::user()->role == 'ADMINISTRATOR')
                         <li> <a href="{{route('staff_main')}}">Staffs</a> </li>
+                        @endif
                         <li> <a href="{{route('material_main', ['display_filter'=>'active'])}}">Materials for Tasks</a> </li>
                         <!--					
                         <li> <a href="#materialsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Materials for Tasks</a> </li>

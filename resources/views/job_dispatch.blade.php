@@ -52,6 +52,13 @@
                         <?php 
                             $listed_items = 0;
                             foreach ($jobs as $job) {
+                                if (Auth::user()->role != 'ADMINISTRATOR') {
+                                    $association = JobDispatch::where('jobdsp_job_id', $job->id)->where('jobdsp_staff_id', Auth::user()->id)->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->first();
+                                    if (!$association) {
+                                        continue;
+                                    }
+                                }
+                    
                                 $listed_items++;
                                 if ($listed_items % 2) {
                                     $bg_color = "Lavender";
