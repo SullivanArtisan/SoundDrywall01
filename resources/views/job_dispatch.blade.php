@@ -53,8 +53,20 @@
                             $listed_items = 0;
                             foreach ($jobs as $job) {
                                 if (Auth::user()->role != 'ADMINISTRATOR') {
-                                    $association = JobDispatch::where('jobdsp_job_id', $job->id)->where('jobdsp_staff_id', Auth::user()->id)->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->first();
-                                    if (!$association) {
+                                    $associations = JobDispatch::where('jobdsp_job_id', $job->id)->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->get();
+                                    $other_superintendent_num = 0;
+                                    foreach ($associations as $association) {
+                                        $one_staff = Staff::where('id', $association->jobdsp_staff_id)->first();
+                                        if ($one_staff) {
+                                            if (($one_staff->role == 'SUPERINTENDENT') && ($one_staff->id != Auth::user()->id)) {
+                                                $other_superintendent_num++;
+                                            }
+                                        } else {
+                                            Log::Info(Auth::user()->id.' failed to access the staff '.$association->jobdsp_staff_id.'\'s object for job '.$job->id.' while listing available jobs');
+                                        }
+                                    }
+                                    //if (!$one_association || ($superintendent_num > 0)) {
+                                    if ($other_superintendent_num > 0) {
                                         continue;
                                     }
                                 }
@@ -102,7 +114,8 @@
                         <?php 
                             $listed_items = 0;
                             foreach ($assistants as $assistant) {
-                                if ($assistant->status == 'DELETED') {
+                                // ADMINISTRATOR can dispatch any staff; SUPERINTENDENT can dispatch any staff but other SUPERINTENDENT
+                                if (($assistant->status == 'DELETED') || (($assistant->role == 'SUPERINTENDENT') && ($assistant->id != Auth::user()->id) && (Auth::user()->role != 'ADMINISTRATOR'))) {
                                     continue;
                                 }
 

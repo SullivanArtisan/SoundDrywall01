@@ -92,7 +92,8 @@
                             <?php 
                                 $listed_items = 0;
                                 foreach ($assistants as $assistant) {
-                                    if ($assistant->status == 'DELETED') {
+                                    // ADMINISTRATOR can dispatch any staff; SUPERINTENDENT can dispatch any staff but other SUPERINTENDENT
+                                    if (($assistant->status == 'DELETED') || (($assistant->role == 'SUPERINTENDENT') && ($assistant->id != Auth::user()->id) && (Auth::user()->role != 'ADMINISTRATOR'))) {
                                         continue;
                                     }
 
