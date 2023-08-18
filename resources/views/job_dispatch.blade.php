@@ -1,3 +1,4 @@
+<script src="js/signature.js"></script>
 <?php
 	use App\Models\Material;
 	use App\Models\JobDispatch;
@@ -5,7 +6,7 @@
 	use App\Models\Staff;
 
     $jobs = Job::all()->where('job_assistants_complete', '=', '0')->where('job_assistants_complete', '<', 'job_total_active_assistants')->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED');
-    $assistants = Staff::where('role', 'ASSISTANT')->orwhere('role', 'SUBCONTRACTOR')->orwhere('role', 'SUPERINTENDENT')->where('status', '<>', 'DELETED')->orderBy('f_name', 'asc')->get();
+    $assistants = Staff::where('status', '<>', 'DELETED')->where('role', '<>', 'ADMINISTRATOR')->orderBy('f_name', 'asc')->get();
 
     // if (isset($_GET['staffRemoveOK'])) {
     //     $staffRemoveResult = $_GET['staffRemoveOK'];
@@ -223,6 +224,6 @@
             // staffId = inputId.substring(2, inputId.length);
             // window.location = './staff_selected?id='+staffId;
         }
-    </script>
+	</script>
 @endsection
 

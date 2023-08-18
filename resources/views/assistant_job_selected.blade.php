@@ -7,6 +7,7 @@
     <title>2020_Assistant_Main_01</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/signature.js"></script>
 </head>
 
 <body>
@@ -280,11 +281,35 @@
         </div>
         <div class="row mt-2">
         </div>
-        <div class="row text-dark" style="background-color:lightpink;">
-            <div class="col my-4 text-center" style="position: static; display: flex; justify-content: right;">
-                <button class="btn m-2 text-white rounded" style="background-color:lightcoral;" onclick="return doCompleteThisJob();">Complete This Task</button>
+            @if (Auth::user()->role == 'INSPECTOR')
+            <div class="row text-dark" style="background-color:lightpink;">
+                <div class="col d-flex justify-content-center align-items-center">
+                    <div class="my-4" id="canvas">
+                        <canvas class="roundCorners" id="signatureForTask" style=" background-color: white; position: relative; margin: 0; padding: 0; border: 1px solid #c4caac;"></canvas>
+                    </div>
+                    <script type="text/javascript">
+                        signatureCapture('signatureForTask');
+                    </script><br /><br />
+                    <div class="my-4" id="canvas">
+                        <canvas class="roundCorners" id="signatureForTask_shadow" style="display:none;"></canvas>
+                    </div>
+                    <script type="text/javascript">
+                        signatureCapture('signatureForTask_shadow');
+                    </script><br /><br />
+                </div>
+                <div align='center' id='savedsig' style='display:none'>
+                    <img align='center' id="saveSignature"/>
+                </div>
+                <div class="col py-4">
+                    <h4 class="mt-2 text-secondary">Task Report: </h4>
+                    <textarea class="form-control mt-1 my-text-height" type="text" row="4" id="task_report" name="task_report"></textarea>
+                </div>
+                <div class="col my-4 text-center d-flex justify-content-end">
+                    <button class="btn m-2 text-white rounded btn-secondary" onclick="signatureClear()">Clear Signature</button></br>
+                    <button class="btn m-2 text-white rounded" style="background-color:lightcoral;" onclick="return doCompleteThisJob();">Complete This Task</button>
+                </div>
             </div>
-        </div>
+            @endif
     </div>
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -347,32 +372,46 @@
         }
 
         function doCompleteThisJob() {
-            role = {!!json_encode($role)!!}
-            if (role == 'SUPERINTENDENT') {
-                promptMsg = "You have to update the Amount Left value of each material before you complete this task.\r\n\r\nAre you sure to complete this task?";
+            if (document.getElementById('signatureForTask_shadow').toDataURL() == document.getElementById('signatureForTask').toDataURL()) {
+                alert('To complete this job, you have to sign first.');
             } else {
-                promptMsg = "Are you sure to complete this task?";
-            }
-            if(!confirm(promptMsg)) {
-                //event.preventDefault();
-            } else {
-                $.ajax({
-                    url: '/job_assistants_complete',
-                    type: 'POST',
-                    data: {
-                        _token:"{{ csrf_token() }}", 
-                        job_id:jobId,
-                        staff_id:staffId,
-                    },    // the _token:token is for Laravel
-                    success: function(dataRetFromPHP) {
-                        alert('Task is completed successfully.')
-                        window.location = './assistant_home_page';
-                    },
-                    error: function(err) {
-                        alert('Failed to complete this task.\r\nPlease tyr again.')
-                        window.location = './assistant_job_selected?id='+jobId+'&jobCompleteOK=false';
-                    }
-                });
+                let taskReport = document.getElementById('task_report').value;
+                // role = {!!json_encode($role)!!}
+                // if (role == 'SUPERINTENDENT') {
+                //     promptMsg = "You have to update the Amount Left value of each material before you complete this task.\r\n\r\nAre you sure to complete this task?";
+                // } else {
+                    promptMsg = "Are you sure to complete this task?";
+                // }
+                if (taskReport == '') {
+                    promptMsg = "The task's report is empty. " + promptMsg;
+                }
+                if(!confirm(promptMsg)) {
+                    //event.preventDefault();
+                } else {
+                    var canvas = document.getElementById("signatureForTask");
+                    var dataURL = canvas.toDataURL("image/png");
+                    document.getElementById("saveSignature").src = dataURL;
+                    $.ajax({
+                        url: '/job_assistants_complete',
+                        type: 'POST',
+                        data: {
+                            _token:"{{ csrf_token() }}", 
+                            job_id: jobId,
+                            staff_id: staffId,
+                            signatrue_data: dataURL,
+                            inspection_report: taskReport,
+                        },    // the _token:token is for Laravel
+                        success: function(dataRetFromPHP) {
+                            alert('Task is completed successfully.')
+                            window.location = './assistant_home_page';
+                        },
+                        error: function(err) {
+                            alert('Failed to complete this task.\r\nPlease tyr again.')
+                            window.location = './assistant_job_selected?id='+jobId+'&jobCompleteOK=false';
+                        }
+                    });
+                    document.getElementById('sig').setAttribute('style','display:none');
+                }
             }
         }
     </script>

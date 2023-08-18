@@ -11,7 +11,7 @@
     } else {
         Log::Info('Failed get the input jobId parameter while doing job_dispatch_by_adding');
     }
-    $assistants = Staff::where('role', 'ASSISTANT')->orwhere('role', 'SUBCONTRACTOR')->orwhere('role', 'SUPERINTENDENT')->where('status', '<>', 'DELETED')->orderBy('f_name', 'asc')->get();
+    $assistants = Staff::where('status', '<>', 'DELETED')->where('role', '<>', 'ADMINISTRATOR')->orderBy('f_name', 'asc')->get();
 
     // if (isset($_GET['staffRemoveOK'])) {
     //     $staffRemoveResult = $_GET['staffRemoveOK'];

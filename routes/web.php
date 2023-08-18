@@ -130,9 +130,24 @@ Route::post('job_assistants_complete', function (Request $request) {
 
 	MyHelper::LogStaffAction(Auth::user()->id, 'To complete task '.$job_id.".", '');
 
+	// Save the signature file
+	$input_data 		= $_POST['signatrue_data'];
+	$inspection_report 	= $_POST['inspection_report'];
+	list($type, $signatrue_data) = explode(';', $input_data);
+	list(, $signatrue_data)      = explode(',', $signatrue_data);
+	$signatrue_data = base64_decode($signatrue_data);
+	$sig_file = 'signature/task_'.$job_id.'_sigof_'.$staff_id.'_img.png';
+	$saved_rslt = file_put_contents($sig_file, $signatrue_data);
+	if (!$saved_rslt) {
+		Log::Info('Failed to update job_assistants_complete for staff '.$staff_id.' and task '.$job_id."!");
+	} else {
+		MyHelper::LogStaffActionResult(Auth::user()->id, 'Saved task signature file '.$sig_file.' OK.', '');
+	}
+
 	$job 		= Job::where('id', $job_id)->first();
 	$job->job_assistants_complete 	= $job->job_assistants_complete + 1;
 	$job->job_status 				= $job->job_assistants_complete.'/'.$job->job_total_active_assistants.' COMPLETED';
+	$job->job_inspection_report 	= $inspection_report;
 	$res = $job->save();
 	if (!$res) {
 		Log::Info('Failed to update job_assistants_complete for staff '.$staff_id.' and task '.$job_id."!");
