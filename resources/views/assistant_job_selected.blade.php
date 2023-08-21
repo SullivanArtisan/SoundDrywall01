@@ -297,9 +297,9 @@
                         signatureCapture('signatureForTask_shadow');
                     </script><br /><br />
                 </div>
-                <div align='center' id='savedsig' style='display:none'>
+                <!--div align='center' id='savedsig' style='display:none'>
                     <img align='center' id="saveSignature"/>
-                </div>
+                </div-->
                 <div class="col py-4">
                     <h4 class="mt-2 text-secondary">Task Report: </h4>
                     <textarea class="form-control mt-1 my-text-height" type="text" row="4" id="task_report" name="task_report"></textarea>
@@ -312,7 +312,7 @@
             @endif
     </div>
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script>
         var msgToShow = {!!json_encode($msg_to_show)!!};
         var jobId = {!!json_encode($id)!!};
@@ -390,7 +390,7 @@
                 } else {
                     var canvas = document.getElementById("signatureForTask");
                     var dataURL = canvas.toDataURL("image/png");
-                    document.getElementById("saveSignature").src = dataURL;
+                    // document.getElementById("saveSignature").src = dataURL;
                     $.ajax({
                         url: '/job_assistants_complete',
                         type: 'POST',
@@ -402,15 +402,15 @@
                             inspection_report: taskReport,
                         },    // the _token:token is for Laravel
                         success: function(dataRetFromPHP) {
-                            alert('Task is completed successfully.')
+                            alert('Task is completed successfully.');
                             window.location = './assistant_home_page';
                         },
                         error: function(err) {
-                            alert('Failed to complete this task.\r\nPlease tyr again.')
+                            alert('Failed to complete this task.\r\nPlease tyr again.');
                             window.location = './assistant_job_selected?id='+jobId+'&jobCompleteOK=false';
                         }
                     });
-                    document.getElementById('sig').setAttribute('style','display:none');
+                    // document.getElementById('sig').setAttribute('style','display:none');
                 }
             }
         }
