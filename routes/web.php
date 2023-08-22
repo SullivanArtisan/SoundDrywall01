@@ -12,6 +12,7 @@ use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\ProjectAttachmentController;
 use App\Models\Staff;
 use App\Models\Material;
 use App\Models\Provider;
@@ -19,6 +20,7 @@ use App\Models\Client;
 use App\Models\Project;
 use App\Models\Job;
 use App\Models\JobDispatch;
+use App\Models\ProjectAttachment;
 use App\Models\User;
 use App\Helper\MyHelper;
 
@@ -556,9 +558,32 @@ Route::get('/project_attachment_main', function () {
     return view('project_attachment_main');
 })->middleware(['auth'])->name('project_attachment_main');
 
-Route::post('/uploadfile', function (Request $request) {
-	echo "Goog Job!";
-})->middleware(['auth'])->name('uploadfile'); 
+Route::post('/uploadfile',[ProjectAttachmentController::class, 'UploadFile'])->middleware(['auth'])->name('uploadfile'); 
+
+Route::post('/project_attachment_remove', function (Request $request) {
+	$proj_id = $_POST['atchmnt_proj_id'];
+	$attachment = ProjectAttachment::where('id', $proj_id)->first();
+
+	if ($proj_id) {
+		MyHelper::LogStaffAction(Auth::user()->id, 'To remove attachment '.$attachment->id, '');
+		if ($attachment) {
+			$attachment->atchmnt_status = "DELETED";
+
+			$saved = $attachment->save();
+			if(!$saved) {
+				MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to remove attachment '.$attachment->id, '900');
+			} else {
+				MyHelper::LogStaffActionResult(Auth::user()->id, 'Removed attachment '.$attachment->id.' OK.', '');
+			}
+		} else {
+			Log::Info('Staff '.Auth::user()->id.' tried to remove an attachment, but the attachment object cannot be accessed');
+			return "The attachment object cannot be accessed!";
+		}
+	} else {
+		Log::Info('Staff '.Auth::user()->id.' tried to remove an attachment, but the post parameter cannot be accessed');
+		return "The post parameter cannot be accessed!";
+	}
+})->middleware(['auth'])->name('project_attachment_remove');
 
 //////////////////////////////// For Tasks ////////////////////////////////
 Route::get('job_main', function (Request $request) {

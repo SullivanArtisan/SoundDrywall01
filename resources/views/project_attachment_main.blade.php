@@ -1,9 +1,7 @@
 <?php
 	use App\Models\JobDispatch;
 	use App\Models\Project;
-	use App\Models\Client;
-	use App\Models\Status;
-	use App\Models\Staff;
+	use App\Models\ProjectAttachment;
 	use App\Models\Job;
 ?>
 
@@ -14,12 +12,9 @@
 
 <?php
 	$id = $_GET['id'];
-    $client_name = "";
-    $job_add_ok = "";
-    $job_update_ok = "";
-    $job_delete_ok = "";
 	if ($id) {
 		$project = Project::where('id', $id)->first();
+		$attachments = ProjectAttachment::where('atchmnt_proj_id', $id)->where('atchmnt_status', '<>', 'DELETED')->orderBy('atchmnt_file_name')->get();
 	}
 ?>
 
@@ -57,14 +52,11 @@
             <div class="card">
                 <div class="card-body" style="background: #BAD8D8;">
                     <?php
-                    // Tasks' Title Line
+                    // Attachments' Title Line
                     $outContents = "<div class=\"container mw-100 mt-3\">";
                     $outContents .= "<div class=\"row bg-info text-white fw-bold mb-2\">";
                         $outContents .= "<div class=\"col mt-1 align-middle\">";
                             $outContents .= "File Name";
-                        $outContents .= "</div>";
-                        $outContents .= "<div class=\"col mt-1 align-middle\">";
-                            $outContents .= "File Type";
                         $outContents .= "</div>";
                         $outContents .= "<div class=\"col mt-1 align-middle\">";
                             $outContents .= "Created On";
@@ -74,6 +66,29 @@
                         $outContents .= "</div>";
                     $outContents .= "</div>";
                     echo $outContents;
+
+                    // All Attachments' Body Lines
+                    foreach($attachments as $attachment) {
+                        $outContents = "<div class=\"row\" >";
+                            $outContents .= "<div class=\"col\">";
+                                $outContents .= "<a href=\"./project_attachments/".$attachment->atchmnt_file_name."\">";
+                                $outContents .= $attachment->atchmnt_file_name;
+                                $outContents .= "</a>";
+                            $outContents .= "</div>";
+                            $outContents .= "<div class=\"col\">";
+                                $outContents .= "<a href=\"./project_attachments/".$attachment->atchmnt_file_name."\">";
+                                $outContents .= $attachment->created_at;
+                                $outContents .= "</a>";
+                            $outContents .= "</div>";
+                            $outContents .= "<div class=\"col\">";
+                                // $outContents .= "<a href=\"./project_attachments/".$attachment->atchmnt_file_name."\">";
+                                // $outContents .= $attachment->atchmnt_file_name;
+                                // $outContents .= "</a>";
+                                $outContents .= "<button class=\"btn btn-sm text-white rounded btn-danger\" id=\"".$attachment->id."\" onclick=\"RemoveThisAttachment(this.id, '".$attachment->atchmnt_file_name."')\">Remove</button>";
+                            $outContents .= "</div>";
+                        $outContents .= "</div>";
+                        echo $outContents;
+                    }
                     ?>
                     <!--div class="row mt-5 d-flex justify-content-center">
                         <div class="col-3 my-4 ml-5">
@@ -98,8 +113,9 @@
                             @csrf
                             @if ($message = Session::get('success'))
                             <div class="alert alert-success">
-                                <strong>{{ $message }}</strong>
+                                <strong class="text-success">{{ $message }}</strong>
                             </div>
+                            <?php Session::forget(['success']); ?>
                             @endif
                             @if (count($errors) > 0)
                             <div class="alert alert-danger">
@@ -112,112 +128,46 @@
                             @endif
                             <div class="custom-file">
                                 <input type="file" name="file" id="chooseFile">
-                                <input id="uploadFile" placeholder="No File" disabled="disabled" />
+                                <input type="hidden" name="proj_id" id="proj_id" value="{{$id}}">
+                                <!--input id="uploadFile" placeholder="No File" disabled="disabled" /-->
                                 <label class="custom-file-label" for="chooseFile" id="uploadPath">Select file</label>
                             </div>
                             <button type="submit" name="submit" class="btn btn-primary btn-block mt-4">Upload an Attachment File</button>
                         </form>
                     </div>
                     <div class="col">
-                        <!--form method="post" action="{{url('project_update')}}">
-                            @csrf
-                            <div class="row">
-                                <div class="col"><label class="col-form-label">Client Name:&nbsp;</label><span class="text-danger">*</span></div>
-                                <div class="col">
-                                    <?php
-                                    // $tagHead = "<input list=\"proj_cstmr_name\" name=\"proj_cstmr_name\" id=\"projcstmrnameinput\" onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$client_name."';\" class=\"form-control mt-1 my-text-height\" value=\"".$client_name."\"";
-                                    // $tagTail = "><datalist id=\"proj_cstmr_name\">";
-
-                                    // $clients = Client::all()->sortBy('clnt_name');
-                                    // foreach($clients as $client) {
-                                    //     $tagTail.= "<option value=".str_replace(' ', '&nbsp;', $client->clnt_name).">";
-                                    // }
-                                    // $tagTail.= "</datalist>";
-                                    // // if (isset($_GET['selJobId'])) {
-                                    // // 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
-                                    // // } else {
-                                    //     echo $tagHead."placeholder=\"\" value=\"\"".$tagTail;
-                                    // // }
-                                    ?>
-                                </div>
-                                <div class="col"><label class="col-form-label">Total Tasks:&nbsp;</label></div>
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="number" readonly id="proj_total_active_jobs" name="proj_total_active_jobs" value="{{$project->proj_total_active_jobs}}"></div>
-                            </div>
-                            <div class="row">
-                                <div class="col"><label class="col-form-label">Task Address:&nbsp;</label><span class="text-danger">*</span></div>
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="proj_address" name="proj_address" value="{{$project->proj_address}}"></div>
-                                <div class="col"><label class="col-form-label">Task City:&nbsp;</label><span class="text-danger">*</span></div>
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="proj_city" name="proj_city" value="{{$project->proj_city}}"></div>
-                            </div>
-                            <div class="row">
-                                <div class="col"><label class="col-form-label">Task Province:&nbsp;</label></div>
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="proj_province" name="proj_province" value="{{$project->proj_province}}"></div>
-                                <div class="col"><label class="col-form-label">Task Postcode:&nbsp;</label></div>
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="proj_postcode" name="proj_postcode" value="{{$project->proj_postcode}}"></div>
-                            </div>
-                            <div class="row">
-                                <div class="col"><label class="col-form-label">Description:&nbsp;</label></div>
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="proj_notes" name="proj_notes" value="{{$project->proj_notes}}"></div>
-                                <div class="col"><label class="col-form-label">Status:&nbsp;</label></div>
-                                <div class="col">
-                                    <?php
-                                    // $tagHead = "<input list=\"proj_status\" name=\"proj_status\" id=\"projstatusinput\" onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$project->proj_status."';\" class=\"form-control mt-1 my-text-height\" value=\"".$project->proj_status."\"";
-                                    // $tagTail = "><datalist id=\"proj_status\">";
-
-                                    // $statuses = Status::all();
-                                    // foreach($statuses as $status) {
-                                    //     $tagTail.= "<option value=".str_replace(' ', '&nbsp;', $status->status_name).">";
-                                    // }
-                                    // $tagTail.= "</datalist>";
-                                    // // if (isset($_GET['selJobId'])) {
-                                    // // 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
-                                    // // } else {
-                                    //     echo $tagHead."placeholder=\"\" value=\"\"".$tagTail;
-                                    // // }
-                                    ?>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col"><label class="col-form-label">&nbsp;</label></div>
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="id" name="id" value="{{$project->id}}"></div>
-                                <div class="col"><label class="col-form-label">&nbsp;</label></div>
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="proj_my_creation_timestamp" name="proj_my_creation_timestamp" value="{{time()}}"></div>
-                            </div>
-                            <div class="row my-3">
-                                <div class="col"></div>
-                                <div class="col">
-                                    @if (Auth::user()->role == 'ADMINISTRATOR')
-                                    <button class="btn btn-warning mx-3" type="submit">Update</button>
-                                    @endif
-                                    <button class="btn btn-secondary mx-3" type="button"><a href="{{route('project_main', ['display_filter'=>'active'])}}">Cancel</a></button>
-                                    <button class="btn btn-info mx-3" type="button"><a href="{{route('project_attachment_main', ['id'=>$id])}}">Attachments</a></button>
-                                </div>
-                                <div class="col"></div>
-                            </div>
-                        </form-->
                     </div>
                 </div>
             </div>
 		</div>
 		
 		<script>
-            var jobAddOk = {!!json_encode($job_add_ok)!!};
-            var jobUpdateOk = {!!json_encode($job_update_ok)!!};
-            var jobDeleteOk = {!!json_encode($job_delete_ok)!!};
-            if (jobAddOk.length > 0) {
-                alert("Task "+jobAddOk+" is didpatched successfully.");
-            }
-            if (jobUpdateOk.length > 0) {
-                alert("Task "+jobUpdateOk+" is updated successfully.");
-            }
-            if (jobDeleteOk.length > 0) {
-                alert("Task "+jobDeleteOk+" is deleted successfully.");
-            }
+            document.getElementById("chooseFile").onchange = function() {
+                var pathInArray = this.value.split("\\");
+                document.getElementById("uploadPath").innerHTML = pathInArray[pathInArray.length - 1];
+            };
 
-			function myConfirmation() {
-				if(!confirm("Are you sure to delete this project?"))
-				    event.preventDefault();
-			}
+            function RemoveThisAttachment(inputId, fileName) {
+                if(!confirm("Are you sure to remove this attachment from this project?")) {
+                    event.preventDefault();
+                } else {
+                    $.ajax({
+                        url: '/project_attachment_remove',
+                        type: 'POST',
+                        data: {
+                            _token:"{{ csrf_token() }}", 
+                            atchmnt_proj_id: inputId,
+                        },    // the _token:token is for Laravel
+                        success: function(dataRetFromPHP) {
+                            alert('Attachment '+fileName+' is removed successfully.');
+                            window.location = './project_attachment_main?id='+{!!json_encode($id)!!};
+                        },
+                        error: function(err) {
+                            window.location = './project_attachment_main?id='+{!!json_encode($id)!!};
+                        }
+                    });
+                }
+            }
 		</script>
 	@endsection
 }
