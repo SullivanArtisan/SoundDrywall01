@@ -9,8 +9,11 @@
 
     $job_id = "";
     $staff_id = Auth::user()->id;
-    $association_staff_id = "";
+    $job_lead_id = "";
     $msg_to_show = "";
+    $job_inspector_id = "";
+    $inspector_sig = "";
+
     if (isset($_GET['jobId'])) {
         $job_id = $_GET['jobId'];
     }
@@ -35,9 +38,24 @@
             $staff = Staff::where('id', $association->jobdsp_staff_id)->first();
             if ($staff) {
                 if ($staff->role == 'SUPERINTENDENT') {
-                    $association_staff_id = $staff->id;
-                    break;
+                    $job_lead_id = $staff->id;
+                    // break;
                 }
+                if ($staff->role == 'INSPECTOR') {
+                    $job_inspector_id = $staff->id;
+                }
+            }
+        }
+
+        // Find out the signature of inspection (SUPERINTENDENT's priority is greater than INSPECTOR's; because SUPERINTENDENT can also perform the inspection)
+        $sig_files = scandir('signature');
+        foreach($sig_files as $sig_file) {
+            if ($sig_file == 'task_'.$job_id.'_sigof_'.$job_lead_id.'_img.png') {
+                $inspector_sig = $sig_file;
+                break;
+            }
+            if ($sig_file == 'task_'.$job_id.'_sigof_'.$job_inspector_id.'_img.png') {
+                $inspector_sig = $sig_file;
             }
         }
 	} else {
@@ -155,18 +173,8 @@
                                 @if (!$project)
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_city" name="job_city"></div>
                                 @else
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_city" name="job_city" value="{{$project->proj_city}}"></div>
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_city" name="job_city" value="{{$project->proj_city}}, {{$project->proj_province}}"></div>
                                 @endif
-                                <div class="col"><label class="col-form-label">Task Province:&nbsp;</label></div>
-                                @if (!$project)
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_province" name="job_province"></div>
-                                @else
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="text" readonly id="job_province" name="job_province" value="{{$project->proj_province}}"></div>
-                                @endif
-                            </div>
-                            <div class="row">
-                                <div class="col"><label class="col-form-label">Task Description:&nbsp;</label></div>
-                                <div class="col"><textarea class="form-control mt-1 my-text-height" rows = "5" id="job_desc" name="job_desc" placeholder="{{$job->job_desc}}">{{$job->job_desc}}</textarea></div>
                                 <div class="col"><label class="col-form-label">Task Status:&nbsp;</label></div>
                                 <div class="col">
                                     <?php
@@ -187,6 +195,18 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="col"><label class="col-form-label">Inspection Report:&nbsp;</label></div>
+                                <div class="col"><textarea class="form-control mt-1 my-text-height" rows = "5" id="job_desc" name="job_inspection_report" placeholder="{{$job->job_inspection_report}}">{{$job->job_inspection_report}}</textarea></div>
+                                <div class="col"><label class="col-form-label">Task Description:&nbsp;</label></div>
+                                <div class="col"><textarea class="form-control mt-1 my-text-height" rows = "5" id="job_desc" name="job_desc" placeholder="{{$job->job_desc}}">{{$job->job_desc}}</textarea></div>
+                            </div>
+                            <div class="row">
+                                <div class="col"><label class="col-form-label">Inspector Signature:&nbsp;</label></div>
+                                @if ($inspector_sig == "")
+                                <div class="col"><img src="" style="margin: 0; padding: 0; border: 1px solid #c4caac;"></img></div>
+                                @else
+                                <div class="col"><img src="signature/{{$inspector_sig}}" width="360" height="100" style="margin: 0; padding: 0; border: 1px solid #c4caac;"></img></div>
+                                @endif
                                 <div class="col"><label class="col-form-label">&nbsp;</label></div>
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" readonly id="job_id" name="job_id" value="{{$job->id}}"></div>
                             </div>
@@ -203,7 +223,39 @@
                     </div>
                 </div>
             </div>
-            @if ($association_staff_id != "") 
+            @if ($job_lead_id != "") 
+                @if (Auth::user()->role != 'ADMINISTRATOR')
+                <div class="row m-4" style="background-color:lightsteelblue;">
+                    <div class="col">
+                        <form method="post" action="{{url('job_assistant_save_working_hours_today')}}">
+                            @csrf
+                            <div class="row mt-3">
+                                <div class="col"><label class="col-form-label">Today's Working Hours:&nbsp;</label></div>
+                                @if ((!$association->jobdsp_workinghours_last_time) || (date("d", strtotime($association->jobdsp_workinghours_last_time)) != date('d', time())))
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value=""></div>
+                                @elseif ($association->jobdsp_workinghours_today && $association->jobdsp_workinghours_today>0)
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" readonly id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value="{{$association->jobdsp_workinghours_today}}"></div>
+                                @else
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value=""></div>
+                                @endif
+                                <div class="col"><label class="col-form-label">Total Working Hours:&nbsp;</label></div>
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" readonly id="jobdsp_workinghours_total" name="jobdsp_workinghours_total" value="{{$association->jobdsp_workinghours_total}}"></div>
+                            </div>
+                            <div class="row my-3">
+                                <div class="col d-flex justify-content-center">
+                                    @if ((!$association->jobdsp_workinghours_last_time) || (date("d", strtotime($association->jobdsp_workinghours_last_time)) != date('d', time())))
+                                    <button class="btn btn-success mx-4" type="submit" id="btn_submit" onclick="RecordTodaysWorkingHours();">Submit</button>
+                                    @elseif ($association->jobdsp_workinghours_today && $association->jobdsp_workinghours_today>0)
+                                    <button class="btn btn-success mx-4" type="submit" id="btn_submit" disabled onclick="RecordTodaysWorkingHours();">Submit</button>
+                                    @else
+                                    <button class="btn btn-success mx-4" type="submit" id="btn_submit" onclick="RecordTodaysWorkingHours();">Submit</button>
+                                    @endif
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                @endif
 			<div class="m-4" style="background: var(--bs-btn-bg); background-color:gold;">
                         @if (Auth::user()->role == 'ADMINISTRATOR')
                         <h3 class="ml-2">Conversation with the Task Superintendent</h3>
@@ -284,7 +336,7 @@
                     data: {
                         _token:"{{ csrf_token() }}", 
                         job_id:jobId,
-                        staff_id:{!!json_encode($association_staff_id)!!},
+                        staff_id:{!!json_encode($job_lead_id)!!},
                     },    // the _token:token is for Laravel
                     success: function(dataRetFromPHP) {
                         setTimeout(ReloadJobMsg, 7500);
@@ -317,7 +369,7 @@
                 if (senderRole == 'ADMINISTRATOR') {
                     msg = document.getElementById('msg_from_admin').value;
                     toThisUrl = '/job_combination_msg_to_staff';
-                    staffId = {!!json_encode($association_staff_id)!!};
+                    staffId = {!!json_encode($job_lead_id)!!};
                     if (staffId == '') {
                         alert('The task has not been dispatched to any superintendent yet, so the message cannot be sent now.');
                         return;
@@ -351,6 +403,36 @@
                             }
                         }
                     });
+                }
+            }
+
+            function RecordTodaysWorkingHours() {
+                event.preventDefault();
+                let workingHours = document.getElementById('jobdsp_workinghours_today').value;
+                if (workingHours == null || workingHours == 0) {
+                    alert('Today\'s working hours cannot be emtpy nor 0!\r\nPlease try again.');
+                } else {
+                    if(!confirm('You cannot change this value after you submit it.\r\rAre you sure to submit this value?')) {
+                        //event.preventDefault();
+                    } else {
+                        $.ajax({
+                            url: '/job_assistant_save_working_hours_today',
+                            type: 'POST',
+                            data: {
+                                _token:"{{ csrf_token() }}", 
+                                job_id: jobId,
+                                staff_id: staffId,
+                                jobdsp_workinghours_today: workingHours,
+                            },    // the _token:token is for Laravel
+                            success: function(dataRetFromPHP) {
+                                alert('Today\'s working hours has been saved.');
+                                window.location = './job_selected?jobId='+jobId;
+                            },
+                            error: function(err) {
+                                alert('Today\'s working hours cannot be saved.');
+                            }
+                        });
+                    }
                 }
             }
 		</script>

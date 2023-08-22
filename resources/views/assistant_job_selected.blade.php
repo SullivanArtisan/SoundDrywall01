@@ -153,6 +153,36 @@
             <div class="col-3"><label class="col-form-label">Job Description:&nbsp;</label></div>
             <div class="col-9"><textarea class="form-control mt-1 my-text-height" rows = "5" readonly id="job_desc" name="job_desc" placeholder="{{$job->job_desc}}">{{$job->job_desc}}</textarea></div>
         </div>
+        <div class="row m-4" style="background-color:lightsteelblue;">
+            <div class="col">
+                <form method="post" action="{{url('job_assistant_save_working_hours_today')}}">
+                    @csrf
+                    <div class="row mt-3">
+                        <div class="col"><label class="col-form-label">Today's Working Hours:&nbsp;</label></div>
+                        @if ((!$association->jobdsp_workinghours_last_time) || (date("d", strtotime($association->jobdsp_workinghours_last_time)) != date('d', time())))
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value=""></div>
+                        @elseif ($association->jobdsp_workinghours_today && $association->jobdsp_workinghours_today>0)
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" readonly id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value="{{$association->jobdsp_workinghours_today}}"></div>
+                        @else
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value=""></div>
+                        @endif
+                        <div class="col"><label class="col-form-label">Total Working Hours:&nbsp;</label></div>
+                        <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" readonly id="jobdsp_workinghours_total" name="jobdsp_workinghours_total" value="{{$association->jobdsp_workinghours_total}}"></div>
+                    </div>
+                    <div class="row my-3">
+                        <div class="col d-flex justify-content-center">
+                            @if ((!$association->jobdsp_workinghours_last_time) || (date("d", strtotime($association->jobdsp_workinghours_last_time)) != date('d', time())))
+                            <button class="btn btn-success mx-4" type="submit" id="btn_submit" onclick="RecordTodaysWorkingHours();">Submit</button>
+                            @elseif ($association->jobdsp_workinghours_today && $association->jobdsp_workinghours_today>0)
+                            <button class="btn btn-success mx-4" type="submit" id="btn_submit" disabled onclick="RecordTodaysWorkingHours();">Submit</button>
+                            @else
+                            <button class="btn btn-success mx-4" type="submit" id="btn_submit" onclick="RecordTodaysWorkingHours();">Submit</button>
+                            @endif
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <!-- Footage Section -->
         <div class="row mt-2">
@@ -285,6 +315,7 @@
             <div class="row text-dark" style="background-color:lightpink;">
                 <div class="col d-flex justify-content-center align-items-center">
                     <div class="my-4" id="canvas">
+                        <h4 class="mt-2 text-secondary">Signature: </h4>
                         <canvas class="roundCorners" id="signatureForTask" style=" background-color: white; position: relative; margin: 0; padding: 0; border: 1px solid #c4caac;"></canvas>
                     </div>
                     <script type="text/javascript">
@@ -302,7 +333,7 @@
                 </div-->
                 <div class="col py-4">
                     <h4 class="mt-2 text-secondary">Task Report: </h4>
-                    <textarea class="form-control mt-1 my-text-height" type="text" row="4" id="task_report" name="task_report"></textarea>
+                    <textarea class="form-control mt-1" type="text" row="4" id="task_report" name="task_report" style="height:60%"></textarea>
                 </div>
                 <div class="col my-4 text-center d-flex justify-content-end">
                     <button class="btn m-2 text-white rounded btn-secondary" onclick="signatureClear()">Clear Signature</button></br>
@@ -411,6 +442,36 @@
                         }
                     });
                     // document.getElementById('sig').setAttribute('style','display:none');
+                }
+            }
+        }
+
+        function RecordTodaysWorkingHours() {
+            event.preventDefault();
+            let workingHours = document.getElementById('jobdsp_workinghours_today').value;
+            if (workingHours == null || workingHours == 0) {
+                alert('Today\'s working hours cannot be emtpy nor 0!\r\nPlease try again.');
+            } else {
+                if(!confirm('You cannot change this value after you submit it.\r\rAre you sure to submit this value?')) {
+                    //event.preventDefault();
+                } else {
+                    $.ajax({
+                        url: '/job_assistant_save_working_hours_today',
+                        type: 'POST',
+                        data: {
+                            _token:"{{ csrf_token() }}", 
+                            job_id: jobId,
+                            staff_id: staffId,
+                            jobdsp_workinghours_today: workingHours,
+                        },    // the _token:token is for Laravel
+                        success: function(dataRetFromPHP) {
+                            alert('Today\'s working hours has been saved.');
+                            window.location = './assistant_job_selected?id='+jobId;
+                        },
+                        error: function(err) {
+                            alert('Today\'s working hours cannot be saved.');
+                        }
+                    });
                 }
             }
         }

@@ -232,6 +232,30 @@ Route::post('job_assistants_complete', function (Request $request) {
 	}
 })->middleware(['auth'])->name('job_assistants_complete');
 
+Route::post('job_assistant_save_working_hours_today', function (Request $request) {
+	$job_id 	= $_POST['job_id'];
+	$staff_id	= $_POST['staff_id'];
+	$jobdsp_workinghours_today	= $_POST['jobdsp_workinghours_today'];
+
+	MyHelper::LogStaffAction(Auth::user()->id, 'To record today\'s working hours ('.$jobdsp_workinghours_today.') for task '.$job_id.".", '');
+	$association = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->first();
+	if (!$association) {
+		Log::Info('Failed to access the object for task '.$job_id." and assistant ".$staff_id.".", '');
+		return "Failed";	
+	} else {
+		$association->jobdsp_workinghours_today 	= $jobdsp_workinghours_today;
+		$association->jobdsp_workinghours_total    += $jobdsp_workinghours_today;
+		$association->jobdsp_workinghours_last_time	= date('Y-m-d H:i:s', time());
+		$res = $association->save();
+		if (!$res) {
+			Log::Info('Failed to update proj_jobs_complete for staff '.$staff_id.' and task '.$job_id."!");
+			return "jobCompleteOK=false";	
+		} else {
+			MyHelper::LogStaffActionResult(Auth::user()->id, 'Saved today\'s working hours ('.$jobdsp_workinghours_today.') for task '.$job_id.' OK.', '');
+		}
+	}
+})->middleware(['auth'])->name('job_assistant_save_working_hours_today');
+
 Route::post('job_combination_staff_remove', function (Request $request) {
 	$job_id 	= $_POST['job_id'];
 	$staff_id	= $_POST['staff_id'];
