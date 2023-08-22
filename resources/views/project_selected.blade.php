@@ -155,6 +155,7 @@
                                 <button class="btn btn-warning mx-3" type="submit">Update</button>
                                 @endif
                                 <button class="btn btn-secondary mx-3" type="button"><a href="{{route('project_main', ['display_filter'=>'active'])}}">Cancel</a></button>
+                                <button class="btn btn-info mx-3" type="button"><a href="{{route('project_attachment_main', ['id'=>$id])}}">Attachments</a></button>
 							</div>
 							<div class="col"></div>
 						</div>

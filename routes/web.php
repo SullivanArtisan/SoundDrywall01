@@ -552,6 +552,14 @@ Route::post('/project_add', function (Request $request) {
 
 Route::get('/project_delete', [ProjectController::class, 'delete'])->name('project_delete');
 
+Route::get('/project_attachment_main', function () {
+    return view('project_attachment_main');
+})->middleware(['auth'])->name('project_attachment_main');
+
+Route::post('/uploadfile', function (Request $request) {
+	echo "Goog Job!";
+})->middleware(['auth'])->name('uploadfile'); 
+
 //////////////////////////////// For Tasks ////////////////////////////////
 Route::get('job_main', function (Request $request) {
     return view('job_main');
