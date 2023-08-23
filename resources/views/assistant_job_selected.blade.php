@@ -43,7 +43,7 @@
 
                         $result = $association->save();
                         if (!$result) {
-                            MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to updated JobDispatch status to RECEIVED OK for task '.$id.'.', '900');
+                            MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to updated JobDispatch status to RECEIVED for task '.$id.'.', '900');
                         } else {
                             MyHelper::LogStaffActionResult(Auth::user()->id, 'Updated JobDispatch status to RECEIVED OK for task '.$id.'.', '');
 
@@ -60,7 +60,12 @@
                             } else {
                                 $job->job_status = $total_received.'/'.$job->job_total_assistants.' RECEIVED';
                                 $result = $job->save();
-                            }
+                                if (!$result) {
+                                    MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to updated Job status to '.$total_received.'/'.$job->job_total_assistants.' RECEIVED for task '.$id.'.', '900');
+                                } else {
+                                    MyHelper::LogStaffActionResult(Auth::user()->id, 'Updated Job status to '.$total_received.'/'.$job->job_total_assistants.' RECEIVED OK for task '.$id.'.', '');
+                                }
+                                            }
                         }
                     }
                 }

@@ -10,6 +10,7 @@
     $job_id = "";
     $staff_id = Auth::user()->id;
     $job_lead_id = "";
+    $lead_association = "";
     $msg_to_show = "";
     $job_inspector_id = "";
     $inspector_sig = "";
@@ -34,15 +35,43 @@
         }
 
         $associations = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->get();
+        $total_received = 0;
         foreach($associations as $association) {
             $staff = Staff::where('id', $association->jobdsp_staff_id)->first();
             if ($staff) {
                 if ($staff->role == 'SUPERINTENDENT') {
                     $job_lead_id = $staff->id;
+                    $lead_association = $association;
                     // break;
+                    if (($association->jobdsp_status == 'CREATED') && (Auth::user()->id == $staff->id)) {
+                        $association->jobdsp_status = 'RECEIVED';
+
+                        $result = $association->save();
+                        if (!$result) {
+                            MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to updated JobDispatch status to RECEIVED for task '.$job_id.'.', '900');
+                        } else {
+                            MyHelper::LogStaffActionResult(Auth::user()->id, 'Updated JobDispatch status to RECEIVED OK for task '.$job_id.'.', '');
+                        }
+                    }
                 }
                 if ($staff->role == 'INSPECTOR') {
                     $job_inspector_id = $staff->id;
+                }
+                if ($association->jobdsp_status == 'RECEIVED') {
+                    $total_received++;
+                }
+            }
+        }
+        if ((Auth::user()->id == $job_lead_id) && (Auth::user()->role == 'SUPERINTENDENT')) {
+            if (strstr($job->job_status, 'COMPLETED')) {
+                // If anybody associated with that task had completed it, keep that ?/? COMPLETED status
+            } else {
+                $job->job_status = $total_received.'/'.$job->job_total_assistants.' RECEIVED';
+                $result = $job->save();
+                if (!$result) {
+                    MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to updated Job status to '.$total_received.'/'.$job->job_total_assistants.' RECEIVED for task '.$job_id.'.', '900');
+                } else {
+                    MyHelper::LogStaffActionResult(Auth::user()->id, 'Updated Job status to '.$total_received.'/'.$job->job_total_assistants.' RECEIVED OK for task '.$job_id.'.', '');
                 }
             }
         }
@@ -231,21 +260,21 @@
                             @csrf
                             <div class="row mt-3">
                                 <div class="col"><label class="col-form-label">Today's Working Hours:&nbsp;</label></div>
-                                @if ((!$association->jobdsp_workinghours_last_time) || (date("d", strtotime($association->jobdsp_workinghours_last_time)) != date('d', time())))
+                                @if ((!$lead_association->jobdsp_workinghours_last_time) || (date("d", strtotime($lead_association->jobdsp_workinghours_last_time)) != date('d', time())))
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value=""></div>
-                                @elseif ($association->jobdsp_workinghours_today && $association->jobdsp_workinghours_today>0)
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" readonly id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value="{{$association->jobdsp_workinghours_today}}"></div>
+                                @elseif ($lead_association->jobdsp_workinghours_today && $lead_association->jobdsp_workinghours_today>0)
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" readonly id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value="{{$lead_association->jobdsp_workinghours_today}}"></div>
                                 @else
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value=""></div>
                                 @endif
                                 <div class="col"><label class="col-form-label">Total Working Hours:&nbsp;</label></div>
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" readonly id="jobdsp_workinghours_total" name="jobdsp_workinghours_total" value="{{$association->jobdsp_workinghours_total}}"></div>
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" readonly id="jobdsp_workinghours_total" name="jobdsp_workinghours_total" value="{{$lead_association->jobdsp_workinghours_total}}"></div>
                             </div>
                             <div class="row my-3">
                                 <div class="col d-flex justify-content-center">
-                                    @if ((!$association->jobdsp_workinghours_last_time) || (date("d", strtotime($association->jobdsp_workinghours_last_time)) != date('d', time())))
+                                    @if ((!$lead_association->jobdsp_workinghours_last_time) || (date("d", strtotime($lead_association->jobdsp_workinghours_last_time)) != date('d', time())))
                                     <button class="btn btn-success mx-4" type="submit" id="btn_submit" onclick="RecordTodaysWorkingHours();">Submit</button>
-                                    @elseif ($association->jobdsp_workinghours_today && $association->jobdsp_workinghours_today>0)
+                                    @elseif ($lead_association->jobdsp_workinghours_today && $lead_association->jobdsp_workinghours_today>0)
                                     <button class="btn btn-success mx-4" type="submit" id="btn_submit" disabled onclick="RecordTodaysWorkingHours();">Submit</button>
                                     @else
                                     <button class="btn btn-success mx-4" type="submit" id="btn_submit" onclick="RecordTodaysWorkingHours();">Submit</button>
@@ -270,19 +299,19 @@
                                 <div class="col ml-1">
                                     @if (Auth::user()->role == 'ADMINISTRATOR')
                                     <div class="row"><label class="col-form-label">Message To Superintendent:&nbsp;</label></div>
-                                    <div class="row"><textarea class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$association->jobdsp_msg_from_admin}}</textarea></div>
+                                    <div class="row"><textarea class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$lead_association->jobdsp_msg_from_admin}}</textarea></div>
                                     @else
                                     <div class="row"><label class="col-form-label">Message From Administrator:&nbsp;</label></div>
-                                    <div class="row"><textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$association->jobdsp_msg_from_admin}}</textarea></div>
+                                    <div class="row"><textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$lead_association->jobdsp_msg_from_admin}}</textarea></div>
                                     @endif
                                 </div>
                                 <div class="col ml-1">
                                     @if (Auth::user()->role == 'ADMINISTRATOR')
                                     <div class="row"><label class="col-form-label">Message From Superintendent:&nbsp;</label></div>
-                                    <div class="row"><textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$association->jobdsp_msg_from_staff}}</textarea></div>
+                                    <div class="row"><textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$lead_association->jobdsp_msg_from_staff}}</textarea></div>
                                     @else
                                     <div class="row"><label class="col-form-label">Message To Administrator:&nbsp;</label></div>
-                                    <div class="row"><textarea class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$association->jobdsp_msg_from_staff}}</textarea></div>
+                                    <div class="row"><textarea class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$lead_association->jobdsp_msg_from_staff}}</textarea></div>
                                     @endif
                                 </div>
                             </div>
