@@ -135,6 +135,10 @@ class JobController extends Controller
                     } else {
                         MyHelper::LogStaffActionResult(Auth::user()->id, 'Deleted job '.$id.' OK.', '');
                         $project->proj_total_active_jobs = strval($project->proj_total_active_jobs - 1);
+                        if (strstr($project->proj_status, 'COMPLETED')) {
+                            $project->proj_status = $project->proj_jobs_complete.'/'.$project->proj_total_active_jobs.' COMPLETED';
+                        }
+
                         $res2 = $project->save();
                         if (!$res2) {
                             Log::Info('Staff '.Auth::user()->id.' tried to delete a job, but the proj_total_active_jobs of job '.$id.' object cannot be accessed');

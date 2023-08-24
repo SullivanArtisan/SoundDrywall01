@@ -164,7 +164,11 @@ Route::post('job_close_by_lead', function (Request $request) {
 						return "jobCompleteOK=false";	
 					} else {
 						$project->proj_jobs_complete++;
-						$project->proj_status = $project->proj_jobs_complete.'/'.$project->proj_total_active_jobs.' COMPLETED';
+						if ($project->proj_jobs_complete == $project->proj_total_active_jobs) {
+							$project->proj_status = 'COMPLETED';
+						} else {
+							$project->proj_status = $project->proj_jobs_complete.'/'.$project->proj_total_active_jobs.' COMPLETED';
+						}
 						$res = $project->save();
 						if (!$res) {
 							Log::Info('Staff '.$staff_id.' failed to update project status for task '.$job_id." to ".$project->proj_jobs_complete."/".$project->proj_total_active_jobs." COMPLETE while trying to close it!");
@@ -202,7 +206,7 @@ Route::post('job_assistants_complete', function (Request $request) {
 
 	$job 		= Job::where('id', $job_id)->first();
 	$job->job_assistants_complete 	= $job->job_assistants_complete + 1;
-	$job->job_status 				= $job->job_assistants_complete.'/'.$job->job_total_active_assistants.' COMPLETED';
+	//$job->job_status 				= $job->job_assistants_complete.'/'.$job->job_total_active_assistants.' COMPLETED';
 	$job->job_inspection_report 	= $inspection_report;
 	$res = $job->save();
 	if (!$res) {
@@ -270,11 +274,11 @@ Route::post('job_assistants_complete', function (Request $request) {
 			if ($job->job_assistants_complete == $job->job_total_active_assistants) {
 				$project = project::where('id', $job->job_proj_id)->first();
 				$project->proj_jobs_complete = $project->proj_jobs_complete + 1;
-				if ($project->proj_jobs_complete < $project->proj_total_active_jobs) {
-					$project->proj_status = $project->proj_jobs_complete.'/'.$project->proj_total_active_jobs.' COMPLETED';
-				} else {
-					$project->proj_status = 'COMPLETED';
-				}
+				// if ($project->proj_jobs_complete < $project->proj_total_active_jobs) {
+				// 	$project->proj_status = $project->proj_jobs_complete.'/'.$project->proj_total_active_jobs.' COMPLETED';
+				// } else {
+				// 	$project->proj_status = 'COMPLETED';
+				// }
 				$res = $project->save();
 				if (!$res) {
 					Log::Info('Failed to update proj_jobs_complete for staff '.$staff_id.' and task '.$job_id."!");
@@ -660,7 +664,7 @@ Route::get('assistant_job_selected', function (Request $request) {
     return view('assistant_job_selected');
 })->middleware(['auth'])->name('assistant_job_selected');
 
-Route::get('assistant_material_in_job_selected', function (Request $request) {
+Route::get('assistant_material_in_job_selected', function (Request $request) {     // This doesn't happen as SUPERINTENDENT doesn't enter the Assistant...GUI for now
     return view('assistant_material_in_job_selected');
 })->middleware(['auth'])->name('assistant_material_in_job_selected');
 

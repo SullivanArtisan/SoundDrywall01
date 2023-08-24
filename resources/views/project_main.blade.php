@@ -141,42 +141,82 @@
             $outContents = "<div class=\"row\">";
 				$outContents .= "<div class=\"col-1\">";
 					$outContents .= "<a href=\"project_selected?id=$project->id\">";
-					$outContents .= $project->id;
-					$outContents .= "</a>";
+					if ($project->proj_status == "COMPLETED") {
+						$outContents .= "<span style=\" color: red;\">";
+						$outContents .= $project->id."</span>";
+					} else {
+						$outContents .= $project->id;
+					}
+				$outContents .= "</a>";
 				$outContents .= "</div>";
 				$outContents .= "<div class=\"col-2\">";
 					$outContents .= "<a href=\"project_selected?id=$project->id\">";
-					$outContents .= $client_name;
+					if ($project->proj_status == "COMPLETED") {
+						$outContents .= "<span style=\" color: red;\">";
+						$outContents .= $client_name."</span>";
+					} else {
+						$outContents .= $client_name;
+					}
 					$outContents .= "</a>";
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-1\">";
 					$outContents .= "<a href=\"project_selected?id=$project->id\">";
-					$outContents .= $project->proj_status;
+					if ($project->proj_status == "COMPLETED") {
+						$outContents .= "<span style=\" color: red;\">";
+						$outContents .= $project->proj_status."</span>";
+					} else {
+						$outContents .= $project->proj_status;
+					}
 					$outContents .= "</a>";
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-1\">";
 					$outContents .= "<a href=\"project_selected?id=$project->id\">";
-					$outContents .= $project->proj_total_active_jobs;
+					if ($project->proj_status == "COMPLETED") {
+						$outContents .= "<span style=\" color: red;\">";
+						$outContents .= $project->proj_total_active_jobs."</span>";
+					} else {
+						$outContents .= $project->proj_total_active_jobs;
+					}
 					$outContents .= "</a>";
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-2\">";
 					$outContents .= "<a href=\"project_selected?id=$project->id\">";
-					$outContents .= $project->proj_address;
+					if ($project->proj_status == "COMPLETED") {
+						$outContents .= "<span style=\" color: red;\">";
+						$outContents .= $project->proj_address."</span>";
+					} else {
+						$outContents .= $project->proj_address;
+					}
 					$outContents .= "</a>";
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-1\">";
 					$outContents .= "<a href=\"project_selected?id=$project->id\">";
-					$outContents .= $project->proj_city;
+					if ($project->proj_status == "COMPLETED") {
+						$outContents .= "<span style=\" color: red;\">";
+						$outContents .= $project->proj_city."</span>";
+					} else {
+						$outContents .= $project->proj_city;
+					}
 					$outContents .= "</a>";
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-2\">";
 					$outContents .= "<a href=\"project_selected?id=$project->id\">";
-					$outContents .= $project->created_at;
+					if ($project->proj_status == "COMPLETED") {
+						$outContents .= "<span style=\" color: red;\">";
+						$outContents .= $project->created_at."</span>";
+					} else {
+						$outContents .= $project->created_at;
+					}
 					$outContents .= "</a>";
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-2\">";
 					$outContents .= "<a href=\"project_selected?id=$project->id\">";
-					$outContents .= $project->proj_notes;
+					if ($project->proj_status == "COMPLETED") {
+						$outContents .= "<span style=\" color: red;\">";
+						$outContents .= $project->proj_notes."</span>";
+					} else {
+						$outContents .= $project->proj_notes;
+					}
 					$outContents .= "</a>";
 				$outContents .= "</div>";
 			$outContents .= "</div><hr class=\"m-1\"/>";

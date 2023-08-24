@@ -16,6 +16,7 @@
     $inspector_sig = "";
     $workinghours_last_time = "";
     $today_daytime = date('Y-m-d', time());
+    $status_of_this_job = "";
 
     if (isset($_GET['jobId'])) {
         $job_id = $_GET['jobId'];
@@ -90,6 +91,8 @@
                 $inspector_sig = $sig_file;
             }
         }
+
+        $status_of_this_job = $job->job_status;
 	} else {
         Log::Info('Failed to get jobId');
     }
@@ -178,7 +181,11 @@
                                 <div class="col"><label class="col-form-label">Task Type:&nbsp;</label><span class="text-danger">*</span></div>
                                 <div class="col">
                                     <?php
-                                    $tagHead = "<input list=\"job_type\" name=\"job_type\" id=\"jobtypeinput\" onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$job->job_type."';\" class=\"form-control mt-1 my-text-height\" value=\"".$job->job_type."\"";
+                                    if ($job->job_status == 'COMPLETED') {
+                                        $tagHead = "<input list=\"job_type\" name=\"job_type\" id=\"jobtypeinput\" readonly onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$job->job_type."';\" class=\"form-control mt-1 my-text-height\" value=\"".$job->job_type."\"";
+                                    } else {
+                                        $tagHead = "<input list=\"job_type\" name=\"job_type\" id=\"jobtypeinput\" onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$job->job_type."';\" class=\"form-control mt-1 my-text-height\" value=\"".$job->job_type."\"";
+                                    }
                                     $tagTail = "><datalist id=\"job_type\">";
 
                                     $types = JobType::all()->sortBy('job_type');
@@ -210,7 +217,12 @@
                                 <div class="col"><label class="col-form-label">Task Status:&nbsp;</label></div>
                                 <div class="col">
                                     <?php
-                                    $tagHead = "<input list=\"job_status\" name=\"job_status\" id=\"jobstatusinput\" onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$job->job_status."';\" class=\"form-control mt-1\" value=\"".$job->job_status."\"";
+                                    if ($job->job_status == 'COMPLETED') {
+                                        $tagHead = "<input list=\"job_status\" name=\"job_status\" id=\"jobstatusinput\" readonly onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$job->job_status."';\" class=\"form-control mt-1\" value=\"".$job->job_status."\"";
+                                    }                                        
+                                    else {
+                                        $tagHead = "<input list=\"job_status\" name=\"job_status\" id=\"jobstatusinput\" onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$job->job_status."';\" class=\"form-control mt-1\" value=\"".$job->job_status."\"";
+                                    }
                                     $tagTail = "><datalist id=\"job_status\">";
 
                                     $statuses = Status::all()->sortBy('status_name');
@@ -228,7 +240,7 @@
                             </div>
                             <div class="row">
                                 <div class="col"><label class="col-form-label">Inspection Report:&nbsp;</label></div>
-                                <div class="col"><textarea class="form-control mt-1 my-text-height" rows = "5" id="job_desc" name="job_inspection_report" placeholder="{{$job->job_inspection_report}}">{{$job->job_inspection_report}}</textarea></div>
+                                <div class="col"><textarea class="form-control mt-1 my-text-height" rows = "5" id="job_desc" name="job_inspection_report" readonly placeholder="{{$job->job_inspection_report}}">{{$job->job_inspection_report}}</textarea></div>
                                 <div class="col"><label class="col-form-label">Task Description:&nbsp;</label></div>
                                 <div class="col"><textarea class="form-control mt-1 my-text-height" rows = "5" id="job_desc" name="job_desc" placeholder="{{$job->job_desc}}">{{$job->job_desc}}</textarea></div>
                             </div>
@@ -347,8 +359,14 @@
             }
 
 			function myConfirmation() {
-				if(!confirm("Are you sure to delete this task?"))
+                if ({!!json_encode($status_of_this_job)!!} == 'COMPLETED') {
 				    event.preventDefault();
+                    alert('This task is closed, so you cannot delete it anymore.');
+                } else {
+                    if(!confirm("Are you sure to delete this task?")) {
+                        event.preventDefault();
+                    }
+                }
 			}
 
             function DoJobCombination() {

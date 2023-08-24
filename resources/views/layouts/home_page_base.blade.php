@@ -24,6 +24,7 @@
 <body>
     <?php
 	use App\Models\StaffAction;
+    use Illuminate\Support\Facades\Auth;
     ?>
 
     <div class="wrapper">
@@ -34,6 +35,7 @@
                 <h3 style="font-family: Georgia; color:LightCyan">TwentyTwenty Contracting Ltd.</h3>
                 -->
                 <h6 style="font-family: Georgia; color:LightCyan"><?php echo date("m/d/Y l");?></h6>
+                <h6 style="font-family: Georgia; color:LightCyan"><?php echo '-- '.Auth::user()->f_name.' '.Auth::user()->l_name;?></h6>
             </div>
 
             <ul class="list-unstyled components">
@@ -43,6 +45,8 @@
                 <li class="active">
                     <a href="#controlSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Control</a>
                     <ul class="collapse list-unstyled" id="controlSubmenu">
+                        <li> <a href="{{route('project_main', ['display_filter'=>'active'])}}">Projects</a> </li>
+                        <li> <a href="{{route('job_main')}}">Tasks</a> </li>
                         <li> <a href="{{route('material_associate')}}">Material Dispatch</a> </li>
                         <li> <a href="{{route('job_dispatch')}}">Task Dispatch</a> </li>
                     </ul>

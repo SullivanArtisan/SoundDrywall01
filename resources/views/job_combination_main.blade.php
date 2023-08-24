@@ -117,9 +117,9 @@
                             <div class="row my-2">
                                 <div class="col">
                                     <div class="row text-white" style="max-height: 400px; background-color:grey; font-weight:bold !important;">
-                                        <div class="col">First Name</div>
-                                        <div class="col">Last Name</div>
+                                        <div class="col">Name</div>
                                         <div class="col">Role</div>
+                                        <div class="col">Hours</div>
                                     </div>
                                     <?php 
                                         $listed_items = 0;
@@ -135,18 +135,10 @@
                                             $outContents .= "<div class=\"col mt-1\">";
                                             if ($association->jobdsp_status == "COMPLETED") {
                                                 $outContents .= "<span style=\"text-decoration: line-through;color: blue;\">";
-                                                $outContents .= $staff_origin->f_name."</span></div>";
+                                                $outContents .= $staff_origin->f_name." ".$staff_origin->l_name."</span></div>";
                                             } else {
                                                 $outContents .= "<a href=\"job_combination_staff_selected?jobId=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
-                                                $outContents .= $staff_origin->f_name."</a></div>";
-                                            }
-                                            $outContents .= "<div class=\"col mt-1\">";
-                                            if ($association->jobdsp_status == "COMPLETED") {
-                                                $outContents .= "<span style=\"text-decoration: line-through;color: blue;\">";
-                                                $outContents .= $staff_origin->l_name."</span></div>";
-                                            } else {
-                                                $outContents .= "<a href=\"job_combination_staff_selected?jobId=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
-                                                $outContents .= $staff_origin->l_name."</a></div>";
+                                                $outContents .= $staff_origin->f_name." ".$staff_origin->l_name."</a></div>";
                                             }
                                             $outContents .= "<div class=\"col mt-1\">";
                                             if ($association->jobdsp_status == "COMPLETED") {
@@ -155,6 +147,14 @@
                                             } else {
                                                 $outContents .= "<a href=\"job_combination_staff_selected?jobId=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
                                                 $outContents .= $staff_origin->role."</a></div>";
+                                            }
+                                            $outContents .= "<div class=\"col mt-1\">";
+                                            if ($association->jobdsp_status == "COMPLETED") {
+                                                $outContents .= "<span style=\"text-decoration: line-through;color: blue;\">";
+                                                $outContents .= $association->jobdsp_workinghours_total."</span></div>";
+                                            } else {
+                                                $outContents .= "<a href=\"job_combination_staff_selected?jobId=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
+                                                $outContents .= $association->jobdsp_workinghours_total."</a></div>";
                                             }
                                             $outContents .= "</div>";
                                             echo $outContents;

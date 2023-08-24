@@ -164,7 +164,7 @@
                     @csrf
                     <div class="row mt-3">
                         <div class="col"><label class="col-form-label">Today's Working Hours:&nbsp;</label></div>
-                        @if ((!$association->jobdsp_workinghours_last_time) || (date('Y-m-d', strtotime($association->jobdsp_workinghours_last_time)) != date('d', time())))
+                        @if ((!$association->jobdsp_workinghours_last_time) || (date('Y-m-d', strtotime($association->jobdsp_workinghours_last_time)) != date('Y-m-d', time())))
                         <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value=""></div>
                         @elseif ($association->jobdsp_workinghours_today && $association->jobdsp_workinghours_today>0)
                         <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" readonly id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value="{{$association->jobdsp_workinghours_today}}"></div>
@@ -176,7 +176,7 @@
                     </div>
                     <div class="row my-3">
                         <div class="col d-flex justify-content-center">
-                            @if ((!$association->jobdsp_workinghours_last_time) || (date('Y-m-d', strtotime($association->jobdsp_workinghours_last_time)) != date('d', time())))
+                            @if ((!$association->jobdsp_workinghours_last_time) || (date('Y-m-d', strtotime($association->jobdsp_workinghours_last_time)) != date('Y-m-d', time())))
                             <button class="btn btn-success mx-4" type="submit" id="btn_submit" onclick="RecordTodaysWorkingHours();">Submit</button>
                             @elseif ($association->jobdsp_workinghours_today && $association->jobdsp_workinghours_today>0)
                             <button class="btn btn-success mx-4" type="submit" id="btn_submit" disabled onclick="RecordTodaysWorkingHours();">Submit</button>
@@ -226,42 +226,42 @@
                     foreach ($materials as $material) {
                             $outContents = "<div class=\"row\">";
                             $outContents .= "<div class=\"col-2\">";
-                            if (Auth::user()->role == 'SUPERINTENDENT')
+                            if (Auth::user()->role == 'SUPERINTENDENT')     // This doesn't happen as SUPERINTENDENT doesn't enter the Assistant...GUI for now
                                 $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
                             $outContents .= $material->mtrl_name;
                             if (Auth::user()->role == 'SUPERINTENDENT')
                                 $outContents .= "</a>";
                             $outContents .= "</div>";
                             $outContents .= "<div class=\"col-2\">";
-                            if (Auth::user()->role == 'SUPERINTENDENT')
+                            if (Auth::user()->role == 'SUPERINTENDENT')     // This doesn't happen as SUPERINTENDENT doesn't enter the Assistant...GUI for now
                                 $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
                                 $outContents .= $material->mtrl_type;
                             if (Auth::user()->role == 'SUPERINTENDENT')
                                 $outContents .= "</a>";
                             $outContents .= "</div>";
                             $outContents .= "<div class=\"col-2\">";
-                            if (Auth::user()->role == 'SUPERINTENDENT')
+                            if (Auth::user()->role == 'SUPERINTENDENT')     // This doesn't happen as SUPERINTENDENT doesn't enter the Assistant...GUI for now
                                 $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
                                 $outContents .= $material->mtrl_model;
                             if (Auth::user()->role == 'SUPERINTENDENT')
                                 $outContents .= "</a>";
                             $outContents .= "</div>";
                             $outContents .= "<div class=\"col-2\">";
-                            if (Auth::user()->role == 'SUPERINTENDENT')
+                            if (Auth::user()->role == 'SUPERINTENDENT')     // This doesn't happen as SUPERINTENDENT doesn't enter the Assistant...GUI for now
                                 $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
                                 $outContents .= $material->mtrl_size;
                             if (Auth::user()->role == 'SUPERINTENDENT')
                                 $outContents .= "</a>";
                             $outContents .= "</div>";
                             $outContents .= "<div class=\"col-2\">";
-                            if (Auth::user()->role == 'SUPERINTENDENT')
+                            if (Auth::user()->role == 'SUPERINTENDENT')     // This doesn't happen as SUPERINTENDENT doesn't enter the Assistant...GUI for now
                                 $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
                                 $outContents .= $material->mtrl_amount;
                             if (Auth::user()->role == 'SUPERINTENDENT')
                                 $outContents .= "</a>";
                             $outContents .= "</div>";
                             $outContents .= "<div class=\"col-2\">";
-                            if (Auth::user()->role == 'SUPERINTENDENT')
+                            if (Auth::user()->role == 'SUPERINTENDENT')     // This doesn't happen as SUPERINTENDENT doesn't enter the Assistant...GUI for now
                                 $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
                                 $outContents .= $material->mtrl_amount_left;
                             if (Auth::user()->role == 'SUPERINTENDENT')
