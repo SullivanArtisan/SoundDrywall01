@@ -4,17 +4,25 @@
 	use App\Models\Job;
 	use Illuminate\Support\Facades\Session;
 
+    $proj_id = "";
     $proj_notes = "";
     $cstmr_name = "";
 
     if (isset($_GET['projId'])) {
 		$proj_id = $_GET['projId'];
+    }
+
+    if (isset($_GET['projIdFromAllJobs'])) {
+		$proj_id = $_GET['projIdFromAllJobs'];
+    }
+    
+    if ($proj_id) {
         $project = Project::where('id', $proj_id)->first();
         if (!$project) {
             Log::Info('Staff '.Auth::user()->id.' failed to access the project object while adding a task to the project '.$proj_id);
         }
     } else {
-        $proj_id = "";
+        Log::Info('Staff '.Auth::user()->id.' failed to get the project ID parameter while entering the job_add page');
     }
 ?>
 
@@ -24,7 +32,11 @@
 </style>
 
 @section('goback')
+    @if (isset($_GET['projIdFromAllJobs']))
 	<a class="text-primary" href="{{route('job_main')}}" style="margin-right: 10px;">Back</a>
+    @else
+	<a class="text-primary" href="{{route('project_selected', ['id'=>$proj_id])}}" style="margin-right: 10px;">Back</a>
+    @endif
 @show
 
 @section('function_page')
@@ -109,7 +121,11 @@
                                 <div class="col">
                                     <div class="row">
                                         <button class="btn btn-success mx-4" type="submit" id="btn_save">Save</button>
+                                        @if (isset($_GET['projIdFromAllJobs']))
                                         <button class="btn btn-secondary mx-3" type="button"><a href="{{route('job_main')}}">Cancel</a></button>
+                                        @else
+                                        <button class="btn btn-secondary mx-3" type="button"><a href="{{route('project_selected', ['id'=>$proj_id])}}">Cancel</a></button>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col"></div>

@@ -20,10 +20,12 @@
 
     if (isset($_GET['jobId'])) {
         $job_id = $_GET['jobId'];
+        $from_project = 'false';
     }
 
     if (isset($_GET['jobIdFromProj'])) {
         $job_id = $_GET['jobIdFromProj'];
+        $from_project = 'true';
     }
 
 	if ($job_id) {
@@ -262,7 +264,11 @@
                                         @if ((Auth::user()->role != 'ADMINISTRATOR') && ($job->job_status != 'COMPLETED'))
                                         <button class="btn btn-danger mx-3 mr-2" type="button" onclick="CloseThisTask();">Close this Task</button>
                                         @endif
+                                        @if (isset($_GET['jobIdFromProj']))
                                         <button class="btn btn-secondary mx-3 ml-2" type="button"><a href="{{route('project_selected', ['id'=>$job->job_proj_id])}}">Cancel</a></button>
+                                        @else
+                                        <button class="btn btn-secondary mx-3 ml-2" type="button"><a href="{{route('job_main')}}">Cancel</a></button>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -354,6 +360,8 @@
             var thisUserRole = {!!json_encode(Auth::user()->role)!!};
             var jobId = {!!json_encode($job_id)!!};
             var staffId = {!!json_encode($staff_id)!!};
+            let fromProject = {!!json_encode($from_project)!!};
+
             if (msgToShow.length > 0) {
                 alert(msgToShow);
             }
@@ -371,7 +379,11 @@
 
             function DoJobCombination() {
                 event.preventDefault();
-                url   = './job_combination_main?jobId='+{!!json_encode($job_id)!!};
+                if (fromProject == 'true') {
+                    url   = './job_combination_main?jobIdFromProj='+{!!json_encode($job_id)!!};
+                } else {
+                    url   = './job_combination_main?jobId='+{!!json_encode($job_id)!!};
+                }
                 window.location = url;
             }
 
@@ -443,16 +455,32 @@
                         },    // the _token:token is for Laravel
                         success: function(dataRetFromPHP) {
                             if (senderRole == 'ADMINISTRATOR') {
-                                window.location = './job_selected?jobId='+jobId+'&msgToStaffOK=true';
+                                if (fromProject == 'true') {
+                                    window.location = './job_selected?jobIdFromProj='+jobId+'&msgToStaffOK=true';
+                                } else {
+                                    window.location = './job_selected?jobId='+jobId+'&msgToStaffOK=true';
+                                }
                             } else {
-                                window.location = './job_selected?jobId='+jobId+'&msgToAdminOK=true';
+                                if (fromProject == 'true') {
+                                    window.location = './job_selected?jobIdFromProj='+jobId+'&msgToAdminOK=true';
+                                } else {
+                                    window.location = './job_selected?jobId='+jobId+'&msgToAdminOK=true';
+                                }
                             }
                         },
                         error: function(err) {
                             if (senderRole == 'ADMINISTRATOR') {
-                                window.location = './job_selected?jobId='+jobId+'&msgToStaffOK=false';
+                                if (fromProject == 'true') {
+                                    window.location = './job_selected?jobIdFromProj='+jobId+'&msgToStaffOK=false';
+                                } else {
+                                    window.location = './job_selected?jobId='+jobId+'&msgToStaffOK=false';
+                                }
                             } else {
-                                window.location = './job_selected?jobId='+jobId+'&msgToAdminOK=false';
+                                if (fromProject == 'true') {
+                                    window.location = './job_selected?jobIdFromProj='+jobId+'&msgToAdminOK=false';
+                                } else {
+                                    window.location = './job_selected?jobId='+jobId+'&msgToAdminOK=false';
+                                }
                             }
                         }
                     });
@@ -479,7 +507,11 @@
                             },    // the _token:token is for Laravel
                             success: function(dataRetFromPHP) {
                                 alert('Today\'s working hours has been saved successfully.');
-                                window.location = './job_selected?jobId='+jobId;
+                                if (fromProject == 'true') {
+                                    window.location = './job_selected?jobIdFromProj='+jobId;
+                                } else {
+                                    window.location = './job_selected?jobId='+jobId;
+                                }
                             },
                             error: function(err) {
                                 alert('Today\'s working hours cannot be saved.');
@@ -518,11 +550,19 @@
                             },    // the _token:token is for Laravel
                             success: function(dataRetFromPHP) {
                                 alert('This task has been closed successfully.');
-                                window.location = './job_selected?jobId='+jobId;
+                                if (fromProject == 'true') {
+                                    window.location = './job_selected?jobIdFromProj='+jobId;
+                                } else {
+                                    window.location = './job_selected?jobId='+jobId;
+                                }
                             },
                             error: function(err) {
                                 alert('Oops, failed to close this task.');
-                                window.location = './job_selected?jobId='+jobId;
+                                if (fromProject == 'true') {
+                                    window.location = './job_selected?jobIdFromProj='+jobId;
+                                } else {
+                                    window.location = './job_selected?jobId='+jobId;
+                                }
                             }
                         });
                     }

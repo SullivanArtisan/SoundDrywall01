@@ -22,10 +22,10 @@
 
                             $projects = App\Models\Project::where('proj_status', '<>', 'CANCELED')->where('proj_status', '<>', 'DELETED')->get()->sortBy('id');
                             foreach($projects as $project) {
-                                if ($project->proj_total_active_jobs > 0 && ($project->proj_jobs_complete == $project->proj_total_active_jobs )) {
-                                    continue;
-                                }
-                                $tagTail.= "<option value=".$project->id.">";
+                                // if ($project->proj_total_active_jobs > 0 && ($project->proj_jobs_complete == $project->proj_total_active_jobs )) {
+                                //     continue;
+                                // }
+								$tagTail.= "<option value=".$project->id.">";
                             }
                             $tagTail.= "</datalist>";
                             echo $tagHead."placeholder=\"\" value=\"\"".$tagTail;
@@ -203,7 +203,7 @@
 		if (projId.length == 0) {
 			alert('Please select the target project first befor you add a new task to it.');
 		} else {
-			window.location='./job_add?projId='+projId;
+			window.location='./job_add?projIdFromAllJobs='+projId;
         }
 	}
 </script>

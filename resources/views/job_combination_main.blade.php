@@ -4,12 +4,19 @@
 	use App\Models\Job;
 	use App\Models\Staff;
 
-    $job_id = $_GET['jobId'];
+    if (isset($_GET['jobId'])) {
+        $job_id = $_GET['jobId'];
+    } else if (isset($_GET['jobIdFromProj'])) {
+        $job_id = $_GET['jobIdFromProj'];
+    }
+
 	if ($job_id) {
         $job = Job::where('id', $job_id)->first();
         $materials = Material::all()->where('mtrl_job_id', $job_id)->where('mtrl_status', '<>', 'DELETED');
         $associations = JobDispatch::all()->where('jobdsp_job_id', $job_id)->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED');
-	}
+	} else {
+        Log::Info('Staff '.Auth::user()->id.' failed to get the job ID parameter while entering the job_combination_main page');
+    }
 
     $msg_to_show = "";
     if (isset($_GET['staffRemoveOK'])) {
@@ -29,7 +36,11 @@
 </style>
 
 @section('goback')
+    @if (isset($_GET['jobId']))
 	<a class="text-primary" href="{{route('job_selected', ['jobId'=>$job_id])}}" style="margin-right: 10px;">Back</a>
+    @else
+	<a class="text-primary" href="{{route('job_selected', ['jobIdFromProj'=>$job_id])}}" style="margin-right: 10px;">Back</a>
+    @endif
 @show
 
 @if (!$job_id) {
