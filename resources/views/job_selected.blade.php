@@ -14,6 +14,8 @@
     $msg_to_show = "";
     $job_inspector_id = "";
     $inspector_sig = "";
+    $workinghours_last_time = "";
+    $today_daytime = date('Y-m-d', time());
 
     if (isset($_GET['jobId'])) {
         $job_id = $_GET['jobId'];
@@ -42,6 +44,7 @@
                 if ($staff->role == 'SUPERINTENDENT') {
                     $job_lead_id = $staff->id;
                     $lead_association = $association;
+                    $workinghours_last_time = date('Y-m-d', strtotime($association->jobdsp_workinghours_last_time));
                     // break;
                     if (($association->jobdsp_status == 'CREATED') && (Auth::user()->id == $staff->id)) {
                         $association->jobdsp_status = 'RECEIVED';
@@ -244,6 +247,9 @@
                                     <div class="row d-flex justify-content-center">
                                         <button class="btn btn-success mx-4" type="submit" id="btn_save">Save</button>
                                         <button class="btn btn-info mx-3 mr-2" type="button" onclick="DoJobCombination();">Edit Task Dispatch</button>
+                                        @if ((Auth::user()->role != 'ADMINISTRATOR') && ($job->job_status != 'COMPLETED'))
+                                        <button class="btn btn-danger mx-3 mr-2" type="button" onclick="CloseThisTask();">Close this Task</button>
+                                        @endif
                                         <button class="btn btn-secondary mx-3 ml-2" type="button"><a href="{{route('project_selected', ['id'=>$job->job_proj_id])}}">Cancel</a></button>
                                     </div>
                                 </div>
@@ -260,7 +266,7 @@
                             @csrf
                             <div class="row mt-3">
                                 <div class="col"><label class="col-form-label">Today's Working Hours:&nbsp;</label></div>
-                                @if ((!$lead_association->jobdsp_workinghours_last_time) || (date("d", strtotime($lead_association->jobdsp_workinghours_last_time)) != date('d', time())))
+                                @if ((!$lead_association->jobdsp_workinghours_last_time) || (date('Y-m-d', strtotime($lead_association->jobdsp_workinghours_last_time)) != date('Y-m-d', time())))
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value=""></div>
                                 @elseif ($lead_association->jobdsp_workinghours_today && $lead_association->jobdsp_workinghours_today>0)
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" readonly id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value="{{$lead_association->jobdsp_workinghours_today}}"></div>
@@ -272,7 +278,7 @@
                             </div>
                             <div class="row my-3">
                                 <div class="col d-flex justify-content-center">
-                                    @if ((!$lead_association->jobdsp_workinghours_last_time) || (date("d", strtotime($lead_association->jobdsp_workinghours_last_time)) != date('d', time())))
+                                    @if ((!$lead_association->jobdsp_workinghours_last_time) || (date('Y-m-d', strtotime($lead_association->jobdsp_workinghours_last_time)) != date('Y-m-d', time())))
                                     <button class="btn btn-success mx-4" type="submit" id="btn_submit" onclick="RecordTodaysWorkingHours();">Submit</button>
                                     @elseif ($lead_association->jobdsp_workinghours_today && $lead_association->jobdsp_workinghours_today>0)
                                     <button class="btn btn-success mx-4" type="submit" id="btn_submit" disabled onclick="RecordTodaysWorkingHours();">Submit</button>
@@ -454,11 +460,51 @@
                                 jobdsp_workinghours_today: workingHours,
                             },    // the _token:token is for Laravel
                             success: function(dataRetFromPHP) {
-                                alert('Today\'s working hours has been saved.');
+                                alert('Today\'s working hours has been saved successfully.');
                                 window.location = './job_selected?jobId='+jobId;
                             },
                             error: function(err) {
                                 alert('Today\'s working hours cannot be saved.');
+                            }
+                        });
+                    }
+                }
+            }
+
+            function CloseThisTask() {
+                event.preventDefault();
+                let workingHoursLastTime = {!!json_encode($workinghours_last_time)!!};
+                let todayDayTime = {!!json_encode($today_daytime)!!};
+                let workingHours = document.getElementById('jobdsp_workinghours_today').value;
+                let confirmRslt = true;
+                let confirmMessage = 'Today\'s working hours is 0.\r\nAfter you close this task, you won\'t be able to enter it again!\r\n\r\nAre you sure to close this task?';
+                if (todayDayTime == workingHoursLastTime && (workingHours == 0 || workingHours == '')) {
+                    confirmRslt = confirm(confirmMessage);
+                } else if (todayDayTime != workingHoursLastTime) {
+                    confirmRslt = confirm(confirmMessage);
+                }
+
+                if(!confirmRslt) {
+                    //event.preventDefault();
+                } else {
+                    if (!confirm('After you close this task, you cannot change it anymore.\r\nAre you sure to close it?')) {
+                        //
+                    } else {
+                        $.ajax({
+                            url: '/job_close_by_lead',
+                            type: 'POST',
+                            data: {
+                                _token:"{{ csrf_token() }}", 
+                                job_id: jobId,
+                                staff_id: staffId,
+                            },    // the _token:token is for Laravel
+                            success: function(dataRetFromPHP) {
+                                alert('This task has been closed successfully.');
+                                window.location = './job_selected?jobId='+jobId;
+                            },
+                            error: function(err) {
+                                alert('Oops, failed to close this task.');
+                                window.location = './job_selected?jobId='+jobId;
                             }
                         });
                     }

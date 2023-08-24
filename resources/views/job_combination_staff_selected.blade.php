@@ -53,10 +53,10 @@
 	@section('function_page')
 		<div>
 			<div class="row m-2">
-				<div class="col-4 my-auto">
-					<h2 class="text-muted ">{{$staff->f_name}} {{$staff->l_name}} <span class="h6">({{$staff->role}}):</span></h2>
+				<div class="col-5 my-auto">
+					<h2 class="text-muted ">Dispatchment of: <span style="font-family: 'Times New Roman';font-weight: bold;font-style: italic; color:darkblue !important">{{$staff->f_name}} {{$staff->l_name}}</span> <span class="h6">({{$staff->role}}):</span></h2>
 				</div>
-                <div class="col-1 my-auto ml-5">
+                <div class="col-1 my-auto ml-2">
 				    <button class="btn btn-danger me-2" type="button" onclick="return doRemoveStaff();">Remove</button>
 			    </div>
                 <div class="col-1 my-auto">

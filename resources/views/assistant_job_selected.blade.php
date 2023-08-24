@@ -164,7 +164,7 @@
                     @csrf
                     <div class="row mt-3">
                         <div class="col"><label class="col-form-label">Today's Working Hours:&nbsp;</label></div>
-                        @if ((!$association->jobdsp_workinghours_last_time) || (date("d", strtotime($association->jobdsp_workinghours_last_time)) != date('d', time())))
+                        @if ((!$association->jobdsp_workinghours_last_time) || (date('Y-m-d', strtotime($association->jobdsp_workinghours_last_time)) != date('d', time())))
                         <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value=""></div>
                         @elseif ($association->jobdsp_workinghours_today && $association->jobdsp_workinghours_today>0)
                         <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" readonly id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value="{{$association->jobdsp_workinghours_today}}"></div>
@@ -176,7 +176,7 @@
                     </div>
                     <div class="row my-3">
                         <div class="col d-flex justify-content-center">
-                            @if ((!$association->jobdsp_workinghours_last_time) || (date("d", strtotime($association->jobdsp_workinghours_last_time)) != date('d', time())))
+                            @if ((!$association->jobdsp_workinghours_last_time) || (date('Y-m-d', strtotime($association->jobdsp_workinghours_last_time)) != date('d', time())))
                             <button class="btn btn-success mx-4" type="submit" id="btn_submit" onclick="RecordTodaysWorkingHours();">Submit</button>
                             @elseif ($association->jobdsp_workinghours_today && $association->jobdsp_workinghours_today>0)
                             <button class="btn btn-success mx-4" type="submit" id="btn_submit" disabled onclick="RecordTodaysWorkingHours();">Submit</button>
@@ -296,13 +296,13 @@
                     @csrf
                     <div class="row">
                         <div class="col m-1">
-                            <div class="row font-weight-bold"><label class="col-form-label">Message From Administrator:&nbsp;</label></div>
+                            <div class="row font-weight-bold"><label class="col-form-label">Message From Superintendent:&nbsp;</label></div>
                             <div class="row">
                                 <textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$association->jobdsp_msg_from_admin}}</textarea>
                             </div>
                         </div>
                         <div class="col m-1">
-                            <div class="row font-weight-bold"><label class="col-form-label">Message To  Administrator:&nbsp;</label></div>
+                            <div class="row font-weight-bold"><label class="col-form-label">Message To  Superintendent:&nbsp;</label></div>
                             <div class="row"><textarea class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$association->jobdsp_msg_from_staff}}</textarea></div>
                         </div>
                     </div>
@@ -470,7 +470,7 @@
                             jobdsp_workinghours_today: workingHours,
                         },    // the _token:token is for Laravel
                         success: function(dataRetFromPHP) {
-                            alert('Today\'s working hours has been saved.');
+                            alert('Today\'s working hours has been saved successfully.');
                             window.location = './assistant_job_selected?id='+jobId;
                         },
                         error: function(err) {

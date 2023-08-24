@@ -126,6 +126,60 @@ Route::post('job_combination_msg_to_admin', function (Request $request) {
 	}
 })->middleware(['auth'])->name('job_combination_msg_to_admin');
 
+Route::post('job_close_by_lead', function (Request $request) {
+	$job_id 	= $_POST['job_id'];
+	$staff_id	= $_POST['staff_id'];
+
+	MyHelper::LogStaffAction($staff_id, 'To close task '.$job_id.'.', '');
+
+	$job = Job::where('id', $job_id)->first();
+	if (!$job) {
+		Log::Info('Staff '.$staff_id.' failed to access the object of task '.$job_id." while trying to close it!");
+		return "jobCompleteOK=false";	
+	} else {
+		$job->job_assistants_complete 	= $job->job_assistants_complete + 1;
+		$job->job_status 				= 'COMPLETED';
+		$res = $job->save();
+		if (!$res) {
+			Log::Info('Staff '.$staff_id.' failed to complete the task '.$job_id."!");
+			return "jobCompleteOK=false";	
+		} else {
+			MyHelper::LogStaffActionResult($staff_id, 'Completed task '.$job_id.' OK.', '');
+			$association = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->first();
+			if (!$association) {
+				Log::Info('Staff '.$staff_id.' failed to access the JobDispatch object of task '.$job_id." while trying to close it!");
+				return "jobCompleteOK=false";	
+			} else {
+				$association->jobdsp_status = 'COMPLETED';
+				$res = $association->save();
+				if (!$res) {
+					Log::Info('Staff '.$staff_id.' failed to update jobdsp_status for task '.$job_id." to COMPLETE while trying to close it!");
+					return "jobCompleteOK=false";	
+				} else {
+					MyHelper::LogStaffActionResult($staff_id, 'Changed jobdsp_status for task '.$job_id.' to COMPLETE OK.', '');
+
+					$project = Project::where('id', $job->job_proj_id)->first();
+					if (!$project) {
+						Log::Info('Staff '.$staff_id.' failed to access the Project object of task '.$job_id." while trying to close it!");
+						return "jobCompleteOK=false";	
+					} else {
+						$project->proj_jobs_complete++;
+						$project->proj_status = $project->proj_jobs_complete.'/'.$project->proj_total_active_jobs.' COMPLETED';
+						$res = $project->save();
+						if (!$res) {
+							Log::Info('Staff '.$staff_id.' failed to update project status for task '.$job_id." to ".$project->proj_jobs_complete."/".$project->proj_total_active_jobs." COMPLETE while trying to close it!");
+							return "jobCompleteOK=false";	
+						} else {
+							MyHelper::LogStaffActionResult($staff_id, 'Changed jobdsp_status for task '.$job_id.' to COMPLETE OK.', '');
+							return "jobCompleteOK=true";
+						}
+					}
+				}
+			}
+		}
+	}
+})->middleware(['auth'])->name('job_close_by_lead');
+
 Route::post('job_assistants_complete', function (Request $request) {
 	$job_id 	= $_POST['job_id'];
 	$staff_id	= $_POST['staff_id'];
