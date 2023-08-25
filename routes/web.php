@@ -156,7 +156,7 @@ Route::post('job_close_by_lead', function (Request $request) {
 					Log::Info('Staff '.$staff_id.' failed to update jobdsp_status for task '.$job_id." to COMPLETE while trying to close it!");
 					return "jobCompleteOK=false";	
 				} else {
-					MyHelper::LogStaffActionResult($staff_id, 'Changed jobdsp_status for task '.$job_id.' to COMPLETE OK.', '');
+					MyHelper::LogStaffActionResult($staff_id, 'Changed jobdsp_status for task '.$job_id.' to COMPLETED OK.', '');
 
 					$project = Project::where('id', $job->job_proj_id)->first();
 					if (!$project) {
@@ -174,7 +174,19 @@ Route::post('job_close_by_lead', function (Request $request) {
 							Log::Info('Staff '.$staff_id.' failed to update project status for task '.$job_id." to ".$project->proj_jobs_complete."/".$project->proj_total_active_jobs." COMPLETE while trying to close it!");
 							return "jobCompleteOK=false";	
 						} else {
-							MyHelper::LogStaffActionResult($staff_id, 'Changed jobdsp_status for task '.$job_id.' to COMPLETE OK.', '');
+							MyHelper::LogStaffActionResult($staff_id, 'Changed proj_status for task '.$job_id.' to COMPLETED OK.', '');
+
+							$materials = Material::where('mtrl_job_id', $job->id)->where('mtrl_status', '<>', 'DELETED')->where('mtrl_status', '<>', 'CANCELED')->get();
+							foreach($materials as $material) {
+								$material->mtrl_status = 'COMPLETED';
+								$res = $material->save();
+								if (!$res) {
+									Log::Info('Staff '.$staff_id.' failed to update material status to COMPLETED for task '.$job_id." while trying to close it!");
+									return "jobCompleteOK=false";	
+								} else {
+									MyHelper::LogStaffActionResult($staff_id, 'Changed mtrl_status for task '.$job_id.' to COMPLETED OK.', '');
+								}		
+							}
 							return "jobCompleteOK=true";
 						}
 					}
@@ -381,6 +393,7 @@ Route::post('job_combination_material_remove', function (Request $request) {
 
 	$material = Material::where('id', $material_id)->where('mtrl_status', '<>', 'DELETED')->where('mtrl_status', '<>', 'CANCELED')->where('mtrl_status', '<>', 'COMPLETED')->first();
 	$material->mtrl_job_id = 0;
+	$material->mtrl_status = 'CREATED';
 	$res = $material->save();
 	if (!$res) {
 		Log::Info('Failed to remove the dispatch of task '.$job_id." and material ".$material_id.".", '');
@@ -525,6 +538,7 @@ Route::get('/drywall_delete', function () {
 	MyHelper::LogStaffAction(Auth::user()->id, 'To didpatch material '.$mtrl_id.' with the task '.$job_id.'.', '');
 	if ($material) {
 		$material->mtrl_job_id = $job_id;
+		$material->mtrl_status = 'DISPATCHED';
 		$res = $material->save();
 		if (!$res) {
 			Log::Info('Failed to didpatch material '.$mtrl_id.' with the task '.$job_id."!");

@@ -83,15 +83,15 @@ class MaterialController extends Controller
             $job = Job::where('job_name', $request->job_name)->first();
     
             if ($material) {
-                if ($request->job_name == "") {
-                    $material->mtrl_job_id      = 0;
-                } else {
-                    if ($job) {
-                        $material->mtrl_job_id  = $job->id;
-                    } else {
-                        MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to access job object for job '.$request->job_name.' while update material '.$request->mtrl_id, '900');
-                    }
-                }
+                // if ($request->job_name == "") {
+                //     $material->mtrl_job_id      = 0;
+                // } else {
+                //     if ($job) {
+                //         $material->mtrl_job_id  = $job->id;
+                //     } else {
+                //         MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to access job object for job '.$request->job_name.' while update material '.$request->mtrl_id, '900');
+                //     }
+                // }
                 $material->mtrl_name        = $request->mtrl_name;
                 // $material->mtrl_status      = $request->mtrl_status;
                 $material->mtrl_model       = $request->mtrl_model;

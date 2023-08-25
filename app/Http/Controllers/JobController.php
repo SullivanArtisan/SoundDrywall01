@@ -152,7 +152,8 @@ class JobController extends Controller
                                     continue;
                                 }
                         
-                                $material->mtrl_status = "DELETED";
+                                $material->mtrl_job_id = 0;
+                                $material->mtrl_status = "CREATED";     // so it can be used for any one of other active tasks
                                 $res = $material->save();
                                 if (!$res) {
                                     Log::Info("Material ".$material->id." cannot be deleted.");
@@ -174,7 +175,7 @@ class JobController extends Controller
                                     Log::Info("Dispatch ".$dispatch->id." cannot be deleted.");
                                     return redirect()->route('op_result.project')->with('status', "The job has been deleted, but its dispatch cannot be deleted for some reason.");	
                                 } else {
-                                    MyHelper::LogStaffActionResult(Auth::user()->id, "Deleted job's dispatch '.$dispatch->id.' OK.", "");
+                                    MyHelper::LogStaffActionResult(Auth::user()->id, "Deleted job association ".$dispatch->id." OK.", "");
                                 }
                             }
 

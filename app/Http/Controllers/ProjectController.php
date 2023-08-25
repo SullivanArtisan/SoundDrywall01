@@ -129,7 +129,8 @@ class ProjectController extends Controller
                                     continue;
                                 }
                         
-                                $material->mtrl_status = "DELETED";
+                                $material->mtrl_job_id = 0;
+                                $material->mtrl_status = "CREATED";     // so it can be used for any one of other active tasks
                                 $res = $material->save();
                                 if (!$res) {
                                     Log::Info("Material ".$material->id." cannot be deleted.");

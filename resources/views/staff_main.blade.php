@@ -92,9 +92,9 @@
 					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-down-square\"></a></i>";
 				}
 			$outContents .= "</div>";
-			$outContents .= "<div class=\"col-2\">";
-				$outContents .= "Dispatched Tasks";
-			$outContents .= "</div>";
+			// $outContents .= "<div class=\"col-2\">";
+			// 	$outContents .= "Dispatched Tasks";
+			// $outContents .= "</div>";
 			$outContents .= "<div class=\"col-3\">";
 				$sortParms = "?sort_key_staff=email&sort_time=".time();
 				$outContents .= "<a href=\"staff_main".$sortParms."\">";
@@ -105,7 +105,7 @@
 					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-down-square\"></a></i>";
 				}
 			$outContents .= "</div>";
-			$outContents .= "<div class=\"col-1\">";
+			$outContents .= "<div class=\"col-3\">";
 				$sortParms = "?sort_key_staff=mobile_phone&sort_time=".time();
 				$outContents .= "<a href=\"staff_main".$sortParms."\">";
 				$outContents .= "Mobile Phone";
@@ -136,35 +136,35 @@
 					$outContents .= $staff->role;
 					$outContents .= "</a>";
 				$outContents .= "</div>";
-                $outContents .= "<div class=\"col-2\">";
-					// if ($staff->assigned_job_id > 0) {
-						// $selJob = \App\Models\Job::where('id', $staff->assigned_job_id)->first();
-						// $outContents .= "<a href=\"staff_selected?id=$staff->id\">";
-						// $outContents .= $selJob->job_name;
-						// $outContents .= "</a>";
-					// }
-					$jobs_total = 0;
-					$jobs = \App\Models\JobDispatch::all()->where('jobdsp_staff_id', $staff->id);
-					if ($jobs) {
-						foreach($jobs as $job) {
-							$job_origin = \App\Models\Job::where('id', $job->jobdsp_job_id)->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'COMPLETED')->first();
+                // $outContents .= "<div class=\"col-2\">";
+				// 	// if ($staff->assigned_job_id > 0) {
+				// 		// $selJob = \App\Models\Job::where('id', $staff->assigned_job_id)->first();
+				// 		// $outContents .= "<a href=\"staff_selected?id=$staff->id\">";
+				// 		// $outContents .= $selJob->job_name;
+				// 		// $outContents .= "</a>";
+				// 	// }
+				// 	$jobs_total = 0;
+				// 	$jobs = \App\Models\JobDispatch::all()->where('jobdsp_staff_id', $staff->id);
+				// 	if ($jobs) {
+				// 		foreach($jobs as $job) {
+				// 			$job_origin = \App\Models\Job::where('id', $job->jobdsp_job_id)->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'COMPLETED')->first();
 							
-							if ($job_origin) {
-								$jobs_total++;
-							} else {
-								$err_msg = "Task ID ".$job->jobdsp_job_id."'s object cannot be found from JobDispatch when counting total tasks in staff_main.blade.";
-								Log::Info($err_msg);
-							}
-						}	
-						$outContents .= $jobs_total;
-					}
-			$outContents .= "</div>";
+				// 			if ($job_origin) {
+				// 				$jobs_total++;
+				// 			} else {
+				// 				$err_msg = "Task ID - ".$job->jobdsp_job_id."'s object cannot be found from JobDispatch when counting total tasks in staff_main.blade.";
+				// 				Log::Info($err_msg);
+				// 			}
+				// 		}	
+				// 		$outContents .= $jobs_total;
+				// 	}
+				// $outContents .= "</div>";
                 $outContents .= "<div class=\"col-3\">";
 					$outContents .= "<a href=\"staff_selected?id=$staff->id\">";
 					$outContents .= $staff->email;
 					$outContents .= "</a>";
 				$outContents .= "</div>";
-                $outContents .= "<div class=\"col-1\">";
+                $outContents .= "<div class=\"col-3\">";
 					$outContents .= "<a href=\"staff_selected?id=$staff->id\">";
 					$outContents .= $staff->mobile_phone;
 					$outContents .= "</a>";

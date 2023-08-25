@@ -18,9 +18,15 @@
 
 <?php
 	$id = $_GET['id'];
+	$material_status = '';
 	if ($id) {
 		$material = Material::where('id', $id)->first();
-		//$mtrl_type = $material->mtrl_type;
+		
+		if ($material) {
+			$material_status = $material->mtrl_status;
+		} else {
+			Log::Info(Auth::user()->id.' failed to access Material '.$id.'\'s object while entering material_selected page.');
+		}
 	}
 ?>
 
@@ -95,7 +101,8 @@
 								$selJob = Job::where('id', $material->mtrl_job_id)->first();
 								$jobs = Job::all()->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'COMPLETED')->sortBy('job_name');
 								
-								$tagHead = "<input list=\"job_name\" name=\"job_name\" id=\"jobnameinput\" onfocus=\"this.value='';\" class=\"form-control mt-1 my-text-height\" ";
+								// $tagHead = "<input list=\"job_name\" name=\"job_name\" id=\"jobnameinput\" onfocus=\"this.value='';\" class=\"form-control mt-1 my-text-height\" ";
+								$tagHead = "<input list=\"job_name\" name=\"job_name\" id=\"jobnameinput\" readonly class=\"form-control mt-1 my-text-height\" ";
 								$tagTail = "><datalist id=\"job_name\">";
 								foreach($jobs as $job) {
 									$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $job->job_name).">";
@@ -199,8 +206,15 @@
 		
 		<script>
 			function myConfirmation() {
-				if(!confirm("Are you sure to delete this material?"))
-				event.preventDefault();
+				let mtrlStatus = {!!json_encode($material_status)!!};
+
+				if (mtrlStatus == 'DISPATCHED' || mtrlStatus == 'COMPLETED') {
+					alert('This material has been dispatched, so you cannot delete it now.');
+					event.preventDefault();
+				} else {
+					if(!confirm("Are you sure to delete this material?"))
+					event.preventDefault();
+				}
 			}
 
 			function CheckMtrlStatusFirst(mtrlStatus) {

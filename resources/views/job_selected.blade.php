@@ -367,9 +367,10 @@
             }
 
 			function myConfirmation() {
-                if ({!!json_encode($status_of_this_job)!!} == 'COMPLETED') {
+                let jobStatus = {!!json_encode($status_of_this_job)!!};
+                if (jobStatus == 'COMPLETED' || jobStatus.indexOf("RECEIVED") >= 0 || jobStatus.indexOf("DISPATCHED") >= 0) {
 				    event.preventDefault();
-                    alert('This task is closed, so you cannot delete it anymore.');
+                    alert('This task has been dispatched, so you cannot delete it now.');
                 } else {
                     if(!confirm("Are you sure to delete this task?")) {
                         event.preventDefault();
