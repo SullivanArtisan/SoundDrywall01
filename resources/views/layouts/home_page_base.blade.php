@@ -46,7 +46,7 @@
                     <a href="#controlSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Control</a>
                     <ul class="collapse list-unstyled" id="controlSubmenu">
                         <li> <a href="{{route('project_main', ['display_filter'=>'active'])}}">Projects</a> </li>
-                        <li> <a href="{{route('job_main')}}">Tasks</a> </li>
+                        <li> <a href="{{route('job_main', ['display_filter'=>'active'])}}">Tasks</a> </li>
                         <li> <a href="{{route('material_associate')}}">Material Dispatch</a> </li>
                         <li> <a href="{{route('job_dispatch')}}">Task Dispatch</a> </li>
                     </ul>

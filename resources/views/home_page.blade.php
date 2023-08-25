@@ -79,7 +79,7 @@
             </div>
             <div class="card ml-1">
                 <div class="card-body">
-                    <button class="btn-grad" type="button" style="margin: 6px;"><a href="{{route('job_main')}}">All Tasks</a></button>
+                    <button class="btn-grad" type="button" style="margin: 6px;"><a href="{{route('job_main', ['display_filter'=>'active'])}}">All Tasks</a></button>
                 </div>
             </div>
             <div class="card ml-1">

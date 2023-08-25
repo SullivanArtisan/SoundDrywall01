@@ -33,7 +33,7 @@
 
 @section('goback')
     @if (isset($_GET['projIdFromAllJobs']))
-	<a class="text-primary" href="{{route('job_main')}}" style="margin-right: 10px;">Back</a>
+	<a class="text-primary" href="{{route('job_main', ['display_filter'=>'active'])}}" style="margin-right: 10px;">Back</a>
     @else
 	<a class="text-primary" href="{{route('project_selected', ['id'=>$proj_id])}}" style="margin-right: 10px;">Back</a>
     @endif
@@ -122,7 +122,7 @@
                                     <div class="row">
                                         <button class="btn btn-success mx-4" type="submit" id="btn_save">Save</button>
                                         @if (isset($_GET['projIdFromAllJobs']))
-                                        <button class="btn btn-secondary mx-3" type="button"><a href="{{route('job_main')}}">Cancel</a></button>
+                                        <button class="btn btn-secondary mx-3" type="button"><a href="{{route('job_main', ['display_filter'=>'active'])}}">Cancel</a></button>
                                         @else
                                         <button class="btn btn-secondary mx-3" type="button"><a href="{{route('project_selected', ['id'=>$proj_id])}}">Cancel</a></button>
                                         @endif

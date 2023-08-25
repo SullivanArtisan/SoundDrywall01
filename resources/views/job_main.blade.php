@@ -5,6 +5,13 @@
 @show
 
 @section('function_page')
+<?php
+	if (isset($_GET['display_filter'])) {
+		$display_filter = $_GET['display_filter'];
+	} else {
+		$display_filter = 'active';
+	}
+	?>
     <div>
         <div class="row m-4">
             <div>
@@ -34,6 +41,14 @@
                     </div>
                 </form>
             </div>
+			<div class="col mt-3 ml-2">
+				<label>Display Filter:</label>
+					<input type="radio" class="ml-3 mr-1" id="rdo_proj_active" name="for_display_filter" onclick="RdoSelected(this.id)" checked><label>Active Only</label>
+					<input type="radio" class="ml-3 mr-1" id="rdo_proj_completed" name="for_display_filter" onclick="RdoSelected(this.id)"><label>Completed Only</label>
+					<input type="radio" class="ml-3 mr-1" id="rdo_proj_canceled" name="for_display_filter" onclick="RdoSelected(this.id)"><label>Canceled Only</label>
+					<input type="radio" class="ml-3 mr-1" id="rdo_proj_all" name="for_display_filter" onclick="RdoSelected(this.id)"><label>All</label>
+				<label></label>
+			</div>
             <!--
             <div class="col">
 				<div class="input-group">
@@ -76,20 +91,50 @@
 				session(['sort_order' => 'asc']);
 				$sort_icon = 'asc';
 			}
-			$jobs = \App\Models\Job::orderBy($_GET['sort_key_job'], session('sort_order', 'asc'))->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'DELETED')->paginate(10);
+			if ($display_filter == 'active') {
+				$jobs = \App\Models\Job::orderBy($_GET['sort_key_job'], session('sort_order', 'asc'))->where('job_status', '<>', 'COMPLETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'DELETED')->paginate(10);
+			} else if ($display_filter == 'completed') {
+				$jobs = \App\Models\Job::orderBy($_GET['sort_key_job'], session('sort_order', 'asc'))->where('job_status', 'COMPLETED')->paginate(10);
+			} else if ($display_filter == 'canceled') {
+				$jobs = \App\Models\Job::orderBy($_GET['sort_key_job'], session('sort_order', 'asc'))->where('job_status', 'CANCELED')->paginate(10);
+			} else {
+				$jobs = \App\Models\Job::orderBy($_GET['sort_key_job'], session('sort_order', 'asc'))->where('job_status', '<>', 'DELETED')->paginate(10);
+			}
 			session(['sort_key_job' => 'job_name']);
 		} else {
-			$jobs = \App\Models\Job::orderBy($sortKey, $sortOrder)->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'DELETED')->paginate(10);
+			if ($display_filter == 'active') {
+				$jobs = \App\Models\Job::orderBy($sortKey, $sortOrder)->where('job_status', '<>', 'COMPLETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'DELETED')->paginate(10);
+			} else if ($display_filter == 'completed') {
+				$jobs = \App\Models\Job::orderBy($sortKey, $sortOrder)->where('job_status', 'COMPLETED')->paginate(10);
+			} else if ($display_filter == 'canceled') {
+				$jobs = \App\Models\Job::orderBy($sortKey, $sortOrder)->where('job_status', 'CANCELED')->paginate(10);
+			} else {
+				$jobs = \App\Models\Job::orderBy($sortKey, $sortOrder)->where('job_status', '<>', 'DELETED')->paginate(10);
+			}
 		}
 
 		// Title Line
 		$outContents = "<div class=\"container mw-100\">";
         $outContents .= "<div class=\"row bg-info text-white fw-bold\">";
-			$outContents .= "<div class=\"col-1\">";
+			$outContents .= "<div class=\"col-2\">";
+				$sortParms = "?display_filter=".$display_filter."&sort_key_job=job_name&sort_time=".time();
+				$outContents .= "<a href=\"job_main".$sortParms."\">";
 				$outContents .= "Task Name";
-			$outContents .= "</div>";
+				if ($sort_icon == 'asc') {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-up-square\"></a></i>";
+				} else {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-down-square\"></a></i>";
+				}
+				$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2 align-middle\">";
+				$sortParms = "?display_filter=".$display_filter."&sort_key_job=job_type&sort_time=".time();
+				$outContents .= "<a href=\"job_main".$sortParms."\">";
 				$outContents .= "Task Type";
+				if ($sort_icon == 'asc') {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-up-square\"></a></i>";
+				} else {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-down-square\"></a></i>";
+				}
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2\">";
 				$outContents .= "Status";
@@ -109,7 +154,7 @@
 			$outContents .= "<div class=\"col-2\">";
 				$outContents .= "Description";
 			$outContents .= "</div>";
-			$outContents .= "<div class=\"col-2\">";
+			$outContents .= "<div class=\"col-1\">";
 				$outContents .= "Due Date";
 			$outContents .= "</div>";
 		$outContents .= "</div><hr class=\"m-1\"/>";
@@ -137,7 +182,7 @@
 			}
 
             $outContents = "<div class=\"row\">";
-				$outContents .= "<div class=\"col-1\">";
+				$outContents .= "<div class=\"col-2\">";
 					$outContents .= "<a href=\"job_selected?jobId=$job->id\">";
 					$outContents .= $job->job_name;
 					$outContents .= "</a>";
@@ -177,7 +222,7 @@
 					$outContents .= $job->job_desc;
 					$outContents .= "</a>";
 				$outContents .= "</div>";
-                $outContents .= "<div class=\"col-2\">";
+                $outContents .= "<div class=\"col-1\">";
 					$outContents .= "<a href=\"job_selected?jobId=$job->id\">";
 					$outContents .= $job->job_till_time;
 					$outContents .= "</a>";
@@ -197,6 +242,43 @@
 @endsection
 
 <script>
+	window.onload = function() {
+		var displayFilter = {!!json_encode($display_filter)!!};
+
+		if (displayFilter == 'active') {
+			document.getElementById('rdo_proj_active').checked = true;
+		} else if (displayFilter == 'completed') {
+			document.getElementById('rdo_proj_completed').checked = true;
+		} else if (displayFilter == 'canceled') {
+			document.getElementById('rdo_proj_canceled').checked = true;
+		} else {
+			document.getElementById('rdo_proj_all').checked = true;
+		}
+	}
+	
+	function RdoSelected(elmId) {
+		var currentUrl = window.location.href;
+		var x = currentUrl.search('=');
+		var y = currentUrl.search('&');
+		var newUrl = currentUrl;
+		if (x > -1 && y > -1) {
+			if (elmId == 'rdo_proj_active') {
+				newUrl = currentUrl.substring(0, x+1) + 'active' + currentUrl.substring(y, currentUrl.length-1);
+			} else if (elmId == 'rdo_proj_completed') {
+				newUrl = currentUrl.substring(0, x+1) + 'completed' + currentUrl.substring(y, currentUrl.length-1);
+			} else if (elmId == 'rdo_proj_canceled') {
+				newUrl = currentUrl.substring(0, x+1) + 'canceled' + currentUrl.substring(y, currentUrl.length-1);
+			} else {
+				newUrl = currentUrl.substring(0, x+1) + 'all' + currentUrl.substring(y, currentUrl.length-1);
+			}
+		} else {
+			newUrl = currentUrl.substring(0, x+1) + elmId.substring(9, elmId.length);
+			console.log('newUrl2 = '+newUrl);
+		}
+
+		window.location = newUrl;
+	}
+
 	function doAddJob() {
         event.preventDefault();
 		projId = document.getElementById('projidinput').value;

@@ -125,7 +125,7 @@
     @if (isset($_GET['jobIdFromProj']))
 	<a class="text-primary" href="{{route('project_selected', ['id'=>$job->job_proj_id])}}" style="margin-right: 10px;">Back</a>
     @else
-	<a class="text-primary" href="{{route('job_main')}}" style="margin-right: 10px;">Back</a>
+	<a class="text-primary" href="{{route('job_main', ['display_filter'=>'active'])}}" style="margin-right: 10px;">Back</a>
     @endif
 @show
 
@@ -267,7 +267,7 @@
                                         @if (isset($_GET['jobIdFromProj']))
                                         <button class="btn btn-secondary mx-3 ml-2" type="button"><a href="{{route('project_selected', ['id'=>$job->job_proj_id])}}">Cancel</a></button>
                                         @else
-                                        <button class="btn btn-secondary mx-3 ml-2" type="button"><a href="{{route('job_main')}}">Cancel</a></button>
+                                        <button class="btn btn-secondary mx-3 ml-2" type="button"><a href="{{route('job_main', ['display_filter'=>'active'])}}">Cancel</a></button>
                                         @endif
                                     </div>
                                 </div>

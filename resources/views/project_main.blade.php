@@ -113,8 +113,15 @@
 				$outContents .= "Task Address";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-1\">";
-				$outContents .= "Task City";
-			$outContents .= "</div>";
+			$sortParms = "?display_filter=".$display_filter."&sort_key_project=proj_city&sort_time=".time();
+			$outContents .= "<a href=\"project_main".$sortParms."\">";
+			$outContents .= "Task City";
+			if ($sort_icon == 'asc') {
+				$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-up-square\"></a></i>";
+			} else {
+				$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-down-square\"></a></i>";
+			}
+		$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2\">";
 				$sortParms = "?display_filter=".$display_filter."&sort_key_project=created_at&sort_time=".time();
 				$outContents .= "<a href=\"project_main".$sortParms."\">";
@@ -258,6 +265,7 @@
 				newUrl = currentUrl.substring(0, x+1) + 'active' + currentUrl.substring(y, currentUrl.length-1);
 			} else if (elmId == 'rdo_proj_completed') {
 				newUrl = currentUrl.substring(0, x+1) + 'completed' + currentUrl.substring(y, currentUrl.length-1);
+				console.log('newUrl = '+newUrl+'; X = '+x+'; Y = '+y);
 			} else if (elmId == 'rdo_proj_canceled') {
 				newUrl = currentUrl.substring(0, x+1) + 'canceled' + currentUrl.substring(y, currentUrl.length-1);
 			} else {
@@ -265,6 +273,7 @@
 			}
 		} else {
 			newUrl = currentUrl.substring(0, x+1) + elmId.substring(9, elmId.length);
+			console.log('newUrl = '+newUrl);
 		}
 
 		window.location = newUrl;
