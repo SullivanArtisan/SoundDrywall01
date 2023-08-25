@@ -55,10 +55,10 @@
 				session(['sort_order' => 'asc']);
 				$sort_icon = 'asc';
 			}
-			$clients = \App\Models\Client::orderBy($_GET['sort_key_client'], session('sort_order', 'asc'))->where('clnt_deleted', 'N')->orwhere('clnt_deleted', null)->paginate(10);
+			$clients = \App\Models\Client::orderBy($_GET['sort_key_client'], session('sort_order', 'asc'))->where('clnt_deleted', 'N')->orwhere('clnt_deleted', null)->paginate(10)->withQueryString();
 			session(['sort_key_client' => 'clnt_name']);
 		} else {
-			$clients = \App\Models\Client::orderBy($sortKey, $sortOrder)->where('clnt_deleted', 'N')->orwhere('clnt_deleted', null)->paginate(10);
+			$clients = \App\Models\Client::orderBy($sortKey, $sortOrder)->where('clnt_deleted', 'N')->orwhere('clnt_deleted', null)->paginate(10)->withQueryString();
 		}
 
 		// Title Line
@@ -78,7 +78,14 @@
 				$outContents .= "Address";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2\">";
+				$sortParms = "?sort_key_client=clnt_city&sort_time=".time();
+				$outContents .= "<a href=\"client_main".$sortParms."\">";
 				$outContents .= "City";
+				if ($sort_icon == 'asc') {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-up-square\"></a></i>";
+				} else {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-down-square\"></a></i>";
+				}
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2\">";
 				$outContents .= "Contact";

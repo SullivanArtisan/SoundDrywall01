@@ -78,24 +78,24 @@
 				$sort_icon = 'asc';
 			}
 			if ($display_filter == 'active') {
-				$materials = \App\Models\Material::where('mtrl_status', '<>', 'COMPLETED')->where('mtrl_status', '<>', 'DELETED')->where('mtrl_status', '<>', 'CANCELED')->orderBy($_GET['sort_key_material'], session('sort_order', 'asc'))->paginate(10);
+				$materials = \App\Models\Material::where('mtrl_status', '<>', 'COMPLETED')->where('mtrl_status', '<>', 'DELETED')->where('mtrl_status', '<>', 'CANCELED')->orderBy($_GET['sort_key_material'], session('sort_order', 'asc'))->paginate(10)->withQueryString();
 			} else if ($display_filter == 'completed') {
-				$materials = \App\Models\Material::where('mtrl_status', 'COMPLETED')->orderBy($_GET['sort_key_material'], session('sort_order', 'asc'))->paginate(10);
+				$materials = \App\Models\Material::where('mtrl_status', 'COMPLETED')->orderBy($_GET['sort_key_material'], session('sort_order', 'asc'))->paginate(10)->withQueryString();
 			} else if ($display_filter == 'canceled') {
-				$materials = \App\Models\Material::where('mtrl_status', 'CANCELED')->orderBy($_GET['sort_key_material'], session('sort_order', 'asc'))->paginate(10);
+				$materials = \App\Models\Material::where('mtrl_status', 'CANCELED')->orderBy($_GET['sort_key_material'], session('sort_order', 'asc'))->paginate(10)->withQueryString();
 			} else {
-				$materials = \App\Models\Material::orderBy($_GET['sort_key_material'], session('sort_order', 'asc'))->paginate(10);
+				$materials = \App\Models\Material::orderBy($_GET['sort_key_material'], session('sort_order', 'asc'))->paginate(10)->withQueryString();
 			}
 			session(['sort_key_material' => 'mtrl_name']);
 		} else {
 			if ($display_filter == 'active') {
-				$materials = \App\Models\Material::where('mtrl_status', '<>', 'COMPLETED')->where('mtrl_status', '<>', 'DELETED')->where('mtrl_status', '<>', 'CANCELED')->orderBy($sortKey, $sortOrder)->paginate(10);
+				$materials = \App\Models\Material::where('mtrl_status', '<>', 'COMPLETED')->where('mtrl_status', '<>', 'DELETED')->where('mtrl_status', '<>', 'CANCELED')->orderBy($sortKey, $sortOrder)->paginate(10)->withQueryString();
 			} else if ($display_filter == 'completed') {
-				$materials = \App\Models\Material::where('mtrl_status', 'COMPLETED')->orderBy($sortKey, $sortOrder)->paginate(10);
+				$materials = \App\Models\Material::where('mtrl_status', 'COMPLETED')->orderBy($sortKey, $sortOrder)->paginate(10)->withQueryString();
 			} else if ($display_filter == 'canceled') {
-				$materials = \App\Models\Material::where('mtrl_status', 'CANCELED')->orderBy($sortKey, $sortOrder)->paginate(10);
+				$materials = \App\Models\Material::where('mtrl_status', 'CANCELED')->orderBy($sortKey, $sortOrder)->paginate(10)->withQueryString();
 			} else {
-				$materials = \App\Models\Material::orderBy($sortKey, $sortOrder)->paginate(10);
+				$materials = \App\Models\Material::orderBy($sortKey, $sortOrder)->paginate(10)->withQueryString();
 			}
 		}
 
@@ -123,7 +123,14 @@
 				}
 			$outContents .= "</div>";
             $outContents .= "<div class=\"col-1\">";
+				$sortParms = "?display_filter=".$display_filter."&sort_key_material=mtrl_model&sort_time=".time();
+				$outContents .= "<a href=\"material_main".$sortParms."\">";
 				$outContents .= "Model";
+				if ($sort_icon == 'asc') {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-up-square\"></a></i>";
+				} else {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-down-square\"></a></i>";
+				}
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-1\">";
 				$outContents .= "for Task";
@@ -132,10 +139,24 @@
 				$outContents .= "Size";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2\">";
+				$sortParms = "?display_filter=".$display_filter."&sort_key_material=mtrl_amount&sort_time=".time();
+				$outContents .= "<a href=\"material_main".$sortParms."\">";
 				$outContents .= "Original Amount";
+				if ($sort_icon == 'asc') {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-up-square\"></a></i>";
+				} else {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-down-square\"></a></i>";
+				}
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2\">";
+				$sortParms = "?display_filter=".$display_filter."&sort_key_material=mtrl_amount_left&sort_time=".time();
+				$outContents .= "<a href=\"material_main".$sortParms."\">";
 				$outContents .= "Left Amount";
+				if ($sort_icon == 'asc') {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-up-square\"></a></i>";
+				} else {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-down-square\"></a></i>";
+				}
 			$outContents .= "</div>";
 		$outContents .= "</div><hr class=\"m-1\"/>";
 		{{echo $outContents;}}

@@ -53,17 +53,17 @@
 				session(['sort_order' => 'asc']);
 				$sort_icon = 'asc';
 			}
-			$providers = \App\Models\Provider::orderBy($_GET['sort_key_provider'], session('sort_order', 'asc'))->where('pvdr_deleted', 'N')->orwhere('pvdr_deleted', null)->paginate(10);
+			$providers = \App\Models\Provider::orderBy($_GET['sort_key_provider'], session('sort_order', 'asc'))->where('pvdr_deleted', 'N')->orwhere('pvdr_deleted', null)->paginate(10)->withQueryString();
 			session(['sort_key_provider' => 'pvdr_name']);
 		} else {
-			$providers = \App\Models\Provider::orderBy($sortKey, $sortOrder)->where('pvdr_deleted', 'N')->orwhere('pvdr_deleted', null)->paginate(10);
+			$providers = \App\Models\Provider::orderBy($sortKey, $sortOrder)->where('pvdr_deleted', 'N')->orwhere('pvdr_deleted', null)->paginate(10)->withQueryString();
 		}
 
 		// Title Line
 		$outContents = "<div class=\"container mw-100\">";
         $outContents .= "<div class=\"row bg-info text-white fw-bold\">";
 			$outContents .= "<div class=\"col-2 align-middle\">";
-				$sortParms = "?sort_key_provider=name&sort_time=".time();
+				$sortParms = "?sort_key_provider=pvdr_name&sort_time=".time();
 				$outContents .= "<a href=\"provider_main".$sortParms."\">";
 				$outContents .= "Provider Name";
 				if ($sort_icon == 'asc') {
@@ -76,7 +76,14 @@
 				$outContents .= "Address";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2\">";
+				$sortParms = "?sort_key_provider=pvdr_city&sort_time=".time();
+				$outContents .= "<a href=\"provider_main".$sortParms."\">";
 				$outContents .= "City";
+				if ($sort_icon == 'asc') {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-up-square\"></a></i>";
+				} else {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-down-square\"></a></i>";
+				}
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2\">";
 				$outContents .= "Contact";

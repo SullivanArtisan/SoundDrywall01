@@ -92,24 +92,24 @@
 				$sort_icon = 'asc';
 			}
 			if ($display_filter == 'active') {
-				$jobs = \App\Models\Job::orderBy($_GET['sort_key_job'], session('sort_order', 'asc'))->where('job_status', '<>', 'COMPLETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'DELETED')->paginate(10);
+				$jobs = \App\Models\Job::orderBy($_GET['sort_key_job'], session('sort_order', 'asc'))->where('job_status', '<>', 'COMPLETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'DELETED')->paginate(10)->withQueryString();
 			} else if ($display_filter == 'completed') {
-				$jobs = \App\Models\Job::orderBy($_GET['sort_key_job'], session('sort_order', 'asc'))->where('job_status', 'COMPLETED')->paginate(10);
+				$jobs = \App\Models\Job::orderBy($_GET['sort_key_job'], session('sort_order', 'asc'))->where('job_status', 'COMPLETED')->paginate(10)->withQueryString();
 			} else if ($display_filter == 'canceled') {
-				$jobs = \App\Models\Job::orderBy($_GET['sort_key_job'], session('sort_order', 'asc'))->where('job_status', 'CANCELED')->paginate(10);
+				$jobs = \App\Models\Job::orderBy($_GET['sort_key_job'], session('sort_order', 'asc'))->where('job_status', 'CANCELED')->paginate(10)->withQueryString();
 			} else {
-				$jobs = \App\Models\Job::orderBy($_GET['sort_key_job'], session('sort_order', 'asc'))->where('job_status', '<>', 'DELETED')->paginate(10);
+				$jobs = \App\Models\Job::orderBy($_GET['sort_key_job'], session('sort_order', 'asc'))->where('job_status', '<>', 'DELETED')->paginate(10)->withQueryString();
 			}
 			session(['sort_key_job' => 'job_name']);
 		} else {
 			if ($display_filter == 'active') {
-				$jobs = \App\Models\Job::orderBy($sortKey, $sortOrder)->where('job_status', '<>', 'COMPLETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'DELETED')->paginate(10);
+				$jobs = \App\Models\Job::orderBy($sortKey, $sortOrder)->where('job_status', '<>', 'COMPLETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'DELETED')->paginate(10)->withQueryString();
 			} else if ($display_filter == 'completed') {
-				$jobs = \App\Models\Job::orderBy($sortKey, $sortOrder)->where('job_status', 'COMPLETED')->paginate(10);
+				$jobs = \App\Models\Job::orderBy($sortKey, $sortOrder)->where('job_status', 'COMPLETED')->paginate(10)->withQueryString();
 			} else if ($display_filter == 'canceled') {
-				$jobs = \App\Models\Job::orderBy($sortKey, $sortOrder)->where('job_status', 'CANCELED')->paginate(10);
+				$jobs = \App\Models\Job::orderBy($sortKey, $sortOrder)->where('job_status', 'CANCELED')->paginate(10)->withQueryString();
 			} else {
-				$jobs = \App\Models\Job::orderBy($sortKey, $sortOrder)->where('job_status', '<>', 'DELETED')->paginate(10);
+				$jobs = \App\Models\Job::orderBy($sortKey, $sortOrder)->where('job_status', '<>', 'DELETED')->paginate(10)->withQueryString();
 			}
 		}
 

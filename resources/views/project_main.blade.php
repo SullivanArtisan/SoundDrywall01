@@ -73,24 +73,24 @@
 				$sort_icon = 'asc';
 			}
 			if ($display_filter == 'active') {
-				$projects = \App\Models\Project::orderBy($_GET['sort_key_project'], session('sort_order', 'asc'))->where('proj_status', '<>', 'COMPLETED')->where('proj_status', '<>', 'CANCELED')->where('proj_status', '<>', 'DELETED')->paginate(10);
+				$projects = \App\Models\Project::orderBy($_GET['sort_key_project'], session('sort_order', 'asc'))->where('proj_status', '<>', 'COMPLETED')->where('proj_status', '<>', 'CANCELED')->where('proj_status', '<>', 'DELETED')->paginate(10)->withQueryString();
 			} else if ($display_filter == 'completed') {
-				$projects = \App\Models\Project::orderBy($_GET['sort_key_project'], session('sort_order', 'asc'))->where('proj_status', 'COMPLETED')->paginate(10);
+				$projects = \App\Models\Project::orderBy($_GET['sort_key_project'], session('sort_order', 'asc'))->where('proj_status', 'COMPLETED')->paginate(10)->withQueryString();
 			} else if ($display_filter == 'canceled') {
-				$projects = \App\Models\Project::orderBy($_GET['sort_key_project'], session('sort_order', 'asc'))->where('proj_status', 'CANCELED')->paginate(10);
+				$projects = \App\Models\Project::orderBy($_GET['sort_key_project'], session('sort_order', 'asc'))->where('proj_status', 'CANCELED')->paginate(10)->withQueryString();
 			} else {
-				$projects = \App\Models\Project::orderBy($_GET['sort_key_project'], session('sort_order', 'asc'))->where('proj_status', '<>', 'DELETED')->paginate(10);
+				$projects = \App\Models\Project::orderBy($_GET['sort_key_project'], session('sort_order', 'asc'))->where('proj_status', '<>', 'DELETED')->paginate(10)->withQueryString();
 			}
 			session(['sort_key_project' => 'created_at']);
 		} else {
 			if ($display_filter == 'active') {
-				$projects = \App\Models\Project::orderBy($sortKey, $sortOrder)->where('proj_status', '<>', 'COMPLETED')->where('proj_status', '<>', 'CANCELED')->where('proj_status', '<>', 'DELETED')->paginate(10);
+				$projects = \App\Models\Project::orderBy($sortKey, $sortOrder)->where('proj_status', '<>', 'COMPLETED')->where('proj_status', '<>', 'CANCELED')->where('proj_status', '<>', 'DELETED')->paginate(10)->withQueryString();
 			} else if ($display_filter == 'completed') {
-				$projects = \App\Models\Project::orderBy($sortKey, $sortOrder)->where('proj_status', 'COMPLETED')->paginate(10);
+				$projects = \App\Models\Project::orderBy($sortKey, $sortOrder)->where('proj_status', 'COMPLETED')->paginate(10)->withQueryString();
 			} else if ($display_filter == 'canceled') {
-				$projects = \App\Models\Project::orderBy($sortKey, $sortOrder)->where('proj_status', 'CANCELED')->paginate(10);
+				$projects = \App\Models\Project::orderBy($sortKey, $sortOrder)->where('proj_status', 'CANCELED')->paginate(10)->withQueryString();
 			} else {
-				$projects = \App\Models\Project::orderBy($sortKey, $sortOrder)->where('proj_status', '<>', 'DELETED')->paginate(10);
+				$projects = \App\Models\Project::orderBy($sortKey, $sortOrder)->where('proj_status', '<>', 'DELETED')->paginate(10)->withQueryString();
 			}
 		}
 

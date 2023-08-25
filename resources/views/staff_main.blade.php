@@ -53,20 +53,27 @@
 				session(['sort_order' => 'asc']);
 				$sort_icon = 'asc';
 			}
-			$staffs = \App\Models\Staff::orderBy($_GET['sort_key_staff'], session('sort_order', 'asc'))->where('status', '<>', 'DELETED')->paginate(10);
+			$staffs = \App\Models\Staff::orderBy($_GET['sort_key_staff'], session('sort_order', 'asc'))->where('status', '<>', 'DELETED')->paginate(10)->withQueryString();
 			session(['sort_key_staff' => 'l_name']);
 		} else {
-			$staffs = \App\Models\Staff::orderBy($sortKey, $sortOrder)->where('status', '<>', 'DELETED')->paginate(10);
+			$staffs = \App\Models\Staff::orderBy($sortKey, $sortOrder)->where('status', '<>', 'DELETED')->paginate(10)->withQueryString();
 		}
 
 		// Title Line
 		$outContents = "<div class=\"container mw-100\">";
         $outContents .= "<div class=\"row bg-info text-white fw-bold\">";
 			$outContents .= "<div class=\"col-2\">";
+				$sortParms = "?sort_key_staff=f_name&sort_time=".time();
+				$outContents .= "<a href=\"staff_main".$sortParms."\">";
 				$outContents .= "First Name";
+				if ($sort_icon == 'asc') {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-up-square\"></a></i>";
+				} else {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-down-square\"></a></i>";
+				}
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2 align-middle\">";
-				$sortParms = "?sort_key_staff=name&sort_time=".time();
+				$sortParms = "?sort_key_staff=l_name&sort_time=".time();
 				$outContents .= "<a href=\"staff_main".$sortParms."\">";
 				$outContents .= "Last Name";
 				if ($sort_icon == 'asc') {
@@ -76,16 +83,37 @@
 				}
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2\">";
+				$sortParms = "?sort_key_staff=role&sort_time=".time();
+				$outContents .= "<a href=\"staff_main".$sortParms."\">";
 				$outContents .= "Role";
+				if ($sort_icon == 'asc') {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-up-square\"></a></i>";
+				} else {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-down-square\"></a></i>";
+				}
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2\">";
 				$outContents .= "Dispatched Tasks";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-3\">";
+				$sortParms = "?sort_key_staff=email&sort_time=".time();
+				$outContents .= "<a href=\"staff_main".$sortParms."\">";
 				$outContents .= "Email";
+				if ($sort_icon == 'asc') {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-up-square\"></a></i>";
+				} else {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-down-square\"></a></i>";
+				}
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-1\">";
+				$sortParms = "?sort_key_staff=mobile_phone&sort_time=".time();
+				$outContents .= "<a href=\"staff_main".$sortParms."\">";
 				$outContents .= "Mobile Phone";
+				if ($sort_icon == 'asc') {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-up-square\"></a></i>";
+				} else {
+					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-down-square\"></a></i>";
+				}
 			$outContents .= "</div>";
 		$outContents .= "</div><hr class=\"m-1\"/>";
 		{{echo $outContents;}}
