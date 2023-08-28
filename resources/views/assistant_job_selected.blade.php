@@ -24,6 +24,8 @@
 
         $client_name = "";
         $role = "";
+        $inspector_sig = "";
+        $todays_working_hours_saved = 'false';
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
             $staff_id = Auth::user()->id;
@@ -89,6 +91,15 @@
                     $client_name = $client->clnt_name;
                 }
                 $materials  = Material::where('mtrl_job_id', $id)->where('mtrl_status', '<>', 'DELETED')->where('mtrl_status', '<>', 'CANCELED')->orderBy('mtrl_type')->get();
+
+                // Find out the signature of inspection (SUPERINTENDENT's priority is greater than INSPECTOR's; because SUPERINTENDENT can also perform the inspection)
+                $sig_files = scandir('signature');
+                foreach($sig_files as $sig_file) {
+                    if ($sig_file == 'task_'.$id.'_sigof_'.$staff_id.'_img.png') {
+                        $inspector_sig = $sig_file;
+                        break;
+                    }
+                }
             } else {
                 $err_msg = "Task ".$id."'s object cannot be accessed while just entering the task's main page.";
                 Log::Info($err_msg);
@@ -167,6 +178,7 @@
                         @if ((!$association->jobdsp_workinghours_last_time) || (date('Y-m-d', strtotime($association->jobdsp_workinghours_last_time)) != date('Y-m-d', time())))
                         <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value=""></div>
                         @elseif ($association->jobdsp_workinghours_today && $association->jobdsp_workinghours_today>0)
+                        <?php $todays_working_hours_saved = 'true'; ?>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" readonly id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value="{{$association->jobdsp_workinghours_today}}"></div>
                         @else
                         <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value=""></div>
@@ -176,12 +188,16 @@
                     </div>
                     <div class="row my-3">
                         <div class="col d-flex justify-content-center">
-                            @if ((!$association->jobdsp_workinghours_last_time) || (date('Y-m-d', strtotime($association->jobdsp_workinghours_last_time)) != date('Y-m-d', time())))
-                            <button class="btn btn-success mx-4" type="submit" id="btn_submit" onclick="RecordTodaysWorkingHours();">Submit</button>
-                            @elseif ($association->jobdsp_workinghours_today && $association->jobdsp_workinghours_today>0)
-                            <button class="btn btn-success mx-4" type="submit" id="btn_submit" disabled onclick="RecordTodaysWorkingHours();">Submit</button>
+                            @if ($inspector_sig == "")
+                                @if ((!$association->jobdsp_workinghours_last_time) || (date('Y-m-d', strtotime($association->jobdsp_workinghours_last_time)) != date('Y-m-d', time())))
+                                <button class="btn btn-success mx-4" type="submit" id="btn_submit" onclick="RecordTodaysWorkingHours();">Submit</button>
+                                @elseif ($association->jobdsp_workinghours_today && $association->jobdsp_workinghours_today>0)
+                                <button class="btn btn-success mx-4" type="submit" id="btn_submit" disabled onclick="RecordTodaysWorkingHours();">Submit</button>
+                                @else
+                                <button class="btn btn-success mx-4" type="submit" id="btn_submit" onclick="RecordTodaysWorkingHours();">Submit</button>
+                                @endif
                             @else
-                            <button class="btn btn-success mx-4" type="submit" id="btn_submit" onclick="RecordTodaysWorkingHours();">Submit</button>
+                                <button class="btn btn-success mx-4" type="submit" id="btn_submit" disabled onclick="RecordTodaysWorkingHours();">Submit</button>
                             @endif
                         </div>
                     </div>
@@ -319,6 +335,7 @@
             @if (Auth::user()->role == 'INSPECTOR')
             <div class="row text-dark" style="background-color:lightpink;">
                 <div class="col d-flex justify-content-center align-items-center">
+                    @if ($inspector_sig == "")
                     <div class="my-4" id="canvas">
                         <h4 class="mt-2 text-secondary">Signature: </h4>
                         <canvas class="roundCorners" id="signatureForTask" style=" background-color: white; position: relative; margin: 0; padding: 0; border: 1px solid #c4caac;"></canvas>
@@ -332,17 +349,32 @@
                     <script type="text/javascript">
                         signatureCapture('signatureForTask_shadow');
                     </script><br /><br />
+                    @else
+                    <div class="my-4" id="canvas">
+                        <h4 class="mt-2 text-secondary">Signature: </h4>
+                        <img src="signature/{{$inspector_sig}}" width="360" height="100" style="margin: 0; padding: 0; border: 1px solid #c4caac;"></img>
+                    </div>
+                    @endif
                 </div>
                 <!--div align='center' id='savedsig' style='display:none'>
                     <img align='center' id="saveSignature"/>
                 </div-->
                 <div class="col py-4">
-                    <h4 class="mt-2 text-secondary">Task Report: </h4>
+                    <h4 class="mt-2 text-secondary">Inspection Report: </h4>
+                    @if ($inspector_sig == "")
                     <textarea class="form-control mt-1" type="text" row="4" id="task_report" name="task_report" style="height:60%"></textarea>
+                    @else
+                    <textarea class="form-control mt-1" type="text" row="4" id="task_report" name="task_report" readonly style="height:60%">{{$job->job_inspection_report}}</textarea>
+                    @endif
                 </div>
                 <div class="col my-4 text-center d-flex justify-content-end">
+                    @if ($inspector_sig == "")
                     <button class="btn m-2 text-white rounded btn-secondary" onclick="signatureClear()">Clear Signature</button></br>
-                    <button class="btn m-2 text-white rounded" style="background-color:lightcoral;" onclick="return doCompleteThisJob();">Complete This Task</button>
+                    <button class="btn m-2 text-white rounded" style="background-color:lightcoral;" onclick="return doCompleteThisJob();">Finish the Inspection</button>
+                    @else
+                    <button class="btn m-2 text-white rounded btn-secondary" disabled>Clear Signature</button></br>
+                    <button class="btn m-2 text-white rounded" style="background-color:lightcoral;" disabled>Finish the Inspection</button>
+                    @endif
                 </div>
             </div>
             @endif
@@ -408,45 +440,50 @@
         }
 
         function doCompleteThisJob() {
-            if (document.getElementById('signatureForTask_shadow').toDataURL() == document.getElementById('signatureForTask').toDataURL()) {
-                alert('To complete this job, you have to sign first.');
+            let todaysWorkingHoursSaved = {!!json_encode($todays_working_hours_saved)!!};
+            if(todaysWorkingHoursSaved == 'false') {
+                alert('Please enter your Today\'s Working Hours first.');
             } else {
-                let taskReport = document.getElementById('task_report').value;
-                // role = {!!json_encode($role)!!}
-                // if (role == 'SUPERINTENDENT') {
-                //     promptMsg = "You have to update the Amount Left value of each material before you complete this task.\r\n\r\nAre you sure to complete this task?";
-                // } else {
-                    promptMsg = "Are you sure to complete this task?";
-                // }
-                if (taskReport == '') {
-                    promptMsg = "The task's report is empty. " + promptMsg;
-                }
-                if(!confirm(promptMsg)) {
-                    //event.preventDefault();
+                if (document.getElementById('signatureForTask_shadow').toDataURL() == document.getElementById('signatureForTask').toDataURL()) {
+                    alert('To finish the inspection, you have to sign first.');
                 } else {
-                    var canvas = document.getElementById("signatureForTask");
-                    var dataURL = canvas.toDataURL("image/png");
-                    // document.getElementById("saveSignature").src = dataURL;
-                    $.ajax({
-                        url: '/job_assistants_complete',
-                        type: 'POST',
-                        data: {
-                            _token:"{{ csrf_token() }}", 
-                            job_id: jobId,
-                            staff_id: staffId,
-                            signatrue_data: dataURL,
-                            inspection_report: taskReport,
-                        },    // the _token:token is for Laravel
-                        success: function(dataRetFromPHP) {
-                            alert('Task is completed successfully.');
-                            window.location = './assistant_home_page';
-                        },
-                        error: function(err) {
-                            alert('Failed to complete this task.\r\nPlease tyr again.');
-                            window.location = './assistant_job_selected?id='+jobId+'&jobCompleteOK=false';
-                        }
-                    });
-                    // document.getElementById('sig').setAttribute('style','display:none');
+                    let taskReport = document.getElementById('task_report').value;
+                    // role = {!!json_encode($role)!!}
+                    // if (role == 'SUPERINTENDENT') {
+                    //     promptMsg = "You have to update the Amount Left value of each material before you finish the inspection.\r\n\r\nAre you sure to finish the inspection?";
+                    // } else {
+                        promptMsg = "Are you sure to finish the inspection?\r\n\r\nThe information you entered cannot be changed once you finish it!";
+                    // }
+                    if (taskReport == '') {
+                        promptMsg = "The inspection report is empty.\r\n" + promptMsg;
+                    }
+                    if(!confirm(promptMsg)) {
+                        //event.preventDefault();
+                    } else {
+                        var canvas = document.getElementById("signatureForTask");
+                        var dataURL = canvas.toDataURL("image/png");
+                        // document.getElementById("saveSignature").src = dataURL;
+                        $.ajax({
+                            url: '/job_assistants_complete',
+                            type: 'POST',
+                            data: {
+                                _token:"{{ csrf_token() }}", 
+                                job_id: jobId,
+                                staff_id: staffId,
+                                signatrue_data: dataURL,
+                                inspection_report: taskReport,
+                            },    // the _token:token is for Laravel
+                            success: function(dataRetFromPHP) {
+                                alert('Task is completed successfully.');
+                                window.location = './assistant_home_page';
+                            },
+                            error: function(err) {
+                                alert('Failed to finish the inspection.\r\nPlease tyr again.');
+                                window.location = './assistant_job_selected?id='+jobId+'&jobCompleteOK=false';
+                            }
+                        });
+                        // document.getElementById('sig').setAttribute('style','display:none');
+                    }
                 }
             }
         }
