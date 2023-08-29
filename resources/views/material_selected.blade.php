@@ -212,7 +212,7 @@
 					alert('This material has been dispatched, so you cannot delete it now.');
 					event.preventDefault();
 				} else {
-					if(!confirm("Are you sure to delete this material?"))
+					if(!confirm("Continue to delete this material?"))
 					event.preventDefault();
 				}
 			}

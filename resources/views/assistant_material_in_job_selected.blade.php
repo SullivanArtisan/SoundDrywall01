@@ -274,9 +274,9 @@
         function doCompleteThisJob() {
             role = {!!json_encode($role)!!}
             if (role == 'SUPERINTENDENT') {
-                promptMsg = "You have to update the Amount Left value of each material before you complete this Task.\r\n\r\nAre you sure to complete this Task?";
+                promptMsg = "You have to update the Amount Left value of each material before you complete this Task.\r\n\r\nContinue to complete this Task?";
             } else {
-                promptMsg = "Are you sure to complete this Task?";
+                promptMsg = "Continue to complete this Task?";
             }
             if(!confirm(promptMsg)) {
                 //event.preventDefault();

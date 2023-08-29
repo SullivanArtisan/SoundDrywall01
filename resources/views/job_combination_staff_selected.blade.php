@@ -192,7 +192,7 @@
                 if (associationWorkinghoursTotal > 0) {
                     alert('This staff\'s Total Working Hours is greater than 0.\r\n\r\nYou cannot remove him/her from this task!');
                 } else {
-                    if(!confirm("Are you sure to remove this assistant from this task?")) {
+                    if(!confirm("Continue to remove this assistant from this task?")) {
                         event.preventDefault();
                     } else {
                         var jobId = {!!json_encode($job_id)!!};
@@ -219,7 +219,7 @@
             function changeStaffAssociation() {
                 newStaff = document.getElementById('staffnameinput').value;
                 if (newStaff.length > 0) {
-                    if(!confirm("Are you sure to re-dispatch this task to this staff?")) {
+                    if(!confirm("Continue to re-dispatch this task to this staff?")) {
                         event.preventDefault();
                     } else {
                         var jobId = {!!json_encode($job_id)!!};

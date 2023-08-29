@@ -148,7 +148,7 @@
 		
 		<script>
 			function myConfirmation() {
-				if(!confirm("Are you sure to delete this material?"))
+				if(!confirm("Continue to delete this material?"))
 				event.preventDefault();
 			}
 		</script>

@@ -132,7 +132,7 @@
 		
 		<script>
 			function myConfirmation() {
-				if(!confirm("Are you sure to delete this provider?"))
+				if(!confirm("Continue to delete this provider?"))
 				event.preventDefault();
 			}
 			

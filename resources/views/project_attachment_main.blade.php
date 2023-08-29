@@ -148,7 +148,7 @@
             };
 
             function RemoveThisAttachment(inputId, fileName) {
-                if(!confirm("Are you sure to remove this attachment from this project?")) {
+                if(!confirm("Continue to remove this attachment from this project?")) {
                     event.preventDefault();
                 } else {
                     $.ajax({

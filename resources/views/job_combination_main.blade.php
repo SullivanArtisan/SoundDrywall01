@@ -213,7 +213,7 @@
                     alert('You cannot cancel the dispatch of this material, as the task has been COMPLETED.');
                 } else {
                     mtrlId = inputId.substring(2, inputId.length);
-                    if(!confirm("Are you sure to remove this material from this task?")) {
+                    if(!confirm("Continue to remove this material from this task?")) {
                         event.preventDefault();
                     } else {
                         var jobId = {!!json_encode($job_id)!!};

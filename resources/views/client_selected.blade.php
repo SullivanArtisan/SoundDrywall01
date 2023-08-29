@@ -136,7 +136,7 @@
 		
 		<script>
 			function myConfirmation() {
-				if(!confirm("Are you sure to delete this client?"))
+				if(!confirm("Continue to delete this client?"))
 				event.preventDefault();
 			}
 			

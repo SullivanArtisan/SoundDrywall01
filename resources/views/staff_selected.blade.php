@@ -153,7 +153,7 @@
 		
 		<script>
 			function myConfirmation() {
-				if(!confirm("Are you sure to delete this staff?"))
+				if(!confirm("Continue to delete this staff?"))
 				event.preventDefault();
 			}
 			

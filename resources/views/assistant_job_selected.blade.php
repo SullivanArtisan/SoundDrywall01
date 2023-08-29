@@ -466,7 +466,7 @@
                     // if (role == 'SUPERINTENDENT') {
                     //     promptMsg = "You have to update the Amount Left value of each material before you finish the inspection.\r\n\r\nAre you sure to finish the inspection?";
                     // } else {
-                        promptMsg = "Are you sure to finish the inspection?\r\n\r\nThe information you entered cannot be changed once you finish it!";
+                        promptMsg = "Continue to finish the inspection?\r\n\r\nThe information you entered cannot be changed once you finish it!";
                     // }
                     if (taskReport == '') {
                         promptMsg = "The inspection report is empty.\r\n" + promptMsg;
@@ -508,7 +508,7 @@
             if (workingHours == '') {
                 alert('Today\'s working hours cannot be emtpy!\r\n\r\nPlease try again.');
             } else {
-                if(!confirm('You cannot change this value after you submit it.\r\rAre you sure to submit this value?')) {
+                if(!confirm('You cannot change this value after you submit it.\r\rContinue to submit this value?')) {
                     //event.preventDefault();
                 } else {
                     $.ajax({

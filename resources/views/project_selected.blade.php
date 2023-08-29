@@ -353,7 +353,7 @@
             }
 
 			function myConfirmation() {
-				if(!confirm("Are you sure to delete this project?"))
+				if(!confirm("Continue to delete this project?"))
 				    event.preventDefault();
 			}
 		</script>
