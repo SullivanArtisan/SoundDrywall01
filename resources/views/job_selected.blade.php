@@ -286,7 +286,7 @@
                                 <div class="col"><label class="col-form-label">Today's Working Hours:&nbsp;</label></div>
                                 @if ((!$lead_association->jobdsp_workinghours_last_time) || (date('Y-m-d', strtotime($lead_association->jobdsp_workinghours_last_time)) != date('Y-m-d', time())))
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value=""></div>
-                                @elseif ($lead_association->jobdsp_workinghours_today && $lead_association->jobdsp_workinghours_today>0)
+                                @elseif ($lead_association->jobdsp_workinghours_today && $lead_association->jobdsp_workinghours_today>=0)
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" readonly id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value="{{$lead_association->jobdsp_workinghours_today}}"></div>
                                 @else
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value=""></div>
@@ -298,7 +298,7 @@
                                 <div class="col d-flex justify-content-center">
                                     @if ((!$lead_association->jobdsp_workinghours_last_time) || (date('Y-m-d', strtotime($lead_association->jobdsp_workinghours_last_time)) != date('Y-m-d', time())))
                                     <button class="btn btn-success mx-4" type="submit" id="btn_submit" onclick="RecordTodaysWorkingHours();">Submit</button>
-                                    @elseif ($lead_association->jobdsp_workinghours_today && $lead_association->jobdsp_workinghours_today>0)
+                                    @elseif ($lead_association->jobdsp_workinghours_today && $lead_association->jobdsp_workinghours_today>=0)
                                     <button class="btn btn-success mx-4" type="submit" id="btn_submit" disabled onclick="RecordTodaysWorkingHours();">Submit</button>
                                     @else
                                     <button class="btn btn-success mx-4" type="submit" id="btn_submit" onclick="RecordTodaysWorkingHours();">Submit</button>
@@ -407,20 +407,24 @@
                     success: function(dataRetFromPHP) {
                         setTimeout(ReloadJobMsg, 7500);
                         if (thisUserRole == 'ADMINISTRATOR') {
-                            if (document.getElementById('msg_from_staff').value != dataRetFromPHP) {
-                                document.getElementById('msg_from_staff').value = dataRetFromPHP;
-                                document.getElementById('msg_from_staff').style.color = 'red';
-                            } else {
-                                document.getElementById('msg_from_staff').value = dataRetFromPHP;
-                                document.getElementById('msg_from_staff').style.color = 'white';
+                            if (document.getElementById('msg_from_staff')) {
+                                if (document.getElementById('msg_from_staff').value != dataRetFromPHP) {
+                                    document.getElementById('msg_from_staff').value = dataRetFromPHP;
+                                    document.getElementById('msg_from_staff').style.color = 'red';
+                                } else {
+                                    document.getElementById('msg_from_staff').value = dataRetFromPHP;
+                                    document.getElementById('msg_from_staff').style.color = 'white';
+                                }
                             }
                         } else {
-                            if (document.getElementById('msg_from_admin').value != dataRetFromPHP) {
-                                document.getElementById('msg_from_admin').value = dataRetFromPHP;
-                                document.getElementById('msg_from_admin').style.color = 'red';
-                            } else {
-                                document.getElementById('msg_from_admin').value = dataRetFromPHP;
-                                document.getElementById('msg_from_admin').style.color = 'white';
+                            if (document.getElementById('msg_from_admin')) {
+                                if (document.getElementById('msg_from_admin').value != dataRetFromPHP) {
+                                    document.getElementById('msg_from_admin').value = dataRetFromPHP;
+                                    document.getElementById('msg_from_admin').style.color = 'red';
+                                } else {
+                                    document.getElementById('msg_from_admin').value = dataRetFromPHP;
+                                    document.getElementById('msg_from_admin').style.color = 'white';
+                                }
                             }
                         }
                     },
@@ -491,8 +495,8 @@
             function RecordTodaysWorkingHours() {
                 event.preventDefault();
                 let workingHours = document.getElementById('jobdsp_workinghours_today').value;
-                if (workingHours == null || workingHours == 0) {
-                    alert('Today\'s working hours cannot be emtpy nor 0!\r\nPlease try again.');
+                if (workingHours == '') {
+                    alert('Today\'s working hours cannot be emtpy!\r\n\r\nPlease try again.');
                 } else {
                     if(!confirm('You cannot change this value after you submit it.\r\rAre you sure to submit this value?')) {
                         //event.preventDefault();

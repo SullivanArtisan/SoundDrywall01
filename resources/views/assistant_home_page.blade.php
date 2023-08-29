@@ -15,6 +15,8 @@
         use App\Models\JobDispatch;
         use Illuminate\Support\Facades\Log;
 
+        $todays_working_hours_saved = 'true';
+
         $staff = Staff::where('id', Auth::user()->id)->first();
         $jobs_total = 0;
         if ($staff) {
@@ -59,6 +61,10 @@
                 $job_origin = Job::where('id', $job->jobdsp_job_id)->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'COMPLETED')->first();
                 
                 if ($job_origin) {
+                    if ((!$job->jobdsp_workinghours_last_time) || (date('Y-m-d', strtotime($job->jobdsp_workinghours_last_time)) != date('Y-m-d', time()))) {
+                        $todays_working_hours_saved = 'false';
+                    }
+
                     $listed_jobs++;
                     if ($listed_jobs % 2) {
                         $outContents = "<div class=\"row\" style=\"background-color:gainsboro\">";
@@ -114,11 +120,11 @@
                             <div class="col">
                             </div>
                             <div class="col">
-                                <form method="POST" action="{{ route('logout') }}" style="cursor: pointer">
+                                <form method="POST" action="{{ route('logout') }}" id="form_assistant_logout" style="cursor: pointer">
                                     @csrf
 
                                     <a style="text-decoration:none;"  class="text-dark border rounded btn btn-secondary" 
-                                        onclick="event.preventDefault(); this.closest('form').submit();">
+                                        onclick="doLogout();">
                                         <span style="font-weight:bold !important; color:white">{{ __('Log Out') }}</span>
                                     </a>
                                 </form>
@@ -138,6 +144,23 @@
         </div>
     </div>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+        
+    <script>
+        var todaysWorkingHoursSaved = {!!json_encode($todays_working_hours_saved)!!};
+
+        function doLogout() {
+            if(todaysWorkingHoursSaved == 'false') {
+                if(!confirm('The Today\'s Working Hours in some of your task has not been entered yet!\r\n\r\nContinue to logout without entering Today\'s Working Hours of that task?')) {
+                } else {
+                    event.preventDefault(); 
+                    document.getElementById('form_assistant_logout').submit();
+                }
+            } else {
+                event.preventDefault(); 
+                document.getElementById('form_assistant_logout').submit();
+            }
+        }
+    </script>
 </body>
 
 </html>

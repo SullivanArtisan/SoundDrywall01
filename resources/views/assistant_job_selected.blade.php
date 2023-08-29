@@ -122,10 +122,10 @@
                         </button>
             </div>
             <div class="col-md-2 my-4" style="">
-                <form method="POST" action="{{ route('logout') }}" style="cursor: pointer">
+                <form method="POST" action="{{ route('logout') }}" style="cursor: pointer" id="form_assistant_logout">
                     @csrf
                     <a style="text-decoration:none;"  class="text-dark border rounded btn btn-dark" 
-                        onclick="event.preventDefault(); this.closest('form').submit();">
+                        onclick="doLogout();">
                         <span style="font-weight:bold !important; color:white">{{ __('Log Out') }}</span>
                     </a>
                 </form>
@@ -177,7 +177,7 @@
                         <div class="col"><label class="col-form-label">Today's Working Hours:&nbsp;</label></div>
                         @if ((!$association->jobdsp_workinghours_last_time) || (date('Y-m-d', strtotime($association->jobdsp_workinghours_last_time)) != date('Y-m-d', time())))
                         <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value=""></div>
-                        @elseif ($association->jobdsp_workinghours_today && $association->jobdsp_workinghours_today>0)
+                        @elseif ($association->jobdsp_workinghours_today && $association->jobdsp_workinghours_today>=0)
                         <?php $todays_working_hours_saved = 'true'; ?>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="number" step="0.1" readonly id="jobdsp_workinghours_today" name="jobdsp_workinghours_today" value="{{$association->jobdsp_workinghours_today}}"></div>
                         @else
@@ -191,7 +191,7 @@
                             @if ($inspector_sig == "")
                                 @if ((!$association->jobdsp_workinghours_last_time) || (date('Y-m-d', strtotime($association->jobdsp_workinghours_last_time)) != date('Y-m-d', time())))
                                 <button class="btn btn-success mx-4" type="submit" id="btn_submit" onclick="RecordTodaysWorkingHours();">Submit</button>
-                                @elseif ($association->jobdsp_workinghours_today && $association->jobdsp_workinghours_today>0)
+                                @elseif ($association->jobdsp_workinghours_today && $association->jobdsp_workinghours_today>=0)
                                 <button class="btn btn-success mx-4" type="submit" id="btn_submit" disabled onclick="RecordTodaysWorkingHours();">Submit</button>
                                 @else
                                 <button class="btn btn-success mx-4" type="submit" id="btn_submit" onclick="RecordTodaysWorkingHours();">Submit</button>
@@ -385,6 +385,8 @@
         var msgToShow = {!!json_encode($msg_to_show)!!};
         var jobId = {!!json_encode($id)!!};
         var staffId = {!!json_encode($staff_id)!!};
+        var todaysWorkingHoursSaved = {!!json_encode($todays_working_hours_saved)!!};
+
         if (msgToShow.length > 0) {
             alert(msgToShow);
         }
@@ -439,8 +441,20 @@
             }
         }
 
+        function doLogout() {
+            if(todaysWorkingHoursSaved == 'false') {
+                if(!confirm('You haven\'t entered Today\'s Working Hours yet!\r\n\r\nContinue to logout without entering Today\'s Working Hours?')) {
+                } else {
+                    event.preventDefault(); 
+                    document.getElementById('form_assistant_logout').submit();
+                }
+            } else {
+                event.preventDefault(); 
+                document.getElementById('form_assistant_logout').submit();
+            }
+        }
+
         function doCompleteThisJob() {
-            let todaysWorkingHoursSaved = {!!json_encode($todays_working_hours_saved)!!};
             if(todaysWorkingHoursSaved == 'false') {
                 alert('Please enter your Today\'s Working Hours first.');
             } else {
@@ -491,8 +505,8 @@
         function RecordTodaysWorkingHours() {
             event.preventDefault();
             let workingHours = document.getElementById('jobdsp_workinghours_today').value;
-            if (workingHours == null || workingHours == 0) {
-                alert('Today\'s working hours cannot be emtpy nor 0!\r\nPlease try again.');
+            if (workingHours == '') {
+                alert('Today\'s working hours cannot be emtpy!\r\n\r\nPlease try again.');
             } else {
                 if(!confirm('You cannot change this value after you submit it.\r\rAre you sure to submit this value?')) {
                     //event.preventDefault();

@@ -24,7 +24,17 @@
 <body>
     <?php
 	use App\Models\StaffAction;
+    use App\Models\Staff;
+    use App\Models\JobDispatch;
     use Illuminate\Support\Facades\Auth;
+
+    $todays_working_hours_saved = 'true';
+    $jobs = JobDispatch::all()->where('jobdsp_staff_id', Auth::user()->id)->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'COMPLETED')->where('jobdsp_status', '<>', 'CANCELED');
+    foreach($jobs as $job) {
+        if ((!$job->jobdsp_workinghours_last_time) || (date('Y-m-d', strtotime($job->jobdsp_workinghours_last_time)) != date('Y-m-d', time()))) {
+            $todays_working_hours_saved = 'false';
+        }
+    }
     ?>
 
     <div class="wrapper">
@@ -130,14 +140,29 @@
                             <div class="my-2">
 							@yield('goback')
                             </div>
-							<form method="POST" action="{{ route('logout') }}" style="cursor: pointer">
+							<form method="POST" action="{{ route('logout') }}" id="form_logout" style="cursor: pointer">
 								@csrf
 
+                                <!--
 								<a style="text-decoration:underline;"  class="text-warning"
 									onclick="event.preventDefault(); this.closest('form').submit();">
 									<i></i>
 									{{ __('Log Out') }}
 								</a>
+                                -->
+                                @if (Auth::user()->role == 'ADMINISTRATOR')
+								<a style="text-decoration:underline;"  class="text-warning"
+									onclick="event.preventDefault(); this.closest('form').submit();">
+									<i></i>
+									{{ __('Log Out') }}
+								</a>
+                                @else
+								<a style="text-decoration:underline;"  class="text-warning"
+									onclick="doLogout();">
+									<i></i>
+									{{ __('Log Out') }}
+								</a>
+                                @endif
 							</form>
                         </div>
                     </div>
@@ -185,6 +210,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 
     <script type="text/javascript">
+        var todaysWorkingHoursSaved = {!!json_encode($todays_working_hours_saved)!!};
+
         $(document).ready(function () {
             $("#sidebar").mCustomScrollbar({
                 theme: "minimal"
@@ -196,6 +223,19 @@
                 $('a[aria-expanded=true]').attr('aria-expanded', 'false');
             });
         });
+
+        function doLogout() {
+            if(todaysWorkingHoursSaved == 'false') {
+                if(!confirm('The Today\'s Working Hours in some of your task has not been entered yet!\r\n\r\nContinue to logout without entering Today\'s Working Hours of that task?')) {
+                } else {
+                    event.preventDefault(); 
+                    document.getElementById('form_logout').submit();
+                }
+            } else {
+                event.preventDefault(); 
+                document.getElementById('form_logout').submit();
+            }
+        }
     </script>
 </body>
 

@@ -81,8 +81,10 @@
 				</div>
 			</div>
 		</div>
+		<!--
 		<script src="{{asset('/bootstrap/js/bootstrap.min.js')}}"></script>
 		<script src="{{asset('/js/bs-init.js')}}"></script>
 		<script src="{{asset('/js/theme.js')}}"></script>
+		-->
 	</body>
 </html>
