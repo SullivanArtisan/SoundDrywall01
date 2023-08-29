@@ -723,7 +723,7 @@ Route::post('reload_page_for_job_msg_from_admin', function() {
 	if ($job_dispatch) {
 		return $job_dispatch->jobdsp_msg_from_admin;
 	} else {
-		Log::Info('Failed to get the JobDispatch object for task '.$job_id.' and staff '.$staff_id.' while refreshing its msg from administrator.');
+		// Log::Info('Failed to get the JobDispatch object for task '.$job_id.' and staff '.$staff_id.' while refreshing its msg from administrator.');
 	}
 })->middleware(['auth'])->name('reload_page_for_job_msg_from_admin');
 
@@ -734,7 +734,7 @@ Route::post('reload_page_for_job_msg_from_staff', function() {
 	if ($job_dispatch) {
 		return $job_dispatch->jobdsp_msg_from_staff;
 	} else {
-		Log::Info('Failed to get the JobDispatch object for task '.$job_id.' and staff '.$staff_id.' while refreshing its msg from staff.');
+		// Log::Info('Failed to get the JobDispatch object for task '.$job_id.' and staff '.$staff_id.' while refreshing its msg from staff.');
 	}
 })->middleware(['auth'])->name('reload_page_for_job_msg_from_staff');
 

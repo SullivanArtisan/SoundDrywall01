@@ -4,7 +4,10 @@
 	use App\Models\Job;
 	use App\Models\Staff;
 
-    $job_id = "";
+    $job_id             = "";
+    $job_lead_num       = 0;
+    $job_inspecor_num   = 0;
+
     if (isset($_GET['jobId'])) {
         $job_id = $_GET['jobId'];
         $job = Job::where('id', $job_id)->first();
@@ -13,6 +16,16 @@
     }
     $assistants = Staff::where('status', '<>', 'DELETED')->where('role', '<>', 'ADMINISTRATOR')->orderBy('f_name', 'asc')->get();
 
+    $associations = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_status', '<>', 'CANCELED')->where('jobdsp_status', '<>', 'DELETED')->get();
+    foreach($associations as $association) {
+        $dispatched_staff = Staff::where('id', $association->jobdsp_staff_id)->first();
+        if ($dispatched_staff->role == 'SUPERINTENDENT') {
+            $job_lead_num++;
+        }
+        if ($dispatched_staff->role == 'INSPECTOR') {
+            $job_inspecor_num++;
+        }
+    } 
     // if (isset($_GET['staffRemoveOK'])) {
     //     $staffRemoveResult = $_GET['staffRemoveOK'];
     //     $staff_id = $_GET['staffId'];
@@ -95,6 +108,20 @@
                                     // ADMINISTRATOR can dispatch any staff; SUPERINTENDENT can dispatch any staff but other SUPERINTENDENT
                                     if (($assistant->status == 'DELETED') || (($assistant->role == 'SUPERINTENDENT') && ($assistant->id != Auth::user()->id) && (Auth::user()->role != 'ADMINISTRATOR'))) {
                                         continue;
+                                    }
+
+                                    // Don't put any SUPERINTENDENT to the list anymore as there's 1 exists
+                                    if ($job_lead_num > 0) {
+                                        if ($assistant->role == 'SUPERINTENDENT') {
+                                            continue;
+                                        }
+                                    }
+
+                                    // Don't put any INSPECTOR to the list anymore as there's 1 exists
+                                    if ($job_inspecor_num > 0) {
+                                        if ($assistant->role == 'INSPECTOR') {
+                                            continue;
+                                        }
                                     }
 
                                     $dispatchExisting = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $assistant->id)->where('jobdsp_status', '<>', 'COMPLETED')->where('jobdsp_status', '<>', 'CANCELED')->where('jobdsp_status', '<>', 'DELETED')->first();

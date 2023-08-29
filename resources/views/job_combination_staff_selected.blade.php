@@ -7,10 +7,16 @@
     $job_id = $_GET['jobId'];
     $staff_id = $_GET['staffId'];
     $msg_to_show = "";
+    $association_workinghours_total = 0;
 	if ($job_id && $staff_id) {
         $job = Job::where('id', $job_id)->first();
         $staff = Staff::where('id', $staff_id)->first();
-        $association = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->first();
+        $association = JobDispatch::where('jobdsp_job_id', $job_id)->where('jobdsp_staff_id', $staff_id)->where('jobdsp_status', '<>', 'COMPLETED')->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->first();
+        if (!$association) {
+            Log::Info('Staff '.Auth::user()->id.' failed to asccess the JobDispatch object for job '.$job_id.' and staff '.$staff_id.' while entering job_combination_staff_selected page.');
+        } else {
+            $association_workinghours_total = $association->jobdsp_workinghours_total;
+        }
 	}
 
     if (isset($_GET['msgToStaffOK'])) {
@@ -182,26 +188,31 @@
             }
             
             function doRemoveStaff() {
-                if(!confirm("Are you sure to remove this assistant from this task?")) {
-			        event.preventDefault();
+                let associationWorkinghoursTotal = {!!json_encode($association_workinghours_total)!!};
+                if (associationWorkinghoursTotal > 0) {
+                    alert('This staff\'s Total Working Hours is greater than 0.\r\n\r\nYou cannot remove him/her from this task!');
                 } else {
-                    var jobId = {!!json_encode($job_id)!!};
-                    var staffId = {!!json_encode($staff_id)!!};
-                    $.ajax({
-                        url: '/job_combination_staff_remove',
-                        type: 'POST',
-                        data: {
-                            _token:"{{ csrf_token() }}", 
-                            job_id:jobId,
-                            staff_id:staffId
-                        },    // the _token:token is for Laravel
-                        success: function(dataRetFromPHP) {
-                            window.location = './job_combination_main?jobId='+jobId+'&staffId='+staffId+'&staffRemoveOK=true';
-                        },
-                        error: function(err) {
-                            window.location = './job_combination_staff_selected?jobId='+jobId+'&staffId='+staffId+'&staffRemoveOK=false';
-                        }
-                    });
+                    if(!confirm("Are you sure to remove this assistant from this task?")) {
+                        event.preventDefault();
+                    } else {
+                        var jobId = {!!json_encode($job_id)!!};
+                        var staffId = {!!json_encode($staff_id)!!};
+                        $.ajax({
+                            url: '/job_combination_staff_remove',
+                            type: 'POST',
+                            data: {
+                                _token:"{{ csrf_token() }}", 
+                                job_id:jobId,
+                                staff_id:staffId
+                            },    // the _token:token is for Laravel
+                            success: function(dataRetFromPHP) {
+                                window.location = './job_combination_main?jobId='+jobId+'&staffId='+staffId+'&staffRemoveOK=true';
+                            },
+                            error: function(err) {
+                                window.location = './job_combination_staff_selected?jobId='+jobId+'&staffId='+staffId+'&staffRemoveOK=false';
+                            }
+                        });
+                    }
                 }
 			}
             

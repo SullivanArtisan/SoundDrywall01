@@ -98,8 +98,8 @@
                     $outContents .= "</div>";
                     echo $outContents;
                 } else {
-                    $err_msg = "Task ID ".$job->jobdsp_job_id."'s object cannot be found from JobDispatch.";
-                    Log::Info($err_msg);
+                    // $err_msg = "Task ID ".$job->jobdsp_job_id."'s object cannot be found from JobDispatch.";
+                    // Log::Info($err_msg);
                 }
             }
         ?>
