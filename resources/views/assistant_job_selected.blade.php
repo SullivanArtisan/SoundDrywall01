@@ -67,7 +67,7 @@
                                 } else {
                                     MyHelper::LogStaffActionResult(Auth::user()->id, 'Updated Job status to '.$total_received.'/'.$job->job_total_assistants.' RECEIVED OK for task '.$id.'.', '');
                                 }
-                                            }
+                            }
                         }
                     }
                 }

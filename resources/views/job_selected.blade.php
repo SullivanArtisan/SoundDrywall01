@@ -72,13 +72,17 @@
         if ((Auth::user()->id == $job_lead_id) && (Auth::user()->role == 'SUPERINTENDENT')) {
             if (strstr($job->job_status, 'COMPLETED')) {
                 // If anybody associated with that task had completed it, keep that ?/? COMPLETED status
+                // Or, if the SUPERINTENDENT's association had be received, keep that ?/? RECEIVED status
             } else {
-                $job->job_status = $total_received.'/'.$job->job_total_assistants.' RECEIVED';
-                $result = $job->save();
-                if (!$result) {
-                    MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to updated Job status to '.$total_received.'/'.$job->job_total_assistants.' RECEIVED for task '.$job_id.'.', '900');
-                } else {
-                    MyHelper::LogStaffActionResult(Auth::user()->id, 'Updated Job status to '.$total_received.'/'.$job->job_total_assistants.' RECEIVED OK for task '.$job_id.'.', '');
+                $new_job_status = $total_received.'/'.$job->job_total_assistants.' RECEIVED';
+                if ($new_job_status != $job->job_status) {
+                    $job->job_status = $new_job_status;
+                    $result = $job->save();
+                    if (!$result) {
+                        MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to updated Job status to '.$total_received.'/'.$job->job_total_assistants.' RECEIVED for task '.$job_id.'.', '900');
+                    } else {
+                        MyHelper::LogStaffActionResult(Auth::user()->id, 'Updated Job status to '.$total_received.'/'.$job->job_total_assistants.' RECEIVED OK for task '.$job_id.'.', '');
+                    }
                 }
             }
         }
