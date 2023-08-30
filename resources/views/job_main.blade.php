@@ -152,7 +152,7 @@
 				$outContents .= "Material#";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-2\">";
-				$outContents .= "Description";
+				$outContents .= "Superintendent";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-1\">";
 				$outContents .= "Due Date";
@@ -162,6 +162,9 @@
 		
 		// Body Lines
 		foreach ($jobs as $job) {
+			$lead_name = "NONE";
+
+			// Find out the SUPERINTENDENT's name of each job
 			if (Auth::user()->role != 'ADMINISTRATOR') {
 				$associations = \App\Models\JobDispatch::where('jobdsp_job_id', $job->id)->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->get();
 				$other_superintendent_num = 0;
@@ -178,23 +181,51 @@
 				//if (!$one_association || ($superintendent_num > 0)) {
 				if ($other_superintendent_num > 0) {
 					continue;
+				} else {
+					$lead_name = Auth::user()->f_name.' '.Auth::user()->l_name;
+				}
+			} else {
+				$associations = \App\Models\JobDispatch::where('jobdsp_job_id', $job->id)->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->get();
+				foreach ($associations as $association) {
+					$one_staff = \App\Models\Staff::where('id', $association->jobdsp_staff_id)->first();
+					if ($one_staff) {
+						if ($one_staff->role == 'SUPERINTENDENT') {
+							$lead_name = $one_staff->f_name.' '.$one_staff->l_name;
+							break;
+						}
+					}
 				}
 			}
 
             $outContents = "<div class=\"row\">";
 				$outContents .= "<div class=\"col-2\">";
 					$outContents .= "<a href=\"job_selected?jobId=$job->id\">";
-					$outContents .= $job->job_name;
-					$outContents .= "</a>";
+					if ($job->job_status == "COMPLETED") {
+						$outContents .= "<span style=\" color: red;\">";
+						$outContents .= $job->job_name."</span>";
+					} else {
+						$outContents .= $job->job_name;
+					}
+				$outContents .= "</a>";
 				$outContents .= "</div>";
 				$outContents .= "<div class=\"col-2\">";
                     $outContents .= "<a href=\"job_selected?jobId=$job->id\">";
-                    $outContents .= $job->job_type;
+					if ($job->job_status == "COMPLETED") {
+						$outContents .= "<span style=\" color: red;\">";
+						$outContents .= $job->job_type."</span>";
+					} else {
+						$outContents .= $job->job_type;
+					}
                     $outContents .= "</a>";
                 $outContents .= "</div>";
                 $outContents .= "<div class=\"col-2\">";
 					$outContents .= "<a href=\"job_selected?jobId=$job->id\">";
-					$outContents .= $job->job_status;
+					if ($job->job_status == "COMPLETED") {
+						$outContents .= "<span style=\" color: red;\">";
+						$outContents .= $job->job_status."</span>";
+					} else {
+						$outContents .= $job->job_status;
+					}
 					$outContents .= "</a>";
 				$outContents .= "</div>";
                 // $outContents .= "<div class=\"col-2\">";
@@ -209,22 +240,42 @@
 				// $outContents .= "</div>";
                 $outContents .= "<div class=\"col-1\">";
 					$outContents .= "<a href=\"job_selected?jobId=$job->id\">";
-					$outContents .= $job->job_total_active_assistants;
+					if ($job->job_status == "COMPLETED") {
+						$outContents .= "<span style=\" color: red;\">";
+						$outContents .= $job->job_total_active_assistants."</span>";
+					} else {
+						$outContents .= $job->job_total_active_assistants;
+					}
 					$outContents .= "</a>";
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-1\">";
 					$outContents .= "<a href=\"job_selected?jobId=$job->id\">";
-					$outContents .= $job->job_total_active_materials;
+					if ($job->job_status == "COMPLETED") {
+						$outContents .= "<span style=\" color: red;\">";
+						$outContents .= $job->job_total_active_materials."</span>";
+					} else {
+						$outContents .= $job->job_total_active_materials;
+					}
 					$outContents .= "</a>";
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-2\">";
 					$outContents .= "<a href=\"job_selected?jobId=$job->id\">";
-					$outContents .= $job->job_desc;
-					$outContents .= "</a>";
+					if ($job->job_status == "COMPLETED") {
+						$outContents .= "<span style=\" color: red;\">";
+						$outContents .= $lead_name."</span>";
+					} else {
+						$outContents .= $lead_name;
+					}
+				$outContents .= "</a>";
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-1\">";
 					$outContents .= "<a href=\"job_selected?jobId=$job->id\">";
-					$outContents .= $job->job_till_time;
+					if ($job->job_status == "COMPLETED") {
+						$outContents .= "<span style=\" color: red;\">";
+						$outContents .= $job->job_till_time."</span>";
+					} else {
+						$outContents .= $job->job_till_time;
+					}
 					$outContents .= "</a>";
 				$outContents .= "</div>";
 			$outContents .= "</div><hr class=\"m-1\"/>";
