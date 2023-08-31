@@ -119,9 +119,9 @@ class ProjectController extends Controller
                         $res = $job->save();
                         if (!$res) {
                             Log::Info("Job ".$job->id." cannot be deleted.");
-                            return redirect()->route('op_result.project')->with('status', 'The project has been deleted, but the didpatched job cannot be deleted for some reason.');	
+                            return redirect()->route('op_result.project')->with('status', 'The project has been deleted, but the dispatched job cannot be deleted for some reason.');	
                         } else {
-                            MyHelper::LogStaffActionResult(Auth::user()->id, "Deleted project's didpatched job '.$job->id.' OK.", "");
+                            MyHelper::LogStaffActionResult(Auth::user()->id, "Deleted project's dispatched job '.$job->id.' OK.", "");
 
                             $materials = Material::where('mtrl_job_id', $job->id)->get();
                             foreach ($materials as $material) {
@@ -134,9 +134,9 @@ class ProjectController extends Controller
                                 $res = $material->save();
                                 if (!$res) {
                                     Log::Info("Material ".$material->id." cannot be deleted.");
-                                    return redirect()->route('op_result.project')->with('status', "The project's didpatched job has been deleted, but its material cannot be deleted for some reason.");	
+                                    return redirect()->route('op_result.project')->with('status', "The project's dispatched job has been deleted, but its material cannot be deleted for some reason.");	
                                 } else {
-                                    MyHelper::LogStaffActionResult(Auth::user()->id, "Deleted project's didpatched job's material '.$material->id.' OK.", "");
+                                    MyHelper::LogStaffActionResult(Auth::user()->id, "Deleted project's dispatched job's material '.$material->id.' OK.", "");
                                 }
                             }
 
@@ -150,9 +150,9 @@ class ProjectController extends Controller
                                 $res = $dispatch->save();
                                 if (!$res) {
                                     Log::Info("Dispatch ".$dispatch->id." cannot be deleted.");
-                                    return redirect()->route('op_result.project')->with('status', "The project's didpatched job has been deleted, but its dispatch cannot be deleted for some reason.");	
+                                    return redirect()->route('op_result.project')->with('status', "The project's dispatched job has been deleted, but its dispatch cannot be deleted for some reason.");	
                                 } else {
-                                    MyHelper::LogStaffActionResult(Auth::user()->id, "Deleted project's didpatched job's dispatch '.$dispatch->id.' OK.", "");
+                                    MyHelper::LogStaffActionResult(Auth::user()->id, "Deleted project's dispatched job's dispatch '.$dispatch->id.' OK.", "");
                                 }
                             }
                         }

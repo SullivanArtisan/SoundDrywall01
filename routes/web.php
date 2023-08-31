@@ -268,7 +268,7 @@ Route::post('job_assistants_complete', function (Request $request) {
 			MyHelper::LogStaffActionResult(Auth::user()->id, 'Inspected task '.$job_id.' OK.', '');
 			Log::Info('Staff '.$staff_id.' completed the task '.$job_id." successfully.");
 
-			// Change all didpatched materials' statuses to 'COMPLETED', if this JobDispatch entry is completed by the superintendent
+			// Change all dispatched materials' statuses to 'COMPLETED', if this JobDispatch entry is completed by the superintendent
 			// and create a new material for the remainder if there is any
 			$staff = Staff::where('id', $staff_id)->first();
 			if ($staff->role == 'SUPERINTENDENT') {
@@ -589,7 +589,7 @@ Route::get('/drywall_delete', function () {
 				Log::Info('Failed to access the task '.$job_id." while didpatching material ".$mtrl_id."!");
 				return "mtrlAssociateOK=false";	
 			}
-			MyHelper::LogStaffActionResult(Auth::user()->id, 'didpatched material '.$mtrl_id.' with task '.$job_id.' OK.', '');
+			MyHelper::LogStaffActionResult(Auth::user()->id, 'dispatched material '.$mtrl_id.' with task '.$job_id.' OK.', '');
 			return "mtrlAssociateOK=true";	
 		}
 	} else {

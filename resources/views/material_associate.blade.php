@@ -203,7 +203,7 @@
                         mtrl_id:mtrlId,
                     },    // the _token:token is for Laravel
                     success: function(dataRetFromPHP) {
-                        alert('Material didpatched successfully.')
+                        alert('Material dispatched successfully.')
                         parmJobId = {!!json_encode($job_id)!!};
                         if (parmJobId == "") {
                             window.location = './material_associate';

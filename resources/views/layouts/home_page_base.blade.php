@@ -50,26 +50,34 @@
 
             <ul class="list-unstyled components">
 				<div class="ml-2 mb-3">
-					<a href="{{route('home_page')}}"><span style='font-size:25px;'>&#127968;</span>&nbsp&nbspHome</a>
+					<a href="{{route('home_page')}}"><span style='font-size:25px;'>&#127968;</span><span style='font-size:23px;color:gold'>&nbsp;&nbsp;Home</span></a>
 				</div>
                 <li class="active">
+                    <!--
                     <a href="#controlSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Control</a>
                     <ul class="collapse list-unstyled" id="controlSubmenu">
-                        <li> <a href="{{route('project_main', ['display_filter'=>'active'])}}">Projects</a> </li>
-                        <li> <a href="{{route('job_main', ['display_filter'=>'active'])}}">Tasks</a> </li>
-                        <li> <a href="{{route('material_associate')}}">Material Dispatch</a> </li>
-                        <li> <a href="{{route('job_dispatch')}}">Task Dispatch</a> </li>
+                    -->
+                    <a href="#controlSubmenu" data-toggle="" aria-expanded="false" class="" style="color:lime">Control</a>
+                    <ul class=" list-unstyled" id="controlSubmenu">
+                        <li> <a href="{{route('project_main', ['display_filter'=>'active'])}}">&#10687;&nbsp;Projects</a> </li>
+                        <li> <a href="{{route('job_main', ['display_filter'=>'active'])}}">&#10687;&nbsp;Tasks</a> </li>
+                        <li> <a href="{{route('material_associate')}}">&#10687;&nbsp;Material Dispatch</a> </li>
+                        <li> <a href="{{route('job_dispatch')}}">&#10687;&nbsp;Task Dispatch</a> </li>
                     </ul>
                 </li>
                 <li>
+                    <!--
                     <a href="#adminSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">DB Mgmnt</a>
                     <ul class="collapse list-unstyled" id="adminSubmenu">
-                        <li> <a href="{{route('client_main')}}">Clients</a> </li>
-                        <li> <a href="{{route('provider_main')}}">Providers</a> </li>
+                    -->
+                    <a href="#adminSubmenu" data-toggle="" aria-expanded="false" class="" style="color:lime">DB Mgmnt</a>
+                    <ul class=" list-unstyled" id="adminSubmenu">
+                        <li> <a href="{{route('client_main')}}">&#9055;&nbsp;Clients</a> </li>
+                        <li> <a href="{{route('provider_main')}}">&#9055;&nbsp;Providers</a> </li>
                         @if (Auth::user()->role == 'ADMINISTRATOR')
-                        <li> <a href="{{route('staff_main')}}">Staffs</a> </li>
+                        <li> <a href="{{route('staff_main')}}">&#9055;&nbsp;Staffs</a> </li>
                         @endif
-                        <li> <a href="{{route('material_main', ['display_filter'=>'active'])}}">Materials for Tasks</a> </li>
+                        <li> <a href="{{route('material_main', ['display_filter'=>'active'])}}">&#9055;&nbsp;Materials for Tasks</a> </li>
                         <!--					
                         <li> <a href="#materialsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Materials for Tasks</a> </li>
 							<ul class="collapse list-unstyled mx-4" id="materialsSubmenu">
