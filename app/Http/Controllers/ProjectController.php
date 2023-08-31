@@ -74,7 +74,7 @@ class ProjectController extends Controller
             $project->proj_city                 = $request->proj_city;
             $project->proj_province             = $request->proj_province;
             $project->proj_postcode             = $request->proj_postcode;
-            $project->proj_status               = $request->proj_status;
+            // $project->proj_status               = $request->proj_status;
             $project->proj_notes                = $request->proj_notes;
             $saved = $project->save();
             

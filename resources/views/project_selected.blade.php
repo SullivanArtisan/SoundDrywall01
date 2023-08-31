@@ -126,20 +126,21 @@
                             <div class="col"><label class="col-form-label">Status:&nbsp;</label></div>
                             <div class="col">
                                 <?php
-                                $tagHead = "<input list=\"proj_status\" name=\"proj_status\" id=\"projstatusinput\" onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$project->proj_status."';\" class=\"form-control mt-1 my-text-height\" value=\"".$project->proj_status."\"";
-                                $tagTail = "><datalist id=\"proj_status\">";
+                                // $tagHead = "<input list=\"proj_status\" name=\"proj_status\" id=\"projstatusinput\" onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$project->proj_status."';\" class=\"form-control mt-1 my-text-height\" value=\"".$project->proj_status."\"";
+                                // $tagTail = "><datalist id=\"proj_status\" readonly>";
 
-                                $statuses = Status::all();
-                                foreach($statuses as $status) {
-                                    $tagTail.= "<option value=".str_replace(' ', '&nbsp;', $status->status_name).">";
-                                }
-                                $tagTail.= "</datalist>";
-                                // if (isset($_GET['selJobId'])) {
-                                // 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
-                                // } else {
-                                    echo $tagHead."placeholder=\"\" value=\"\"".$tagTail;
+                                // $statuses = Status::all();
+                                // foreach($statuses as $status) {
+                                //     $tagTail.= "<option value=".str_replace(' ', '&nbsp;', $status->status_name).">";
                                 // }
+                                // $tagTail.= "</datalist>";
+                                // // if (isset($_GET['selJobId'])) {
+                                // // 	echo $tagHead."placeholder=\"".$booking->bk_job_type."\" value=\"".$booking->bk_job_type."\"".$tagTail;
+                                // // } else {
+                                //     echo $tagHead."placeholder=\"\" value=\"\"".$tagTail;
+                                // // }
                                 ?>
+                                <input class="form-control mt-1 my-text-height" type="text" readonly id="proj_status" name="proj_status" value="{{$project->proj_status}}">
                             </div>
                         </div>
                         <div class="row">

@@ -206,18 +206,18 @@
         </div>
 
         <!-- Footage Section -->
-        <div class="row mt-2">
+        <div class="row my-3">
             <p>
             <button class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 Show / Hide Materials
             </button>
             </p>
             <div class="collapse" id="collapseExample">
-                <div class="my-3">
+                <div>
                     <?php
                     // Title Line
                     $outContents = "<div class=\"container mw-100\">";
-                    $outContents .= "<div class=\"row bg-info text-white fw-bold\">";
+                    $outContents .= "<div class=\"row bg-secondary text-white fw-bold\">";
                         $outContents .= "<div class=\"col-2\">";
                             $outContents .= "Material Name";
                         $outContents .= "</div>";
@@ -306,31 +306,36 @@
         </div>
 
         <!-- Messages Section -->
-        <div class="row text-dark" style="background-color:lightsteelblue;">
-            <div class="col mt-2">
-                <form method="post" action="{{url('job_combination_msg_to_admin')}}">
-                    @csrf
-                    <div class="row">
-                        <div class="col m-1">
-                            <div class="row font-weight-bold"><label class="col-form-label">Message From Superintendent:&nbsp;</label></div>
-                            <div class="row">
-                                <textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$association->jobdsp_msg_from_admin}}</textarea>
+        <div class="row text-dark mt-4">
+            <p>
+                <button class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#msgSection" aria-expanded="false" aria-controls="msgSection">
+                    Show / Hide Message Section
+                </button>
+            </p>
+            <div class="collapse mx-2" id="msgSection">
+                    <form method="post" action="{{url('job_combination_msg_to_admin')}}">
+                        @csrf
+                        <div class="row">
+                            <div class="col m-1">
+                                <div class="row font-weight-bold"><label class="col-form-label">Message From Superintendent:&nbsp;</label></div>
+                                <div class="row">
+                                    <textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$association->jobdsp_msg_from_admin}}</textarea>
+                                </div>
+                            </div>
+                            <div class="col m-1">
+                                <div class="row font-weight-bold"><label class="col-form-label">Message To  Superintendent:&nbsp;</label></div>
+                                <div class="row"><textarea class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$association->jobdsp_msg_from_staff}}</textarea></div>
                             </div>
                         </div>
-                        <div class="col m-1">
-                            <div class="row font-weight-bold"><label class="col-form-label">Message To  Superintendent:&nbsp;</label></div>
-                            <div class="row"><textarea class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$association->jobdsp_msg_from_staff}}</textarea></div>
+                        <div class="row mb-2">
+                            <div class="col" style="display: flex; justify-content: center;">
+                                <button class="btn btn-success m-3 rounded" type="submit" onclick="return doSendMsgToAdmin();">Send Message</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col" style="display: flex; justify-content: center;">
-                            <button class="btn btn-success m-3 rounded" type="submit" onclick="return doSendMsgToAdmin();">Send Message</button>
-                        </div>
-                    </div>
-                </form>
+                    </form>
             </div>
         </div>
-        <div class="row mt-2">
+        <div class="row mt-3">
         </div>
             @if (Auth::user()->role == 'INSPECTOR')
             <div class="row text-dark" style="background-color:lightpink;">

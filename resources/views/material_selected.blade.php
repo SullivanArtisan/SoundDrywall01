@@ -19,6 +19,7 @@
 <?php
 	$id = $_GET['id'];
 	$material_status = '';
+	$mtrl_job_id = "";
 	if ($id) {
 		$material = Material::where('id', $id)->first();
 		
@@ -102,13 +103,14 @@
 								$jobs = Job::all()->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->where('job_status', '<>', 'COMPLETED')->sortBy('job_name');
 								
 								// $tagHead = "<input list=\"job_name\" name=\"job_name\" id=\"jobnameinput\" onfocus=\"this.value='';\" class=\"form-control mt-1 my-text-height\" ";
-								$tagHead = "<input list=\"job_name\" name=\"job_name\" id=\"jobnameinput\" readonly class=\"form-control mt-1 my-text-height\" ";
+								$tagHead = "<input list=\"job_name\" name=\"job_name\" id=\"jobnameinput\" ondblclick=\"GoToThatJob()\" readonly class=\"form-control mt-1 my-text-height\" ";
 								$tagTail = "><datalist id=\"job_name\">";
 								foreach($jobs as $job) {
 									$tagTail.= "<option value=".str_replace(' ', '&nbsp;', $job->job_name).">";
 								}
 								$tagTail.= "</datalist>";
 								if ($selJob) {
+									$mtrl_job_id = $selJob->id;
 									echo $tagHead."placeholder=\"\" value=\"".$selJob->job_name."\"".$tagTail;
 								} else {
 									echo $tagHead."placeholder=\"\" value=\"\"".$tagTail;
@@ -221,6 +223,15 @@
 				if(mtrlStatus.includes('COMPLETED')) {
 					alert('You cannot update this material, as the dispatched task has been COMPLETED.');
 					event.preventDefault();
+				}
+			}
+
+			function GoToThatJob() {
+				let jobId = {!!json_encode($mtrl_job_id)!!};
+				let mtrlId = {!!json_encode($id)!!};
+
+				if (jobId != '') {
+					window.location = './job_selected?jobId='+jobId+'&jobFromMtrlId='+mtrlId;
 				}
 			}
 		</script>

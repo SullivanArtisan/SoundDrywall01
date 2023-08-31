@@ -566,6 +566,27 @@ Route::get('/drywall_delete', function () {
 	}
 })->middleware(['auth'])->name('mtrl_associate_with_job');
 
+Route::post('update_material_left_amount', function (Request $request) {
+	$mtrl_id			= $_POST['id'];
+	$mtrl_amount_left 	= $_POST['mtrl_amount_left'];
+	$material 			= Material::where('id', $mtrl_id)->first();
+
+	MyHelper::LogStaffAction(Auth::user()->id, 'To update material '.$mtrl_id.'\'s left amount to '.$mtrl_amount_left.'.', '');
+	if ($material) {
+		$material->mtrl_amount_left = $mtrl_amount_left;
+		$res = $material->save();
+		if (!$res) {
+			Log::Info('Failed to update material '.$mtrl_id.'\'s left amount to '.$mtrl_amount_left.'.', '');
+			return "mtrlUpdateLeftOK=false";	
+		} else {
+			MyHelper::LogStaffActionResult(Auth::user()->id, 'Update material '.$mtrl_id.'\'s left amount to '.$mtrl_amount_left.' OK.', '');
+		}
+	} else {
+		Log::Info('Failed to access the material '.$mtrl_id." while updating it's left amount'!");
+		return "mtrlUpdateLeftOK=false";	
+	}
+})->middleware(['auth'])->name('update_material_left_amount');
+
 //////////////////////////////// For Projects ////////////////////////////////
 Route::get('/project_main', function () {
     return view('project_main');

@@ -5,6 +5,7 @@
 	use App\Models\Staff;
 	use App\Models\Job;
 	use App\Models\JobType;
+	use App\Models\Material;
 	use App\Models\JobDispatch;
 
     $job_id = "";
@@ -129,6 +130,8 @@
 @section('goback')
     @if (isset($_GET['jobIdFromProj']))
 	<a class="text-primary" href="{{route('project_selected', ['id'=>$job->job_proj_id])}}" style="margin-right: 10px;">Back</a>
+    @elseif (isset($_GET['jobFromMtrlId']))
+	<a class="text-primary" href="{{route('material_selected', ['id'=>$_GET['jobFromMtrlId']])}}" style="margin-right: 10px;">Back</a>
     @else
 	<a class="text-primary" href="{{route('job_main', ['display_filter'=>'active'])}}" style="margin-right: 10px;">Back</a>
     @endif
@@ -266,12 +269,12 @@
                                     <div class="row d-flex justify-content-center">
                                         <button class="btn btn-success mx-4" type="submit" id="btn_save">Save</button>
                                         <button class="btn btn-info mx-3 mr-2" type="button" onclick="DoJobCombination();">Edit Task Dispatch</button>
-                                        @if ((Auth::user()->role != 'ADMINISTRATOR') && ($job->job_status != 'COMPLETED') && ($job_lead_id != ""))
-                                        <button class="btn btn-danger mx-3 mr-2" type="button" onclick="CloseThisTask();">Close this Task</button>
-                                        @else
-                                        @endif
+
+
                                         @if (isset($_GET['jobIdFromProj']))
                                         <button class="btn btn-secondary mx-3 ml-2" type="button"><a href="{{route('project_selected', ['id'=>$job->job_proj_id])}}">Cancel</a></button>
+                                        @elseif (isset($_GET['jobFromMtrlId']))
+                                        <button class="btn btn-secondary mx-3 ml-2" type="button"><a href="{{route('material_selected', ['id'=>$_GET['jobFromMtrlId']])}}">Cancel</a></button>
                                         @else
                                         <button class="btn btn-secondary mx-3 ml-2" type="button"><a href="{{route('job_main', ['display_filter'=>'active'])}}">Cancel</a></button>
                                         @endif
@@ -316,49 +319,136 @@
                     </div>
                 </div>
                 @endif
-			<div class="m-4" style="background: var(--bs-btn-bg); background-color:gold;">
-                        @if (Auth::user()->role == 'ADMINISTRATOR')
-                        <h3 class="ml-2">Conversation with the Task Superintendent</h3>
-                        @else
-                        <h3 class="ml-2">Conversation with Administrator</h3>
-                        @endif
-                <div class="row mx-2">
-                    <div class="col">
-                        <form method="post" action="{{url('job_combination_msg_to_staff')}}">
-                            @csrf
-                            <div class="row">
-                                <div class="col ml-1">
-                                    @if (Auth::user()->role == 'ADMINISTRATOR')
-                                    <div class="row"><label class="col-form-label">Message To Superintendent:&nbsp;</label></div>
-                                    <div class="row"><textarea class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$lead_association->jobdsp_msg_from_admin}}</textarea></div>
-                                    @else
-                                    <div class="row"><label class="col-form-label">Message From Administrator:&nbsp;</label></div>
-                                    <div class="row"><textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$lead_association->jobdsp_msg_from_admin}}</textarea></div>
-                                    @endif
-                                </div>
-                                <div class="col ml-1">
-                                    @if (Auth::user()->role == 'ADMINISTRATOR')
-                                    <div class="row"><label class="col-form-label">Message From Superintendent:&nbsp;</label></div>
-                                    <div class="row"><textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$lead_association->jobdsp_msg_from_staff}}</textarea></div>
-                                    @else
-                                    <div class="row"><label class="col-form-label">Message To Administrator:&nbsp;</label></div>
-                                    <div class="row"><textarea class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$lead_association->jobdsp_msg_from_staff}}</textarea></div>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="row my-3">
-                                <div class="w-25"></div>
-                                <div class="col">
-                                    <div class="row d-flex justify-content-start">
-                                        <button class="btn btn-success mx-4" type="submit" onclick="return doSendMsgToReceiver('{{Auth::user()->role}}');">Send</button>
+
+                <!-- The section for the conversation between ADMINISTRATOR and SUPERINTENDENT -->
+                <div class="m-4" style="background: var(--bs-btn-bg); background-color:gold;">
+                            @if (Auth::user()->role == 'ADMINISTRATOR')
+                            <h3 class="ml-2">Conversation with the Task Superintendent</h3>
+                            @else
+                            <h3 class="ml-2">Conversation with Administrator</h3>
+                            @endif
+                    <div class="row mx-2 mt-3">
+                        <div class="col">
+                            <form method="post" action="{{url('job_combination_msg_to_staff')}}">
+                                @csrf
+                                <div class="row">
+                                    <div class="col ml-1">
+                                        @if (Auth::user()->role == 'ADMINISTRATOR')
+                                        <div class="row"><label class="col-form-label">Message To Superintendent:&nbsp;</label></div>
+                                        <div class="row"><textarea class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$lead_association->jobdsp_msg_from_admin}}</textarea></div>
+                                        @else
+                                        <div class="row"><label class="col-form-label">Message From Administrator:&nbsp;</label></div>
+                                        <div class="row"><textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$lead_association->jobdsp_msg_from_admin}}</textarea></div>
+                                        @endif
+                                    </div>
+                                    <div class="col ml-1">
+                                        @if (Auth::user()->role == 'ADMINISTRATOR')
+                                        <div class="row"><label class="col-form-label">Message From Superintendent:&nbsp;</label></div>
+                                        <div class="row"><textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$lead_association->jobdsp_msg_from_staff}}</textarea></div>
+                                        @else
+                                        <div class="row"><label class="col-form-label">Message To Administrator:&nbsp;</label></div>
+                                        <div class="row"><textarea class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$lead_association->jobdsp_msg_from_staff}}</textarea></div>
+                                        @endif
                                     </div>
                                 </div>
-                                <div class="col"></div>
-                            </div>
-                        </form>
+                                <div class="row my-3">
+                                    <div class="w-75"></div>
+                                    <div class="col">
+                                        <div class="row d-flex justify-content-start">
+                                            <button class="btn btn-success mx-4" type="submit" onclick="return doSendMsgToReceiver('{{Auth::user()->role}}');">Send</button>
+                                        </div>
+                                    </div>
+                                    <div class="col"></div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-			</div>
+
+                <!-- The section of changing each material's mtrl_amount_left -->
+                <div class="m-4 bg-info text-white">
+                    <h4 class="ml-2">Materials</h4>
+                    <div class="row mx-2 mt-3 mb-1">
+                        <?php
+                        $materials  = Material::where('mtrl_job_id', $job_id)->where('mtrl_status', '<>', 'DELETED')->where('mtrl_status', '<>', 'CANCELED')->orderBy('mtrl_type')->get();
+                        $outContents = "<div class=\"col-2\">";
+                            $outContents .= "<strong>Material Name</strong>";
+                        $outContents .= "</div>";
+                        $outContents .= "<div class=\"col-1\">";
+                            $outContents .= "<strong>Type</strong>";
+                        $outContents .= "</div>";
+                        $outContents .= "<div class=\"col-2\">";
+                            $outContents .= "<strong>Model</strong>";
+                        $outContents .= "</div>";
+                        $outContents .= "<div class=\"col-2\">";
+                            $outContents .= "<strong>Size</strong>";
+                        $outContents .= "</div>";
+                        $outContents .= "<div class=\"col-2\">";
+                            $outContents .= "<strong>Original Amount</strong>";
+                        $outContents .= "</div>";
+                        $outContents .= "<div class=\"col-2\">";
+                            $outContents .= "<strong>Left Amount</strong>";
+                        $outContents .= "</div>";
+                        $outContents .= "<div class=\"col-1\">";
+                            $outContents .= "<strong></strong>";
+                        $outContents .= "</div>";
+                        echo $outContents;
+                        ?>
+                    </div>
+                    <?php
+                    foreach ($materials as $material) {
+                        $outContents = "<div class=\"row mx-2\">";
+                        $outContents .= "<div class=\"col-2\">";
+                            // $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
+                        $outContents .= $material->mtrl_name;
+                            // $outContents .= "</a>";
+                        $outContents .= "</div>";
+                        $outContents .= "<div class=\"col-1\">";
+                            // $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
+                            $outContents .= $material->mtrl_type;
+                            // $outContents .= "</a>";
+                        $outContents .= "</div>";
+                        $outContents .= "<div class=\"col-2\">";
+                            // $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
+                            $outContents .= $material->mtrl_model;
+                            // $outContents .= "</a>";
+                        $outContents .= "</div>";
+                        $outContents .= "<div class=\"col-2\">";
+                            // $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
+                            $outContents .= $material->mtrl_size;
+                            // $outContents .= "</a>";
+                        $outContents .= "</div>";
+                        $outContents .= "<div class=\"col-2\">";
+                            // $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
+                            $outContents .= $material->mtrl_amount;
+                            // $outContents .= "</a>";
+                        $outContents .= "</div>";
+                        $outContents .= "<div class=\"col-2\">";
+                            // $outContents .= "<a href=\"assistant_material_in_job_selected?id=$material->id\">";
+                            $outContents .= "<input class=\"form-control mt-1 my-text-height\" step=\"0.01\" type=\"number\" id=\"m_left_".$material->id."\" value=\"".$material->mtrl_amount_left."\">";
+                            // $outContents .= "</a>";
+                        $outContents .= "</div>";
+                        $outContents .= "<div class=\"col-1 mt-1\">";
+                            $outContents .= "<button onclick=\"UpdateMtrlLeft(".$material->id.")\">";
+                            $outContents .= "Update";
+                            $outContents .= "</button>";
+                        $outContents .= "</div>";
+                        $outContents .= "</div>";
+                        echo $outContents;;
+                    }
+                    ?>
+                </div>
+
+                <!-- The section for the 'Close this Task' button -->
+                <div class="row my-3">
+                    <div class="col">
+                        <div class="row d-flex justify-content-center">
+                            @if ((Auth::user()->role != 'ADMINISTRATOR') && ($job->job_status != 'COMPLETED') && ($job_lead_id != ""))
+                            <button class="btn btn-danger m-2 p-4 rounded" type="button" onclick="CloseThisTask();">Close this Task</button>
+                            @endif
+                        </div>
+                    </div>
+                </div>
             @endif
 		</div>
 		
@@ -593,6 +683,39 @@
                         }
                     }
                 }
+            }
+
+            function UpdateMtrlLeft(mtrlId) {
+                let mtrlLeftAmount = document.getElementById('m_left_'+mtrlId).value;
+                // if (!confirm('After you update this value, you cannot change it anymore.\r\n\r\nContinue to update?')) {
+                //     //
+                // } else {
+                    $.ajax({
+                        url: '/update_material_left_amount',
+                        type: 'POST',
+                        data: {
+                            _token:"{{ csrf_token() }}", 
+                            id: mtrlId,
+                            mtrl_amount_left: mtrlLeftAmount,
+                        },    // the _token:token is for Laravel
+                        success: function(dataRetFromPHP) {
+                            alert('The material\'s left amount has been updated successfully.');
+                            if (fromProject == 'true') {
+                                window.location = './job_selected?jobIdFromProj='+jobId;
+                            } else {
+                                window.location = './job_selected?jobId='+jobId;
+                            }
+                        },
+                        error: function(err) {
+                            alert('Oops, failed to close this task.');
+                            if (fromProject == 'true') {
+                                window.location = './job_selected?jobIdFromProj='+jobId;
+                            } else {
+                                window.location = './job_selected?jobId='+jobId;
+                            }
+                        }
+                    });
+                // }
             }
 		</script>
 	@endsection
