@@ -268,7 +268,7 @@
                                 <div class="col">
                                     <div class="row d-flex justify-content-center">
                                         <button class="btn btn-success mx-4" type="submit" id="btn_save">Save</button>
-                                        <button class="btn btn-info mx-3 mr-2" type="button" onclick="DoJobCombination();">Edit Task Dispatch</button>
+                                        <button class="btn btn-info mx-3 mr-2" type="button" onclick="DoJobCombination();">Edit Task Dispatchment</button>
 
 
                                         @if (isset($_GET['jobIdFromProj']))
@@ -652,7 +652,7 @@
                     }
 
                     if (continueIt == true) {
-                        if (!confirm('After you close this task, you cannot change it anymore.\r\nContinue to close it?')) {
+                        if (!confirm('\r\nMAKE SURE ALL THE \'Left Amount\' VALUES ARE ENTERED CORRECTLY BEFORE YOU CLOSE THIS TASK!\r\n\r\nAfter you close this task, you cannot change it anymore.\r\nContinue to close it?')) {
                             //
                         } else {
                             $.ajax({

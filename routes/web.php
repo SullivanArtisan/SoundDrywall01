@@ -185,6 +185,38 @@ Route::post('job_close_by_lead', function (Request $request) {
 									return "jobCompleteOK=false";	
 								} else {
 									MyHelper::LogStaffActionResult($staff_id, 'Changed mtrl_status for task '.$job_id.' to COMPLETED OK.', '');
+
+									if ($material->mtrl_amount_left > 0) {
+										$new_mtrl = new Material;
+										if (!$new_mtrl) {
+											MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to create a new LEFT material object for material '.$material->id.'.', '900');
+										} else {
+											// Create a new material for the remainding
+											MyHelper::LogStaffAction(Auth::user()->id, 'Added a LEFT material for material '.$material->id.'.', '');
+											$new_mtrl->mtrl_job_id      = 0;
+											$new_mtrl->mtrl_name        = $material->mtrl_name.'_leftof_'.$job->job_name;
+											$new_mtrl->mtrl_model       = $material->mtrl_model;
+											$new_mtrl->mtrl_status      = "CREATED";
+											$new_mtrl->mtrl_type        = $material->mtrl_type;
+											$new_mtrl->mtrl_size        = $material->mtrl_size;
+											$new_mtrl->mtrl_size_unit   = $material->mtrl_size_unit;
+											$new_mtrl->mtrl_source      = "WAREHOUSE";
+											//$new_mtrl->mtrl_shipped_by  = $material->mtrl_shipped_by;
+											$new_mtrl->mtrl_amount      = $material->mtrl_amount_left;
+											$new_mtrl->mtrl_amount_unit = $material->mtrl_amount_unit;
+											//$new_mtrl->mtrl_amount_left = $material->mtrl_amount;
+											$new_mtrl->mtrl_unit_price  = $material->mtrl_unit_price;
+											if ($material->mtrl_amount > 0) {
+												$new_mtrl->mtrl_total_price = $material->mtrl_total_price * $material->mtrl_amount_left / $material->mtrl_amount;
+											}
+											$saved = $new_mtrl->save();
+											if (!$saved) {
+												MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to add the new LEFT for material '.$material->id.'.', '900');
+											} else {
+												MyHelper::LogStaffActionResult(Auth::user()->id, 'Added the new LEFT for material '.$material->id.' OK.', '');
+											}
+										}
+									}
 								}		
 							}
 							return "jobCompleteOK=true";
@@ -230,10 +262,10 @@ Route::post('job_assistants_complete', function (Request $request) {
 		$association->jobdsp_status = 'COMPLETED';
 		$res = $association->save();
 		if (!$res) {
-			Log::Info('Staff '.$staff_id.' failed to complete the task '.$job_id."!");
+			Log::Info('Staff '.$staff_id.' failed to inspect the task '.$job_id."!");
 			return "jobCompleteOK=false";	
 		} else {
-			MyHelper::LogStaffActionResult(Auth::user()->id, 'Completed task '.$job_id.' OK.', '');
+			MyHelper::LogStaffActionResult(Auth::user()->id, 'Inspected task '.$job_id.' OK.', '');
 			Log::Info('Staff '.$staff_id.' completed the task '.$job_id." successfully.");
 
 			// Change all didpatched materials' statuses to 'COMPLETED', if this JobDispatch entry is completed by the superintendent
@@ -248,15 +280,15 @@ Route::post('job_assistants_complete', function (Request $request) {
 						MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to change the status to COMPLETED for material '.$material->id.'.', '900');
 					}
 
-					$new_mtrl = new Material;
-					if (!$new_mtrl) {
-						MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to create a new REMAINDER material object for material '.$material->id.'.', '900');
-					} else {
-						if ($material->mtrl_amount_left > 0) {
-							// Create a new material for the remainder
-							MyHelper::LogStaffAction(Auth::user()->id, 'Added a REMAINDER material for material '.$material->id.'.', '');
+					if ($material->mtrl_amount_left > 0) {
+						$new_mtrl = new Material;
+						if (!$new_mtrl) {
+							MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to create a new LEFT material object for material '.$material->id.'.', '900');
+						} else {
+							// Create a new material for the remainding
+							MyHelper::LogStaffAction(Auth::user()->id, 'Added a LEFT material for material '.$material->id.'.', '');
 							$new_mtrl->mtrl_job_id      = 0;
-							$new_mtrl->mtrl_name        = $material->mtrl_name.'_remainder_'.$job->job_name;
+							$new_mtrl->mtrl_name        = $material->mtrl_name.'_leftof_'.$job->job_name;
 							$new_mtrl->mtrl_model       = $material->mtrl_model;
 							$new_mtrl->mtrl_status      = "CREATED";
 							$new_mtrl->mtrl_type        = $material->mtrl_type;
@@ -273,9 +305,9 @@ Route::post('job_assistants_complete', function (Request $request) {
 							}
 							$saved = $new_mtrl->save();
 							if (!$saved) {
-								MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to add the new REMAINDER for material '.$material->id.'.', '900');
+								MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to add the new LEFT for material '.$material->id.'.', '900');
 							} else {
-								MyHelper::LogStaffActionResult(Auth::user()->id, 'Added the new REMAINDER for material '.$material->id.' OK.', '');
+								MyHelper::LogStaffActionResult(Auth::user()->id, 'Added the new LEFT for material '.$material->id.' OK.', '');
 							}
 						}
 					}
