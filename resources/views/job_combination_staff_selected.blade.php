@@ -4,7 +4,14 @@
 	use App\Models\Job;
 	use App\Models\Staff;
 
-    $job_id = $_GET['jobId'];
+    if (isset($_GET['jobId'])) {
+        $job_id = $_GET['jobId'];
+        $from_project = 'false';
+    } else if (isset($_GET['jobIdFromProj'])) {
+        $job_id = $_GET['jobIdFromProj'];
+        $from_project = 'true';
+    }
+
     $staff_id = $_GET['staffId'];
     $msg_to_show = "";
     $association_workinghours_total = 0;
@@ -34,7 +41,11 @@
 </style>
 
 @section('goback')
+    @if ($from_project == 'true')
+	<a class="text-primary" href="{{route('job_combination_main', ['jobIdFromProj'=>$job_id])}}" style="margin-right: 10px;">Back</a>
+    @else
 	<a class="text-primary" href="{{route('job_combination_main', ['jobId'=>$job_id])}}" style="margin-right: 10px;">Back</a>
+    @endif
 @show
 
 @if (!$job_id) {
@@ -115,7 +126,11 @@
                                 <div class="col">
                                     <div class="row">
                                         <button class="btn btn-success mx-4" type="submit" onclick="return doSendMsgToStaff();">Send</button>
+                                        @if ($from_project == 'true')
+                                        <button class="btn btn-secondary mx-3" type="button"><a href="{{route('job_combination_main', ['jobIdFromProj'=>$job_id])}}">Cancel</a></button>
+                                        @else
                                         <button class="btn btn-secondary mx-3" type="button"><a href="{{route('job_combination_main', ['jobId'=>$job_id])}}">Cancel</a></button>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col"></div>
@@ -168,6 +183,8 @@
                     event.preventDefault();
                     var jobId = {!!json_encode($job_id)!!};
                     var staffId = {!!json_encode($staff_id)!!};
+                    var fromProject = {!!json_encode($from_project)!!};
+                    
                     $.ajax({
                         url: '/job_combination_msg_to_staff',
                         type: 'POST',
@@ -178,10 +195,20 @@
                             msg:msg
                         },    // the _token:token is for Laravel
                         success: function(dataRetFromPHP) {
-                            window.location = './job_combination_staff_selected?jobId='+jobId+'&staffId='+staffId+'&msgToStaffOK=true';
+                            if (fromProject == 'true') {
+                                url   = './job_combination_staff_selected?jobIdFromProj='+jobId+'&staffId='+staffId+'&msgToStaffOK=true';
+                            } else {
+                                url   = './job_combination_staff_selected?jobId='+jobId+'&staffId='+staffId+'&msgToStaffOK=true';
+                            }
+                            window.location = url;
                         },
                         error: function(err) {
-                            window.location = './job_combination_staff_selected?jobId='+jobId+'&staffId='+staffId+'&msgToStaffOK=false';
+                            if (fromProject == 'true') {
+                                url   = './job_combination_staff_selected?jobIdFromProj='+jobId+'&staffId='+staffId+'&msgToStaffOK=false';
+                            } else {
+                                url   = './job_combination_staff_selected?jobId='+jobId+'&staffId='+staffId+'&msgToStaffOK=false';
+                            }
+                            window.location = url;
                         }
                     });
                 }
@@ -197,6 +224,8 @@
                     } else {
                         var jobId = {!!json_encode($job_id)!!};
                         var staffId = {!!json_encode($staff_id)!!};
+                        var fromProject = {!!json_encode($from_project)!!};
+
                         $.ajax({
                             url: '/job_combination_staff_remove',
                             type: 'POST',
@@ -206,10 +235,20 @@
                                 staff_id:staffId
                             },    // the _token:token is for Laravel
                             success: function(dataRetFromPHP) {
-                                window.location = './job_combination_main?jobId='+jobId+'&staffId='+staffId+'&staffRemoveOK=true';
+                                if (fromProject == 'true') {
+                                    url   = './job_combination_main?jobId='+jobIdFromProj+'&staffId='+staffId+'&staffRemoveOK=true';
+                                } else {
+                                    url   = './job_combination_main?jobId='+jobId+'&staffId='+staffId+'&staffRemoveOK=true';
+                                }
+                                window.location = url;
                             },
                             error: function(err) {
-                                window.location = './job_combination_staff_selected?jobId='+jobId+'&staffId='+staffId+'&staffRemoveOK=false';
+                                if (fromProject == 'true') {
+                                    url   = './job_combination_staff_selected?jobIdFromProj='+jobId+'&staffId='+staffId+'&staffRemoveOK=false';
+                                } else {
+                                    url   = './job_combination_staff_selected?jobId='+jobId+'&staffId='+staffId+'&staffRemoveOK=false';
+                                }
+                                window.location = url;
                             }
                         });
                     }
@@ -224,6 +263,8 @@
                     } else {
                         var jobId = {!!json_encode($job_id)!!};
                         var staffId = {!!json_encode($staff_id)!!};
+                        var fromProject = {!!json_encode($from_project)!!};
+
                         $.ajax({
                             url: '/job_combination_staff_reassociate',
                             type: 'POST',
@@ -234,10 +275,20 @@
                                 new_staff:newStaff
                             },    // the _token:token is for Laravel
                             success: function(dataRetFromPHP) {
-                                window.location = './job_combination_main?jobId='+jobId;
+                                if (fromProject == 'true') {
+                                    url   = './job_combination_main?jobIdFromProj='+jobId;
+                                } else {
+                                    url   = './job_combination_main?jobId='+jobId;
+                                }
+                                window.location = url;
                             },
                             error: function(err) {
-                                window.location = './job_combination_staff_selected?jobId='+jobId;
+                                if (fromProject == 'true') {
+                                    url   = './job_combination_staff_selected?jobIdFromProj='+jobId;
+                                } else {
+                                    url   = './job_combination_staff_selected?jobId='+jobId;
+                                }
+                                window.location = url;
                             }
                         });
                     }

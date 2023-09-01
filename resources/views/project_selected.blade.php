@@ -22,10 +22,26 @@
     $job_add_ok = "";
     $job_update_ok = "";
     $job_delete_ok = "";
+    $project_completed = 'true';
+    $jobs_not_received_num = 0;
+    $jobs_active_num = 0;
 	if ($id) {
 		$project = Project::where('id', $id)->first();
         $client = Client::where('id', $project->proj_cstmr_id)->first();
         $jobs = Job::where('job_proj_id', $id)->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED')->orderBy('created_at')->get();
+
+        // Determine how many CREATED or DISPATCHED jobs belong to this project
+        foreach($jobs as $one_job) {
+            if ($one_job->job_status == 'CREATED' || $one_job->job_status == 'DISPATCHED') {
+                $jobs_not_received_num++;
+            }
+        }
+        $jobs_active_num = $project->proj_total_active_jobs;
+
+        if ($project->proj_status == 'CREATED') {
+            $project_completed = 'false';
+        }
+
         $client_name = $client->clnt_name;
         if (isset($_GET['JobAddOk'])) {
             $job_add_ok = $_GET['JobAddOk'];
@@ -354,8 +370,23 @@
             }
 
 			function myConfirmation() {
-				if(!confirm("Continue to delete this project?"))
-				    event.preventDefault();
+                let projectCompleted = {!!json_encode($project_completed)!!};
+                let jobsNotReceivedNum = {!!json_encode($jobs_not_received_num)!!};
+                let jobsActiveNum = {!!json_encode($jobs_active_num)!!};
+
+                if ('false' == projectCompleted) {
+                    if (jobsNotReceivedNum == jobsActiveNum) {
+                        if(!confirm("Continue to delete this project?")) {
+                            event.preventDefault();
+                        }
+                    } else {
+                        alert('\r\nThis project has been dispatched, so you CANNOT delete it.')
+                        event.preventDefault();
+                    }
+                } else {
+                    alert('\r\nThis project is completed, so you CANNOT delete it.')
+                    event.preventDefault();
+                }
 			}
 		</script>
 	@endsection

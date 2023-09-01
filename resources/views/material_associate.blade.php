@@ -7,7 +7,13 @@
     if (isset($_GET['jobId'])) {
         $job_id = $_GET['jobId'];
         $job = Job::where('id', $job_id)->first();
+        $from_project = 'false';
+    } else if (isset($_GET['jobIdFromProj'])) {
+        $job_id = $_GET['jobIdFromProj'];
+        $job = Job::where('id', $job_id)->first();
+        $from_project = 'true';
     } else {
+        $from_project = '';
         Log::Info('Failed get the input jobId parameter while doing job_dispatch_by_adding');
     }
     $materials = Material::where('mtrl_status', '<>', 'DELETED')->where('mtrl_job_id', '0')->orderBy('mtrl_name', 'asc')->get();
@@ -20,10 +26,12 @@
 </style>
 
 @section('goback')
-    @if ($job_id == "")
-	    <a class="text-primary" href="{{route('home_page')}}" style="margin-right: 10px;">Back</a>
-    @else
+    @if ($from_project == 'false')
         <a class="text-primary" href="{{route('job_combination_main', ['jobId'=>$job_id])}}" style="margin-right: 10px;">Back</a>
+    @elseif ($from_project == 'true')
+        <a class="text-primary" href="{{route('job_combination_main', ['jobIdFromProj'=>$job_id])}}" style="margin-right: 10px;">Back</a>
+    @else
+        <a class="text-primary" href="{{route('home_page')}}" style="margin-right: 10px;">Back</a>
     @endif
 @show
 
@@ -205,10 +213,14 @@
                     success: function(dataRetFromPHP) {
                         alert('Material dispatched successfully.')
                         parmJobId = {!!json_encode($job_id)!!};
-                        if (parmJobId == "") {
-                            window.location = './material_associate';
-                        } else {
+                        from_project = {!!json_encode($from_project)!!};
+
+                        if (parmJobId == "false") {
                             window.location = './material_associate?jobId='+jobId;
+                        } else if (parmJobId == "true") {
+                            window.location = './material_associate?jobIdFromProj='+jobId;
+                        } else {
+                            window.location = './material_associate';
                         }
                     },
                     error: function(err) {

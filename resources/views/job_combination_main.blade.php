@@ -6,8 +6,10 @@
 
     if (isset($_GET['jobId'])) {
         $job_id = $_GET['jobId'];
+        $from_project = 'false';
     } else if (isset($_GET['jobIdFromProj'])) {
         $job_id = $_GET['jobIdFromProj'];
+        $from_project = 'true';
     }
 
 	if ($job_id) {
@@ -148,7 +150,11 @@
                                                 $outContents .= "<span style=\"text-decoration: line-through;color: blue;\">";
                                                 $outContents .= $staff_origin->f_name." ".$staff_origin->l_name."</span></div>";
                                             } else {
-                                                $outContents .= "<a href=\"job_combination_staff_selected?jobId=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
+                                                if ($from_project == 'true') {
+                                                    $outContents .= "<a href=\"job_combination_staff_selected?jobIdFromProj=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
+                                                } else{
+                                                    $outContents .= "<a href=\"job_combination_staff_selected?jobId=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
+                                                }    
                                                 $outContents .= $staff_origin->f_name." ".$staff_origin->l_name."</a></div>";
                                             }
                                             $outContents .= "<div class=\"col mt-1\">";
@@ -156,7 +162,11 @@
                                                 $outContents .= "<span style=\"text-decoration: line-through;color: blue;\">";
                                                 $outContents .= $staff_origin->role."</span></div>";
                                             } else {
-                                                $outContents .= "<a href=\"job_combination_staff_selected?jobId=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
+                                                if ($from_project == 'true') {
+                                                    $outContents .= "<a href=\"job_combination_staff_selected?jobIdFromProj=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
+                                                } else{
+                                                    $outContents .= "<a href=\"job_combination_staff_selected?jobId=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
+                                                }    
                                                 $outContents .= $staff_origin->role."</a></div>";
                                             }
                                             $outContents .= "<div class=\"col mt-1\">";
@@ -164,7 +174,11 @@
                                                 $outContents .= "<span style=\"text-decoration: line-through;color: blue;\">";
                                                 $outContents .= $association->jobdsp_workinghours_total."</span></div>";
                                             } else {
-                                                $outContents .= "<a href=\"job_combination_staff_selected?jobId=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
+                                                if ($from_project == 'true') {
+                                                    $outContents .= "<a href=\"job_combination_staff_selected?jobIdFromProj=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
+                                                } else{
+                                                    $outContents .= "<a href=\"job_combination_staff_selected?jobId=".$association->jobdsp_job_id."&staffId=".$association->jobdsp_staff_id."\">";
+                                                }    
                                                 $outContents .= $association->jobdsp_workinghours_total."</a></div>";
                                             }
                                             $outContents .= "</div>";
@@ -192,9 +206,16 @@
                 if (jobStatus.includes("COMPLETED")) {
                     alert('You cannot add any new material, as the job has been COMPLETED.');
                 } else {
-                    jobId = {!!json_encode($job_id)!!};
+                    var jobId = {!!json_encode($job_id)!!};
+                    var fromProject = {!!json_encode($from_project)!!};
+
                     event.preventDefault();
-                    window.location = './material_associate?jobId='+jobId;
+                    if (fromProject == 'true') {
+                        url   = './material_associate?jobIdFromProj='+jobId;
+                    } else {
+                        url   = './material_associate?jobId='+jobId;
+                    }
+                    window.location = url;
                 }
 			}
 
@@ -202,9 +223,16 @@
                 if (jobStatus.includes("COMPLETED")) {
                     alert('You cannot add any new assistant, as the task has been COMPLETED.');
                 } else {
-                    jobId = {!!json_encode($job_id)!!};
+                    jobId           = {!!json_encode($job_id)!!};
+                    fromProject     = {!!json_encode($from_project)!!};
+
                     event.preventDefault();
-                    window.location = './job_dispatch_by_adding?jobId='+jobId;
+                    if (fromProject == 'true') {
+                        url   = './job_dispatch_by_adding?jobIdFromProj='+jobId;
+                    } else {
+                        url   = './job_dispatch_by_adding?jobId='+jobId;
+                    }
+                    window.location = url;
                 }
 			}
 
@@ -216,7 +244,9 @@
                     if(!confirm("Continue to remove this material from this task?")) {
                         event.preventDefault();
                     } else {
-                        var jobId = {!!json_encode($job_id)!!};
+                        var jobId   = {!!json_encode($job_id)!!};
+                        var fromProject = {!!json_encode($from_project)!!};
+
                         $.ajax({
                             url: '/job_combination_material_remove',
                             type: 'POST',
@@ -226,10 +256,20 @@
                                 material_id:mtrlId
                             },    // the _token:token is for Laravel
                             success: function(dataRetFromPHP) {
-                                window.location = './job_combination_main?jobId='+jobId;
+                                if (fromProject == 'true') {
+                                    url   = './job_combination_main?jobIdFromProj='+jobId;
+                                } else {
+                                    url   = './job_combination_main?jobId='+jobId;
+                                }
+                                window.location = url;
                             },
                             error: function(err) {
-                                window.location = './job_combination_main?jobId='+jobId;
+                                if (fromProject == 'true') {
+                                    url   = './job_combination_main?jobIdFromProj='+jobId;
+                                } else {
+                                    url   = './job_combination_main?jobId='+jobId;
+                                }
+                                window.location = url;
                             }
                         });
                     }

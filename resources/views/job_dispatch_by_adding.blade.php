@@ -11,6 +11,11 @@
     if (isset($_GET['jobId'])) {
         $job_id = $_GET['jobId'];
         $job = Job::where('id', $job_id)->first();
+        $from_project = 'false';
+    } else if (isset($_GET['jobIdFromProj'])) {
+        $job_id = $_GET['jobIdFromProj'];
+        $job = Job::where('id', $job_id)->first();
+        $from_project = 'true';
     } else {
         Log::Info('Failed get the input jobId parameter while doing job_dispatch_by_adding');
     }
@@ -43,7 +48,11 @@
 </style>
 
 @section('goback')
+    @if ($from_project == 'true')
+	<a class="text-primary" href="{{route('job_combination_main', ['jobIdFromProj' => $job_id])}}" style="margin-right: 10px;">Back</a>
+    @else
 	<a class="text-primary" href="{{route('job_combination_main', ['jobId' => $job_id])}}" style="margin-right: 10px;">Back</a>
+    @endif
 @show
 
 @section('function_page')
@@ -186,6 +195,8 @@
             if (jobId == "" || staffId == "") {
                 alert('Please select Task and Assistant first befor you do the dispatch!')
             } else {
+                var fromProject = {!!json_encode($from_project)!!};
+
                 $.ajax({
                     url: '/job_dispatch_to_staff',
                     type: 'POST',
@@ -195,8 +206,13 @@
                         staff_id:staffId,
                     },    // the _token:token is for Laravel
                     success: function(dataRetFromPHP) {
-                        alert('Task dispatched successfully.')
-                        window.location = './job_combination_main?jobId='+inputId;
+                        alert('Task dispatched successfully!')
+                        if (fromProject == 'true') {
+                            url   = './job_combination_main?jobIdFromProj='+inputId;
+                        } else {
+                            url   = './job_combination_main?jobId='+inputId;
+                        }
+                        window.location = url;
                     },
                     error: function(err) {
                         alert('Failed to dispatch the Task.\r\nPlease try again!')
