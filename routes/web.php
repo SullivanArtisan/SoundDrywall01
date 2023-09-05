@@ -885,5 +885,128 @@ Route::name('op_result.')->group(function () {
 });
 
 //////// For Misc
+Route::post('check_new_messages', function (Request $request) {	// Check if there's any new messages. Flash the 'Check New Message(s)' button if any!
+	$for_whom 	= "";
+	$staff_id 	= "";
+
+	if (isset($_POST['for_whom'])) {
+		$for_whom = $_POST['for_whom'];
+	}
+	if (isset($_POST['staff_id'])) {
+		$staff_id = $_POST['staff_id'];
+	}
+
+	$association_found = false;
+	if ($for_whom == 'ADMINISTRATOR') {
+		$associations = JobDispatch::where('jobdsp_status', '<>', 'COMPLETED')->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->get();
+		foreach($associations as $association) {
+			// Find out all associations whose jobdsp_staff_id's role is SUPERINTENDENT
+			$staff = Staff::where('id', $association->jobdsp_staff_id)->where('status', '<>', 'DELETED')->first();
+
+			if (!$staff) {
+				Log::Info(Auth::user()->id.' failed to access the Staff object from jobdsp_staff_id '.$association->jobdsp_staff_id.' in function check_new_messages() for ADMINISTRATOR.');
+			} else {
+				if ($staff->role != 'SUPERINTENDENT') {
+					continue;
+				} else {
+					if ($association->jobdsp_msg_from_staff_old != $association->jobdsp_msg_from_staff) {
+						$result = $association->id;
+						$association_found = true;
+						break;
+					} else {
+					}
+				}
+			}
+		}
+
+		if ($association_found) {
+			return $result;
+		} else {
+		}
+	} else if ($for_whom == 'SUPERINTENDENT') {
+		$associations = JobDispatch::where('jobdsp_staff_id', Auth::user()->id)->where('jobdsp_status', '<>', 'COMPLETED')->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->get();
+		foreach($associations as $association) {
+			// Find out all associations whose jobdsp_staff_id's role is the SUPERINTENDENT himself/herself
+			$staff = Staff::where('id', $association->jobdsp_staff_id)->where('status', '<>', 'DELETED')->first();
+
+			if (!$staff) {
+				Log::Info(Auth::user()->id.' failed to access the Staff object from jobdsp_staff_id '.$association->jobdsp_staff_id.' in function check_new_messages() for SUPERINTENDENT.');
+			} else {
+				if ($staff->role == 'SUPERINTENDENT') {
+					if ($association->jobdsp_msg_from_admin_old != $association->jobdsp_msg_from_admin) {
+						$result = $association->id;
+						$association_found = true;
+						break;
+					} else {
+						$association_found2 = false;
+						$associations_2 = JobDispatch::where('jobdsp_job_id', $association->jobdsp_job_id)->where('jobdsp_staff_id', '<>', Auth::user()->id)->where('jobdsp_status', '<>', 'COMPLETED')->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->get();
+						foreach($associations_2 as $association_2) {
+							// Find out all associations whose jobdsp_staff_id's role is ASSISTANT or INSPECTOR but the same job as the SUPERINTENDENT
+							$staff = Staff::where('id', $association_2->jobdsp_staff_id)->where('status', '<>', 'DELETED')->first();
+				
+							if (!$staff) {
+								Log::Info(Auth::user()->id.' failed to access the Staff object from jobdsp_staff_id '.$association_2->jobdsp_staff_id.' in function check_new_messages() for othe staffs.');
+							} else {
+								if ($staff->role == 'ASSISTANT' || $staff->role == 'INSPECTOR') {
+									if ($association_2->jobdsp_msg_from_staff_old != $association_2->jobdsp_msg_from_staff) {
+										$result = $association_2->id;
+										$association_found2 = true;
+										break;
+									}
+								} else {
+								}
+							}
+						}
+				
+						if ($association_found2) {
+							return $result;
+						} else {
+						}
+					}
+				} else {
+					// This seems won't happen
+				}
+			}
+		}
+
+		if ($association_found) {
+			return $result;
+		} else {
+		}
+	}
+
+	return ('');
+})->middleware(['auth'])->name('check_new_messages');
+
+Route::get('to_process_new_msg', function (Request $request) {
+	$jobdsp_id = "";
+	if (isset($_GET['jobdsp_id'])) {
+		$jobdsp_id = $_GET['jobdsp_id'];
+	}
+
+	if (!$jobdsp_id) {
+		Log::Info(Auth::user()->id.' failed to get the jobdsp_id parameter in function to_process_new_msg().');
+	} else {
+		$association = JobDispatch::where('id', $jobdsp_id)->where('jobdsp_status', '<>', 'COMPLETED')->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'CANCELED')->first();
+
+		if (!$association) {
+			Log::Info(Auth::user()->id.' failed to access the JobDispatch object from jobdsp_id '.$jobdsp_id.' in function check_new_messages().');
+		} else {
+			$staff = Staff::where('id', $association->jobdsp_staff_id)->where('status', '<>', 'DELETED')->first();
+
+			if (!$staff) {
+				Log::Info(Auth::user()->id.' failed to access the Staff object from jobdsp_staff_id '.$association->jobdsp_staff_id.' in function to_process_new_msg().');
+			} else {
+				if ($staff->role == 'ADMINISTRATOR' || $staff->role == 'SUPERINTENDENT') {
+					return redirect()->route('job_selected', ['jobIdFromProj'=>$association->jobdsp_job_id]);
+				} else {
+					return redirect()->route('job_combination_staff_selected', ['jobId'=>$association->jobdsp_job_id, 'staffId'=>$staff->id]);
+				}
+			}
+		}
+	}
+	return redirect()->back();				
+})->middleware(['auth'])->name('to_process_new_msg');
+
 
 require __DIR__.'/auth.php';

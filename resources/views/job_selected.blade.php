@@ -321,12 +321,14 @@
                 @endif
 
                 <!-- The section for the conversation between ADMINISTRATOR and SUPERINTENDENT -->
+                @if (($lead_association->jobdsp_status != 'COMPLETED') && ($lead_association->jobdsp_status != 'DELETED'))
                 <div class="m-4" style="background: var(--bs-btn-bg); background-color:gold;">
-                            @if (Auth::user()->role == 'ADMINISTRATOR')
-                            <h3 class="ml-2">Conversation with the Task Superintendent</h3>
-                            @else
-                            <h3 class="ml-2">Conversation with Administrator</h3>
-                            @endif
+                    @if (Auth::user()->role == 'ADMINISTRATOR')
+                    <h3 class="ml-2">Conversation with the Task Superintendent</h3>
+                    @else
+                    <h3 class="ml-2">Conversation with Administrator</h3>
+                    @endif
+
                     <div class="row mx-2 mt-3">
                         <div class="col">
                             <form method="post" action="{{url('job_combination_msg_to_staff')}}">
@@ -335,19 +337,35 @@
                                     <div class="col ml-1">
                                         @if (Auth::user()->role == 'ADMINISTRATOR')
                                         <div class="row"><label class="col-form-label">Message To Superintendent:&nbsp;</label></div>
-                                        <div class="row"><textarea class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$lead_association->jobdsp_msg_from_admin}}</textarea></div>
+                                        <div class="row">
+                                            <textarea class="form-control mt-1" style="height: 150px; !important" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$lead_association->jobdsp_msg_from_admin}}</textarea>
+                                        </div>
                                         @else
                                         <div class="row"><label class="col-form-label">Message From Administrator:&nbsp;</label></div>
-                                        <div class="row"><textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$lead_association->jobdsp_msg_from_admin}}</textarea></div>
+                                        <div class="row">
+                                            <textarea readonly class="form-control mt-1" style="background-color:silver; height: 150px; !important" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$lead_association->jobdsp_msg_from_admin}}</textarea>
+                                            <?php 
+                                                $lead_association->jobdsp_msg_from_admin_old = $lead_association->jobdsp_msg_from_admin; 
+                                                $lead_association->save();
+                                            ?>
+                                        </div>
                                         @endif
                                     </div>
                                     <div class="col ml-1">
                                         @if (Auth::user()->role == 'ADMINISTRATOR')
                                         <div class="row"><label class="col-form-label">Message From Superintendent:&nbsp;</label></div>
-                                        <div class="row"><textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$lead_association->jobdsp_msg_from_staff}}</textarea></div>
+                                        <div class="row">
+                                            <textarea readonly class="form-control mt-1" style="background-color:silver; height: 150px; !important" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$lead_association->jobdsp_msg_from_staff}}</textarea>
+                                            <?php 
+                                                $lead_association->jobdsp_msg_from_staff_old = $lead_association->jobdsp_msg_from_staff; 
+                                                $lead_association->save();
+                                            ?>                        
+                                        </div>
                                         @else
                                         <div class="row"><label class="col-form-label">Message To Administrator:&nbsp;</label></div>
-                                        <div class="row"><textarea class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$lead_association->jobdsp_msg_from_staff}}</textarea></div>
+                                        <div class="row">
+                                            <textarea class="form-control mt-1" style="height: 150px; !important" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$lead_association->jobdsp_msg_from_staff}}</textarea>
+                                        </div>
                                         @endif
                                     </div>
                                 </div>
@@ -364,13 +382,17 @@
                         </div>
                     </div>
                 </div>
+                @endif
 
                 <!-- The section of changing each material's mtrl_amount_left -->
+                <?php
+                $materials  = Material::where('mtrl_job_id', $job_id)->where('mtrl_status', '<>', 'DELETED')->where('mtrl_status', '<>', 'CANCELED')->orderBy('mtrl_type')->get();
+                ?>
+                @if (count($materials) > 0)
                 <div class="m-4 bg-info text-white">
                     <h4 class="ml-2">Materials</h4>
                     <div class="row mx-2 mt-3 mb-1">
                         <?php
-                        $materials  = Material::where('mtrl_job_id', $job_id)->where('mtrl_status', '<>', 'DELETED')->where('mtrl_status', '<>', 'CANCELED')->orderBy('mtrl_type')->get();
                         $outContents = "<div class=\"col-2\">";
                             $outContents .= "<strong>Material Name</strong>";
                         $outContents .= "</div>";
@@ -429,7 +451,7 @@
                             // $outContents .= "</a>";
                         $outContents .= "</div>";
                         $outContents .= "<div class=\"col-1 mt-1\">";
-                            $outContents .= "<button onclick=\"UpdateMtrlLeft(".$material->id.")\">";
+                            $outContents .= "<button onclick=\"UpdateMtrlLeft(".$material->id.")\" class=\"rounded\">";
                             $outContents .= "Update";
                             $outContents .= "</button>";
                         $outContents .= "</div>";
@@ -438,6 +460,7 @@
                     }
                     ?>
                 </div>
+                @endif
 
                 <!-- The section for the 'Close this Task' button -->
                 <div class="row my-3">
@@ -488,6 +511,7 @@
             setTimeout(ReloadJobMsg, 7500);
 
             function ReloadJobMsg() {
+                // alert('HHOHO')
                 if (thisUserRole == 'ADMINISTRATOR') {
                     toThisUrl = '/reload_page_for_job_msg_from_staff';
                 } else {

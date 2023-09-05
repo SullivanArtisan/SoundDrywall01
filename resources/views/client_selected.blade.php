@@ -124,13 +124,13 @@
 			</div>
 		</div>
 		<script>
-			var opsCodeInput = document.getElementById('opsCodeInput'); 			// give an id to your input and set it as variable
+			// var opsCodeInput = document.getElementById('opsCodeInput'); 			// give an id to your input and set it as variable
 			//opsCodeInput.value ='Local'; 											// set default value instead of html attribute
-			opsCodeInput.onfocus = function() { opsCodeInput.value ='';} 			// on focus - clear input
+			// opsCodeInput.onfocus = function() { opsCodeInput.value ='';} 			// on focus - clear input
 			//opsCodeInput.onblur = function() { opsCodeInput.value ='Local';} 		// on leave restore it.
-			var secLevelInput = document.getElementById('secLevelInput'); 			// give an id to your input and set it as variable
+			// var secLevelInput = document.getElementById('secLevelInput'); 			// give an id to your input and set it as variable
 			//secLevelInput.value ='Chassis'; 										// set default value instead of html attribute
-			secLevelInput.onfocus = function() { secLevelInput.value ='';}			// on focus - clear input
+			// secLevelInput.onfocus = function() { secLevelInput.value ='';}			// on focus - clear input
 			//secLevelInput.onblur = function() { secLevelInput.value ='Chassis';	// on leave restore it.
 		</script>
 		

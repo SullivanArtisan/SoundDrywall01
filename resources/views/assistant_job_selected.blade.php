@@ -319,12 +319,12 @@
                             <div class="col m-1">
                                 <div class="row font-weight-bold"><label class="col-form-label">Message From Superintendent:&nbsp;</label></div>
                                 <div class="row">
-                                    <textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$association->jobdsp_msg_from_admin}}</textarea>
+                                    <textarea readonly class="form-control mt-1" style="background-color:silver; height: 150px; !important" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$association->jobdsp_msg_from_admin}}</textarea>
                                 </div>
                             </div>
                             <div class="col m-1">
                                 <div class="row font-weight-bold"><label class="col-form-label">Message To  Superintendent:&nbsp;</label></div>
-                                <div class="row"><textarea class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$association->jobdsp_msg_from_staff}}</textarea></div>
+                                <div class="row"><textarea class="form-control mt-1" style="height: 150px; !important" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$association->jobdsp_msg_from_staff}}</textarea></div>
                             </div>
                         </div>
                         <div class="row mb-2">

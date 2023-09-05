@@ -113,12 +113,16 @@
                             @csrf
                             <div class="row">
                                 <div class="col ml-3">
-                                    <div class="row"><label class="col-form-label">Message To <span class="font-italic">{{$staff->f_name}} {{$staff->l_name}}</span>:&nbsp;</label></div>
-                                    <div class="row"><textarea class="form-control mt-1 my-text-height" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$association->jobdsp_msg_from_admin}}</textarea></div>
+                                    <div class="row"><label class="col-form-label">Message To1111 <span class="font-italic">{{$staff->f_name}} {{$staff->l_name}}</span>:&nbsp;</label></div>
+                                    <div class="row"><textarea class="form-control mt-1 my-text-height" style="height: 150px; !important" type="text" row="10" id="msg_from_admin" name="msg_from_admin">{{$association->jobdsp_msg_from_admin}}</textarea></div>
                                 </div>
                                 <div class="col ml-3">
                                     <div class="row"><label class="col-form-label">Message From <span class="font-italic">{{$staff->f_name}} {{$staff->l_name}}</span>:&nbsp;</label></div>
-                                    <div class="row"><textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver;" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$association->jobdsp_msg_from_staff}}</textarea></div>
+                                    <div class="row"><textarea readonly class="form-control mt-1 my-text-height" style="background-color:silver; height: 150px; !important" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$association->jobdsp_msg_from_staff}}</textarea></div>
+                                    <?php 
+                                        $association->jobdsp_msg_from_staff_old = $association->jobdsp_msg_from_staff; 
+                                        $association->save();
+                                    ?>                        
                                 </div>
                             </div>
                             <div class="row my-3">

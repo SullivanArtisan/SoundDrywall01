@@ -19,6 +19,39 @@
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+    <style>
+      .blinking-button {
+        background-color: #1c87c9;
+        -webkit-border-radius: 60px;
+        border-radius: 60px;
+        border: none;
+        color: #eeeeee;
+        cursor: pointer;
+        display: inline-block;
+        font-family: sans-serif;
+        font-size: 15px;
+        padding: 2px 6px;
+        text-align: center;
+        text-decoration: none;
+      }
+      @keyframes glowing {
+        0% {
+          background-color: #faea57;
+          box-shadow: 0 0 5px #faea57;
+        }
+        50% {
+          background-color: #f7b602;
+          box-shadow: 0 0 20px #f7b602;
+        }
+        100% {
+          background-color: #faea57;
+          box-shadow: 0 0 5px #faea57;
+        }
+      }
+      .blinking-button {
+        animation: glowing 1200ms infinite;
+      }
+    </style>
 </head>
 
 <body>
@@ -133,8 +166,11 @@
 						</div>
 						<div class="col-8 text-muted">
                             <div class="row" style="font-family: Georgia;">
-                                <div class="col"><h2>TwentyTwenty Contracting Ltd.&nbsp&nbsp</h2></div>
-                                <div class="col pt-2"><h6>(Ver. 0.1)</h6></div>
+                                <div class="col-6"><h2>TwentyTwenty Contracting Ltd.&nbsp&nbsp</h2></div>
+                                <div class="col-3 pt-2"><h6>(Ver. 0.1)</h6></div>
+                                <div class="col-3 pt-2">
+                                    <a class="blinking-button" id="btn_check_new_msg" onclick="ProcessNewMessage()" hidden>Check New Message(s)</a>
+                                </div>
                             </div>
                             <div class="row mt-2">
                                 <div>
@@ -244,6 +280,41 @@
                 document.getElementById('form_logout').submit();
             }
         }
+        setTimeout(ReloadJobMsg, 1500);
+
+        function ReloadJobMsg() {
+            // alert('NAME = '+document.getElementById('btn_check_new_msg').name);
+
+            var thisUserRole = {!!json_encode(Auth::user()->role)!!};
+            // alert(window.location.href);
+            $.ajax({
+                url: 'check_new_messages',
+                type: 'POST',
+                data: {
+                    _token:"{{ csrf_token() }}", 
+                    for_whom: thisUserRole,
+                    staff_id: '0',
+                },    // the _token:token is for Laravel
+                success: function(dataRetFromPHP) {
+                    if (dataRetFromPHP.length > 0) {
+                        document.getElementById('btn_check_new_msg').removeAttribute("hidden");
+                        document.getElementById('btn_check_new_msg').name = dataRetFromPHP;
+                        // alert('id = '+dataRetFromPHP);
+                    }
+                },
+                error: function(err) {
+                }
+            });
+            setTimeout(ReloadJobMsg, 7500);
+        }
+
+    function ProcessNewMessage() {
+        jobdspId = document.getElementById('btn_check_new_msg').name;
+        document.getElementById('btn_check_new_msg').name = '';
+        document.getElementById('btn_check_new_msg').setAttribute("hidden", true);
+        window.location = './to_process_new_msg?jobdsp_id='+jobdspId;
+////////setTimeout(ReloadJobMsg, 7500);
+    }
     </script>
 </body>
 
