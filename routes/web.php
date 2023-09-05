@@ -472,28 +472,35 @@ Route::post('job_dispatch_to_staff', function (Request $request) {
 		$association = new JobDispatch;
 
 		if ($association) {
-			$association->jobdsp_job_id = $job_id;
-			$association->jobdsp_staff_id = $staff_id;
-			$association->jobdsp_status = 'CREATED';
-			$res = $association->save();
-			if (!$res) {
-				Log::Info('Failed to dispatch task '.$job_id.'to staff '.$staff_id."!");
-				return "jobDispatchOK=false";	
+			$staff = Staff::where('id', $staff_id)->where('status', '<>', 'DELETED')->first();
+			if (!$staff) {
+				Log::Info(Auth::user()->id.' failed to access the object of staff '.$staff_id."!");
 			} else {
-				$job->job_total_assistants 			= $job->job_total_assistants + 1;
-				$job->job_total_active_assistants	= $job->job_total_active_assistants + 1;
-				if (!strstr(strtoupper($job->job_status), 'RECEIVED')) {
-					$job->job_status = 'DISPATCHED';
-				}
-				$res = $job->save();
+				$association->jobdsp_job_id 	= $job_id;
+				$association->jobdsp_job_name 	= $job->job_name;
+				$association->jobdsp_staff_id 	= $staff_id;
+				$association->jobdsp_staff_name	= $staff->f_name.' '.$staff->l_name;
+				$association->jobdsp_status = 'CREATED';
+				$res = $association->save();
 				if (!$res) {
-					Log::Info('Failed to update job_total_assistants and job_total_active_assistants while dispatch task '.$job_id.'to staff '.$staff_id."!");
+					Log::Info('Failed to dispatch task '.$job_id.'to staff '.$staff_id."!");
 					return "jobDispatchOK=false";	
 				} else {
-					MyHelper::LogStaffActionResult(Auth::user()->id, 'Increased job_total_active_assistants for task '.$job_id.' OK.', '');
-                    MyHelper::LogStaffActionResult(Auth::user()->id, 'Dispatched task '.$job_id.' to staff '.$staff_id.' OK.', '');
-					Log::Info('Successfully dispatched task '.$job_id.' to staff '.$staff_id."!");
-					return "jobDispatchOK=true";	
+					$job->job_total_assistants 			= $job->job_total_assistants + 1;
+					$job->job_total_active_assistants	= $job->job_total_active_assistants + 1;
+					if (!strstr(strtoupper($job->job_status), 'RECEIVED')) {
+						$job->job_status = 'DISPATCHED';
+					}
+					$res = $job->save();
+					if (!$res) {
+						Log::Info('Failed to update job_total_assistants and job_total_active_assistants while dispatch task '.$job_id.'to staff '.$staff_id."!");
+						return "jobDispatchOK=false";	
+					} else {
+						MyHelper::LogStaffActionResult(Auth::user()->id, 'Increased job_total_active_assistants for task '.$job_id.' OK.', '');
+						MyHelper::LogStaffActionResult(Auth::user()->id, 'Dispatched task '.$job_id.' to staff '.$staff_id.' OK.', '');
+						Log::Info('Successfully dispatched task '.$job_id.' to staff '.$staff_id."!");
+						return "jobDispatchOK=true";	
+					}
 				}
 			}
 		} else {
