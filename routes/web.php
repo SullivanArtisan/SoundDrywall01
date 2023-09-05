@@ -1015,5 +1015,9 @@ Route::get('to_process_new_msg', function (Request $request) {
 	return redirect()->back();				
 })->middleware(['auth'])->name('to_process_new_msg');
 
+Route::get('all_job_dispatches', function (Request $request) {
+    return view('all_job_dispatches');
+})->middleware(['auth'])->name('all_job_dispatches');
+
 
 require __DIR__.'/auth.php';
