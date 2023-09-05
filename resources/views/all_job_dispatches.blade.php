@@ -46,10 +46,10 @@
 				session(['sort_order' => 'asc']);
 				$sort_icon = 'asc';
 			}
-			$associations = \App\Models\JobDispatch::orderBy($_GET['sort_key_JobDispatch'], session('sort_order', 'asc'))->where('jobdsp_status', '<>', 'COMPLETED')->where('jobdsp_status', '<>', 'CANCELED')->where('jobdsp_status', '<>', 'DELETED')->paginate(10)->withQueryString();
+			$associations = \App\Models\JobDispatch::orderBy($_GET['sort_key_JobDispatch'], session('sort_order', 'asc'))->where('jobdsp_status', '<>', 'COMPLETED')->where('jobdsp_status', '<>', 'CANCELED')->where('jobdsp_status', '<>', 'DELETED')->paginate(50)->withQueryString();
 			session(['sort_key_JobDispatch' => 'id']);
 		} else {
-            $associations = \App\Models\JobDispatch::orderBy($sortKey, $sortOrder)->where('jobdsp_status', '<>', 'DELETED')->paginate(10)->withQueryString();
+            $associations = \App\Models\JobDispatch::orderBy($sortKey, $sortOrder)->where('jobdsp_status', '<>', 'DELETED')->paginate(50)->withQueryString();
 		}
 
 		// Title Line

@@ -112,7 +112,8 @@
                         @endif
                         <li> <a href="{{route('material_main', ['display_filter'=>'active'])}}">&#9055;&nbsp;Materials for Tasks</a> </li>
                         @if (Auth::user()->email == 'nuecosoftware@gmail.com')
-                        <li> <a href="{{route('all_job_dispatches')}}">&#9055;&nbsp;JobDispatches</a> </li>
+                        <li> <a href="{{route('all_job_dispatches')}}" style="color:maroon">&#9055;&nbsp;JobDispatches</a> </li>
+                        <li> <a href="{{route('all_staff_actions')}}" style="color:maroon">&#9055;&nbsp;Staff Actions</a> </li>
                         @endif
                         <!--					
                         <li> <a href="#materialsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Materials for Tasks</a> </li>
