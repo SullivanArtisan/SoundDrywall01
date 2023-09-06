@@ -261,6 +261,10 @@
                                 @else
                                 <div class="col"><img src="signature/{{$inspector_sig}}" width="360" height="100" style="margin: 0; padding: 0; border: 1px solid #c4caac;"></img></div>
                                 @endif
+                                <div class="col"><label class="col-form-label">Due Date:</label></div>
+                                <div class="col"><input class="form-control mt-1 my-text-height" type="datetime-local" id="job_till_time" name="job_till_time" value="{{$job->job_till_time}}"></div>
+                            </div>
+                            <div class="row">
                                 <div class="col"><label class="col-form-label">&nbsp;</label></div>
                                 <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" readonly id="job_id" name="job_id" value="{{$job->id}}"></div>
                             </div>

@@ -174,6 +174,8 @@
         var oldJobBgColor   = "";
         var oldStaffBgColor = "";
 
+        document.getElementById('base_main_body').style.backgroundColor = '#f0e68c';
+
         function StaffSelected(inputId) {
             // prepare the staff data for the ajax post function
             staffId = inputId.substring(2, inputId.length);

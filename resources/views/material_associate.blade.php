@@ -161,6 +161,8 @@
         var oldJobBgColor   = "";
         var oldMtrlBgColor = "";
 
+        document.getElementById('base_main_body').style.backgroundColor = '#f0e68c';
+
         function JobSelected(inputId) {
             // prepare the job data for the ajax post function
             jobId = inputId.substring(2, inputId.length);

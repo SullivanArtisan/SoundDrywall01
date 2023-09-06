@@ -97,9 +97,9 @@
                 if ($listed_items % 2) {
                     $bg_color = "Lavender";
                 } else {
-                    $bg_color = "PaleGreen";
+                    $bg_color = "darkseagreen";
                 }
-                $outContents = "<div class=\"row\">";
+                $outContents = "<div class=\"row\" style=\"background-color:".$bg_color."\">";
 				$outContents .= "<div class=\"col-1\">";
 					$outContents .= $action->id;
 				$outContents .= "</div>";

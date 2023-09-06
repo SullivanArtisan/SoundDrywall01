@@ -36,6 +36,8 @@ class JobController extends Controller
                 $job->job_address   = $request->job_address;
                 $job->job_city      = $request->job_city;
                 // $job->job_province  = $request->job_province;
+                $job->job_desc      = $request->job_desc;
+                $job->job_till_time = $request->job_till_time;
                 $job->job_total_assistants          = 0;
                 $job->job_total_active_assistants   = 0;
                 $job->job_assistants_complete       = 0;
@@ -94,6 +96,7 @@ class JobController extends Controller
                 $job->job_city      = $request->job_city;
                 // $job->job_province  = $request->job_province;
                 $job->job_desc      = $request->job_desc;
+                $job->job_till_time = $request->job_till_time;
                 $saved = $job->save();
             } else {
                 $err_msg = "Job object cannot be accessed while updating a job.";

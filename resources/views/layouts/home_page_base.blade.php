@@ -217,7 +217,7 @@
                 </div>
             </nav>
 
-			<div class="w-100 p-1"  style="background-color: #e8f5e9">
+			<div class="w-100 p-1" id="base_main_body" style="background-color: #e8f5e9">
 				@yield('function_page')
 			</div>
 			
