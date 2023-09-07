@@ -72,10 +72,10 @@
             <h4 class="mx-2 mb-4 card-title text-info">Frequently Used Functions: </h4>
         </div>
         <div class="row">
-                    <button class="btn-grad" type="button" style="margin: 2px;"><a href="{{route('project_main', ['display_filter'=>'active'])}}">All Projects</a></button>
-                    <button class="btn-grad" type="button" style="margin: 2px;"><a href="{{route('job_main', ['display_filter'=>'active'])}}">All Tasks</a></button>
-                    <button class="btn-grad-2" type="button" style="margin: 2px;"><a href="{{route('material_associate')}}">Dispatch Material To a Task</a></button>
-                    <button class="btn-grad-2" type="button" style="margin: 2px;"><a href="{{route('job_dispatch')}}">Dispatch a Staff To a Task</a></button>
+            <button class="btn-grad btn-sm" type="button" style="margin: 2px;"><a href="{{route('project_main', ['display_filter'=>'active'])}}">All Projects</a></button>
+            <button class="btn-grad btn-sm" type="button" style="margin: 2px;"><a href="{{route('job_main', ['display_filter'=>'active'])}}">All Tasks</a></button>
+            <button class="btn-grad-2 btn-sm" type="button" style="margin: 2px;"><a href="{{route('material_associate')}}">Dispatch Material To a Task</a></button>
+            <button class="btn-grad-2 btn-sm" type="button" style="margin: 2px;"><a href="{{route('job_dispatch')}}">Dispatch a Staff To a Task</a></button>
         </div>
     </div>
 @endsection
