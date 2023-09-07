@@ -250,19 +250,21 @@
                             </div>
                             <div class="row">
                                 <div class="col"><label class="col-form-label">Inspection Report:&nbsp;</label></div>
-                                <div class="col"><textarea class="form-control mt-1 my-text-height" rows = "5" id="job_desc" name="job_inspection_report" readonly placeholder="{{$job->job_inspection_report}}">{{$job->job_inspection_report}}</textarea></div>
+                                <div class="col"><textarea class="form-control mt-1 my-text-height" rows = "5" id="job_inspection_report" name="job_inspection_report" readonly placeholder="{{$job->job_inspection_report}}">{{$job->job_inspection_report}}</textarea></div>
                                 <div class="col"><label class="col-form-label">Task Description:&nbsp;</label></div>
                                 <div class="col"><textarea class="form-control mt-1 my-text-height" rows = "5" id="job_desc" name="job_desc" placeholder="{{$job->job_desc}}">{{$job->job_desc}}</textarea></div>
                             </div>
                             <div class="row">
-                                <div class="col"><label class="col-form-label">Inspector Signature:&nbsp;</label></div>
+                                <div class="col-3"><label class="col-form-label">Inspector Signature:&nbsp;</label></div>
                                 @if ($inspector_sig == "")
-                                <div class="col"><img src="" style="margin: 0; padding: 0; border: 1px solid #c4caac;"></img></div>
+                                <div class="col-9"><img src="" style="margin: 0; padding: 0; border: 1px solid #c4caac;"></img></div>
                                 @else
-                                <div class="col"><img src="signature/{{$inspector_sig}}" width="360" height="100" style="margin: 0; padding: 0; border: 1px solid #c4caac;"></img></div>
+                                <div class="col-9"><img src="signature/{{$inspector_sig}}" width="360" height="100" style="margin: 0; padding: 0; border: 1px solid #c4caac;"></img></div>
                                 @endif
-                                <div class="col"><label class="col-form-label">Due Date:</label></div>
-                                <div class="col"><input class="form-control mt-1 my-text-height" type="datetime-local" id="job_till_time" name="job_till_time" value="{{$job->job_till_time}}"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3"><label class="col-form-label">Due Date:</label></div>
+                                <div class="col-9"><input class="form-control mt-1 my-text-height" type="datetime-local" id="job_till_time" name="job_till_time" value="{{$job->job_till_time}}"></div>
                             </div>
                             <div class="row">
                                 <div class="col"><label class="col-form-label">&nbsp;</label></div>

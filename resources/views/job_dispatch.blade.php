@@ -1,4 +1,5 @@
 <script src="js/signature.js"></script>
+<script src="js/my_utilities.js"></script>
 <?php
 	use App\Models\Material;
 	use App\Models\JobDispatch;
@@ -36,7 +37,7 @@
             </div>
         </div>
         <div class="row m-4">
-            <div class="col-6">
+            <div class="col-5">
                 <!-- Available Tasks Section -->
                 <div class="container">
                     <div class="row">
@@ -95,11 +96,11 @@
                 </div>
             </div>
             <div class="col-1" style="position: relative;">
-                <div style="position: absolute; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%);">
-                    <button class="btn btn-success align-items-center" onclick="doJobDispatch()">Dispatch</button>
+                <div id="div_dispatch_btn" style="position: absolute; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%);">
+                    <button class="btn btn-success btn-sm" onclick="doJobDispatch()"><span style="font-size: 0.875em;">Dispatch</span></button>
                 </div>
             </div>
-            <div class="col-5">
+            <div class="col-6">
                 <!-- Available Asststants Section -->
                 <div class="container">
                     <div class="row">
@@ -157,7 +158,7 @@
         var oldJobBgColor   = "";
         var oldStaffBgColor = "";
 
-        document.getElementById('base_main_body').style.backgroundColor = '#f0e68c';
+        prepareBackground();
 
         function JobSelected(inputId) {
             // prepare the task data for the ajax post function

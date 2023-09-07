@@ -14,15 +14,15 @@
 	?>
     <div>
         <div class="row m-4">
-            <div>
-				<h2 class="text-muted pl-2">All Tasks</h2>
+            <div class="col-1">
+				<h3 class="text-muted">All Tasks</h3>
             </div>
-            <div class="col my-auto ml-5">
+            <div class="col-5 ml-5">
                 <form method="post" action="{{url('job_add')}}">
                     @csrf
                     <div class="row">
-                        <div><button class="btn btn-success mr-4" type="submit" onclick="doAddJob()">Add a Task to Project:&nbsp;</button></div>
-                        <div>
+                        <div class="col"><button class="btn btn-success btn-sm" type="submit" onclick="doAddJob()"><span style="font-size: 0.875em;">Add a Task to Project:&nbsp;</span></button></div>
+						<div class="col">
                         <?php
                             $tagHead = "<input list=\"proj_id\" name=\"proj_id\" id=\"projidinput\" onfocus=\"this.value='';\" class=\"form-control my-text-height\" ";
                             $tagTail = "><datalist id=\"proj_id\">";
@@ -41,12 +41,12 @@
                     </div>
                 </form>
             </div>
-			<div class="col mt-3 ml-2">
+			<div class="col mt-3 ml-2" style="font-size: 0.85em;">
 				<label>Display Filter:</label>
-					<input type="radio" class="ml-3 mr-1" id="rdo_proj_active" name="for_display_filter" onclick="RdoSelected(this.id)" checked><label>Active Only</label>
-					<input type="radio" class="ml-3 mr-1" id="rdo_proj_completed" name="for_display_filter" onclick="RdoSelected(this.id)"><label>Completed Only</label>
-					<input type="radio" class="ml-3 mr-1" id="rdo_proj_canceled" name="for_display_filter" onclick="RdoSelected(this.id)"><label>Canceled Only</label>
-					<input type="radio" class="ml-3 mr-1" id="rdo_proj_all" name="for_display_filter" onclick="RdoSelected(this.id)"><label>All</label>
+					<input type="radio" class="ml-1 mr-1" id="rdo_proj_active" name="for_display_filter" onclick="RdoSelected(this.id)" checked><label>Active</label>
+					<input type="radio" class="ml-1 mr-1" id="rdo_proj_completed" name="for_display_filter" onclick="RdoSelected(this.id)"><label>Completed</label>
+					<input type="radio" class="ml-1 mr-1" id="rdo_proj_canceled" name="for_display_filter" onclick="RdoSelected(this.id)"><label>Canceled</label>
+					<input type="radio" class="ml-1 mr-1" id="rdo_proj_all" name="for_display_filter" onclick="RdoSelected(this.id)"><label>All</label>
 				<label></label>
 			</div>
             <!--

@@ -14,19 +14,19 @@
 	?>
     <div>
         <div class="row m-4">
-            <div>
+            <div class="col-2">
 				<h2 class="text-muted pl-2">All Projects</h2>
             </div>
-            <div class="col my-auto ml-5">
+            <div class="col-1 my-auto ml-5">
 				@if (Auth::user()->role == 'ADMINISTRATOR')
 				<button class="btn btn-success mr-4" type="button"><a href="{{route('project_add')}}">Add</a></button>
 				@endif
 			</div>
 			<div class="col mt-3 ml-2">
 				<label>Display Filter:</label>
-					<input type="radio" class="ml-3 mr-1" id="rdo_proj_active" name="for_display_filter" onclick="RdoSelected(this.id)" checked><label>Active Only</label>
-					<input type="radio" class="ml-3 mr-1" id="rdo_proj_completed" name="for_display_filter" onclick="RdoSelected(this.id)"><label>Completed Only</label>
-					<input type="radio" class="ml-3 mr-1" id="rdo_proj_canceled" name="for_display_filter" onclick="RdoSelected(this.id)"><label>Canceled Only</label>
+					<input type="radio" class="ml-3 mr-1" id="rdo_proj_active" name="for_display_filter" onclick="RdoSelected(this.id)" checked><label>Active</label>
+					<input type="radio" class="ml-3 mr-1" id="rdo_proj_completed" name="for_display_filter" onclick="RdoSelected(this.id)"><label>Completed</label>
+					<input type="radio" class="ml-3 mr-1" id="rdo_proj_canceled" name="for_display_filter" onclick="RdoSelected(this.id)"><label>Canceled</label>
 					<input type="radio" class="ml-3 mr-1" id="rdo_proj_all" name="for_display_filter" onclick="RdoSelected(this.id)"><label>All</label>
 				<label></label>
 			</div>

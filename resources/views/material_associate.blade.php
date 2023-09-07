@@ -1,3 +1,4 @@
+<script src="js/my_utilities.js"></script>
 <?php
 	use App\Models\Material;
 	use App\Models\JobDispatch;
@@ -54,7 +55,9 @@
                         <div class="row text-white" style="max-height: 400px; background-color:grey; font-weight:bold !important;">
                             <div class="col">Name</div>
                             <div class="col">Type</div>
+                            <!--
                             <div class="col">Size</div>
+                            -->
                             <div class="col">Amount</div>
                         </div>
                         <?php 
@@ -68,7 +71,7 @@
                                 }
                                 $outContents = "<div class=\"row\" id=\"m_".$material->id."\" onclick=\"MaterialSelected(this.id)\" ondblclick=\"EditMaterial(this.id)\" style=\"background-color:".$bg_color."\">";
                                 $outContents .= "<div class=\"col\" style=\"cursor:default\">".$material->mtrl_name."</div>";
-                                $outContents .= "<div class=\"col\" style=\"cursor:default\">".$material->mtrl_type."</div>";
+                                // $outContents .= "<div class=\"col\" style=\"cursor:default\">".$material->mtrl_type."</div>";
                                 $outContents .= "<div class=\"col\" style=\"cursor:default\">".$material->mtrl_size."</div>";
                                 $outContents .= "<div class=\"col\" style=\"cursor:default\">".intval($material->mtrl_amount_left)."/".intval($material->mtrl_amount)."</div>";
                                 // $job = Job::where('id', $material->mtrl_job_id)->first();
@@ -89,8 +92,8 @@
                 </div>
             </div>
             <div class="col-1" style="position: relative;">
-                <div style="position: absolute; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%);">
-                    <button class="btn btn-success align-items-center" onclick="doMtrlAssociate()">Dispatch</button>
+                <div id="div_dispatch_btn" style="position: absolute; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%);">
+                    <button class="btn btn-success btn-sm" onclick="doMtrlAssociate()"><span style="font-size: 0.875em;">Dispatch</span></button>
                 </div>
             </div>
             <div class="col-6">
@@ -161,7 +164,7 @@
         var oldJobBgColor   = "";
         var oldMtrlBgColor = "";
 
-        document.getElementById('base_main_body').style.backgroundColor = '#f0e68c';
+        prepareBackground();
 
         function JobSelected(inputId) {
             // prepare the job data for the ajax post function

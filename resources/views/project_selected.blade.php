@@ -166,15 +166,15 @@
                             <div class="col"><input class="form-control mt-1 my-text-height" type="hidden" id="proj_my_creation_timestamp" name="proj_my_creation_timestamp" value="{{time()}}"></div>
                         </div>
 						<div class="row my-3">
-							<div class="col"></div>
-							<div class="col">
+							<div class="col-2"></div>
+							<div class="col-8">
                                 @if (Auth::user()->role == 'ADMINISTRATOR')
                                 <button class="btn btn-warning mx-3" type="submit">Update</button>
                                 @endif
                                 <button class="btn btn-secondary mx-3" type="button"><a href="{{route('project_main', ['display_filter'=>'active'])}}">Cancel</a></button>
                                 <button class="btn btn-info mx-3" type="button"><a href="{{route('project_attachment_main', ['id'=>$id])}}">Attachments</a></button>
-							</div>
-							<div class="col"></div>
+                            </div>
+							<div class="col-2"></div>
 						</div>
 					</form>
 				</div>
