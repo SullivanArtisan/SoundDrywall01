@@ -30,7 +30,7 @@ class ProjectAttachmentController extends Controller
             // Upload file
             $upload_rslt = $file->move($location, $filename);
 
-            if ($upload_rslt == $location.'\\'.$filename) {     // File uploaded succssfully!
+            if (($upload_rslt == $location.'\\'.$filename) || ($upload_rslt == $location.'/'.$filename)) {     // File uploaded succssfully! (under Windows FS or Linux FS)
                 // Session::flash('message','Upload Successfully.');
                 Session::put('success', 'Upload Successfully!! (for file: '.$filename.')');
                 // Session::put('uploadPath', $location."/".$filename);
