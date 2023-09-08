@@ -132,7 +132,7 @@
                                 <!--input id="uploadFile" placeholder="No File" disabled="disabled" /-->
                                 <label class="custom-file-label" for="chooseFile" id="uploadPath">Select file</label>
                             </div>
-                            <button type="submit" name="submit" class="btn btn-primary btn-block mt-4">Upload an Attachment File</button>
+                            <button type="submit" id="btn_upld_attchmnt" name="submit" class="btn btn-primary btn-block mt-4" disabled>Upload an Attachment File</button>
                         </form>
                     </div>
                     <div class="col">
@@ -142,9 +142,17 @@
 		</div>
 		
 		<script>
+            document.getElementById("btn_upld_attchmnt").disabled = true;
+
             document.getElementById("chooseFile").onchange = function() {
                 var pathInArray = this.value.split("\\");
-                document.getElementById("uploadPath").innerHTML = pathInArray[pathInArray.length - 1];
+                var fName = pathInArray[pathInArray.length - 1];
+                document.getElementById("uploadPath").innerHTML = fName;
+                if (fName.length < 64) {
+                    document.getElementById("btn_upld_attchmnt").disabled = false;
+                } else {
+                    alert('The filename\'s length has to be less than 64 characters!');
+                }
             };
 
             function RemoveThisAttachment(inputId, fileName) {

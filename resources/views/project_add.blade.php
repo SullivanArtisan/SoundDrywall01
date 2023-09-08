@@ -230,7 +230,7 @@
                         if (position >= 0) {
                             window.location = './op_result_project?status='+dataRetFromPHP.substr(statusKey.length);
                         } else {
-                            if(!confirm("The new project is created successfully.\r\nContinue to add any task to it now?")) {
+                            if(!confirm("The new project is created successfully.\r\nContinue to a new task to it now?")) {
                                 window.location = './op_result_project?status=The project is added successfully!';
                             } else {
                                 window.location = './project_selected?id='+dataRetFromPHP;
