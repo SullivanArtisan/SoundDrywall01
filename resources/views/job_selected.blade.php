@@ -514,9 +514,9 @@
                 window.location = url;
             }
 
-            setTimeout(ReloadJobMsg, 7500);
+            setTimeout(ReloadJobMessage, 7500);
 
-            function ReloadJobMsg() {
+            function ReloadJobMessage() {
                 // alert('HHOHO')
                 if (thisUserRole == 'ADMINISTRATOR') {
                     toThisUrl = '/reload_page_for_job_msg_from_staff';
@@ -532,7 +532,7 @@
                         staff_id:{!!json_encode($job_lead_id)!!},
                     },    // the _token:token is for Laravel
                     success: function(dataRetFromPHP) {
-                        setTimeout(ReloadJobMsg, 7500);
+                        //setTimeout(ReloadJobMessage, 7500);
                         if (thisUserRole == 'ADMINISTRATOR') {
                             if (document.getElementById('msg_from_staff')) {
                                 if (document.getElementById('msg_from_staff').value != dataRetFromPHP) {
@@ -556,9 +556,10 @@
                         }
                     },
                     error: function(err) {
-                        setTimeout(ReloadJobMsg, 7500);
+                        //setTimeout(ReloadJobMessage, 7500);
                     }
                 });
+                setTimeout(ReloadJobMessage, 7500);
             }
 
             function doSendMsgToReceiver(senderRole) {

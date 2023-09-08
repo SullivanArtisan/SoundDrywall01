@@ -284,9 +284,9 @@
                 document.getElementById('form_logout').submit();
             }
         }
-        setTimeout(ReloadJobMsg, 1500);
+        setTimeout(ReloadAllJobMsgs, 1500);
 
-        function ReloadJobMsg() {
+        function ReloadAllJobMsgs() {
             // alert('NAME = '+document.getElementById('btn_check_new_msg').name);
 
             var thisUserRole = {!!json_encode(Auth::user()->role)!!};
@@ -301,15 +301,18 @@
                 },    // the _token:token is for Laravel
                 success: function(dataRetFromPHP) {
                     if (dataRetFromPHP.length > 0) {
-                        document.getElementById('btn_check_new_msg').removeAttribute("hidden");
-                        document.getElementById('btn_check_new_msg').name = dataRetFromPHP;
-                        // alert('id = '+dataRetFromPHP);
+                        if ((window.location.href.indexOf("job_selected") >= 0) || window.location.href.indexOf("job_combination_staff_selected") >= 0) {
+                            // Those pages can handle by themselves, so no need to do anything here
+                        } else {
+                            document.getElementById('btn_check_new_msg').removeAttribute("hidden");
+                            document.getElementById('btn_check_new_msg').name = dataRetFromPHP;
+                        }
                     }
                 },
                 error: function(err) {
                 }
             });
-            setTimeout(ReloadJobMsg, 7500);
+            setTimeout(ReloadAllJobMsgs, 7500);
         }
 
     function ProcessNewMessage() {
@@ -317,7 +320,7 @@
         document.getElementById('btn_check_new_msg').name = '';
         document.getElementById('btn_check_new_msg').setAttribute("hidden", true);
         window.location = './to_process_new_msg?jobdsp_id='+jobdspId;
-////////setTimeout(ReloadJobMsg, 7500);
+////////setTimeout(ReloadAllJobMsgs, 7500);
     }
     </script>
 </body>
