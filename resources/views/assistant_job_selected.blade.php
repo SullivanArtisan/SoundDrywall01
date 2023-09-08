@@ -396,16 +396,6 @@
             alert(msgToShow);
         }
 
-        function myFunction() {
-            var x = document.getElementById("p2").getAttribute("aria-expanded"); 
-            if (x == "true") {
-                x = "false"
-            } else {
-                x = "true"
-            }
-            document.getElementById("p2").setAttribute("aria-expanded", x);
-        }
-
         setTimeout(ReloadPageForJobMsg, 7500);
 
         function ReloadPageForJobMsg() {
