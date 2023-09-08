@@ -169,7 +169,7 @@
             <div class="col-3"><label class="col-form-label">Job Description:&nbsp;</label></div>
             <div class="col-9"><textarea class="form-control mt-1 my-text-height" rows = "5" readonly id="job_desc" name="job_desc" placeholder="{{$job->job_desc}}">{{$job->job_desc}}</textarea></div>
         </div>
-        <div class="row m-4" style="background-color:lightsteelblue;">
+        <div class="row my-4 mx-1" style="background-color:lightsteelblue;">
             <div class="col">
                 <form method="post" action="{{url('job_assistant_save_working_hours_today')}}">
                     @csrf
@@ -209,7 +209,7 @@
         <div class="row my-3">
             <p>
             <button class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                Show / Hide Materials
+            <h5>Show / Hide Materials</h5>
             </button>
             </p>
             <div class="collapse" id="collapseExample">
@@ -288,6 +288,10 @@
                             echo $outContents;;
                         }}
                     }
+                    if (count($materials) == 0) {
+                        $outContents = "<div class=\"row mb-2\"><p><span style=\"margin-left:10px;\">No material dispatched yet.</span></p></div>";
+                        echo $outContents;;
+                    }
                     ?>
                 </div>
             </div>        
@@ -306,13 +310,9 @@
         </div>
 
         <!-- Messages Section -->
-        <div class="row text-dark mt-4">
-            <p>
-                <button class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#msgSection" aria-expanded="false" aria-controls="msgSection">
-                    Show / Hide Message Section
-                </button>
-            </p>
-            <div class="collapse mx-2" id="msgSection">
+        <div class="row text-dark mt-4" style="background-color: khaki;">
+            <h4><span class="px-2 pb-1" style="background-color: darkkhaki; color: white;">Message Section</span></h4>
+            <div class="mx-2" id="msgSection">
                     <form method="post" action="{{url('job_combination_msg_to_admin')}}">
                         @csrf
                         <div class="row">
@@ -324,7 +324,7 @@
                             </div>
                             <div class="col m-1">
                                 <div class="row font-weight-bold"><label class="col-form-label">Message To  Superintendent:&nbsp;</label></div>
-                                <div class="row"><textarea class="form-control mt-1" style="height: 150px; !important" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$association->jobdsp_msg_from_staff}}</textarea></div>
+                                <div class="row"><textarea class="form-control mt-1" style="height: 150px; width: 640px; !important" type="text" row="10" id="msg_from_staff" name="msg_from_staff">{{$association->jobdsp_msg_from_staff}}</textarea></div>
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -394,6 +394,16 @@
 
         if (msgToShow.length > 0) {
             alert(msgToShow);
+        }
+
+        function myFunction() {
+            var x = document.getElementById("p2").getAttribute("aria-expanded"); 
+            if (x == "true") {
+                x = "false"
+            } else {
+                x = "true"
+            }
+            document.getElementById("p2").setAttribute("aria-expanded", x);
         }
 
         setTimeout(ReloadPageForJobMsg, 7500);
