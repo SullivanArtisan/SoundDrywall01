@@ -71,10 +71,10 @@
 			$outContents .= "<div class=\"col-2\">";
 				$outContents .= "Staff Name";
 			$outContents .= "</div>";
-			$outContents .= "<div class=\"col-3\">";
+			$outContents .= "<div class=\"col-2\">";
 				$outContents .= "Action";
 			$outContents .= "</div>";
-			$outContents .= "<div class=\"col-4\">";
+			$outContents .= "<div class=\"col-3\">";
 				$outContents .= "Action Result";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-1 align-middle\">";
@@ -86,6 +86,9 @@
 				} else {
 					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-down-square\"></a></i>";
 				}
+			$outContents .= "</div>";
+			$outContents .= "<div class=\"col-2\">";
+				$outContents .= "Timestamp";
 			$outContents .= "</div>";
 		$outContents .= "</div><hr class=\"m-1\"/>";
 		{{echo $outContents;}}
@@ -109,17 +112,20 @@
                 $staff = \App\Models\Staff::where('id', $action->staff_id)->where('status', '<>', 'DELETED')->first();
                 $outContents .= "<div class=\"col-2\">";
                     if ($staff) {
-                        $outContents .= $action->f_name.' '.$action->l_name;
+                        $outContents .= $staff->f_name.' '.$staff->l_name;
                     }
 				$outContents .= "</div>";
-                $outContents .= "<div class=\"col-3\">";
+                $outContents .= "<div class=\"col-2\">";
 					$outContents .= $action->staff_action;
 				$outContents .= "</div>";
-                $outContents .= "<div class=\"col-4\">";
+                $outContents .= "<div class=\"col-3\">";
 					$outContents .= $action->staff_action_result;
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-1\">";
 					$outContents .= $action->staff_action_severity;
+				$outContents .= "</div>";
+                $outContents .= "<div class=\"col-2\">";
+					$outContents .= $action->created_at;
 				$outContents .= "</div>";
 			$outContents .= "</div><hr class=\"m-1\"/>";
 			{{ 					
