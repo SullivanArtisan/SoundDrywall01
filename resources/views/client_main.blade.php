@@ -8,7 +8,7 @@
     <div>
         <div class="row m-4">
             <div>
-				<h2 class="text-muted pl-2">Clients</h2>
+				<h2 class="text-muted pl-2">Projects' Clients</h2>
             </div>
             <div class="col my-auto ml-5">
 				@if (Auth::user()->role == 'ADMINISTRATOR')

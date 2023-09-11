@@ -87,6 +87,11 @@
                                 $outContents .= "</div>";
                                 echo $outContents;
                             }
+
+                            if (count($jobs) == 0) {
+                                $outContents = "<div class=\"row mt-2\"><div class=\"col\"><p>There's no task to dispatch.</p></div></div>";
+                                echo $outContents;
+                            }
                         ?>
                     </div>
                     </div>

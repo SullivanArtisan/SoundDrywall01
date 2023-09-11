@@ -83,6 +83,11 @@
                                 $outContents .= "</div>";
                                 echo $outContents;
                             }
+
+                            if (count($materials) == 0) {
+                                $outContents = "<div class=\"row mt-2\"><div class=\"col\"><p>There's no material to dispatch.</p></div></div>";
+                                echo $outContents;
+                            }
                         ?>
                     </div>
                     </div>
