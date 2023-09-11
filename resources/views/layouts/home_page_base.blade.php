@@ -114,6 +114,7 @@
                         @if (Auth::user()->email == 'nuecosoftware@gmail.com')
                         <li> <a href="{{route('all_job_dispatches')}}" style="color:maroon">&#9055;&nbsp;JobDispatches</a> </li>
                         <li> <a href="{{route('all_staff_actions')}}" style="color:maroon">&#9055;&nbsp;Staff Actions</a> </li>
+                        <li> <a href="{{route('all_logs')}}" style="color:maroon">&#9055;&nbsp;Read Logs</a> </li>
                         @endif
                         <!--					
                         <li> <a href="#materialsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Materials for Tasks</a> </li>

@@ -1015,13 +1015,17 @@ Route::get('to_process_new_msg', function (Request $request) {
 	return redirect()->back();				
 })->middleware(['auth'])->name('to_process_new_msg');
 
+Route::get('all_job_dispatches', function (Request $request) {
+    return view('all_job_dispatches');
+})->middleware(['auth'])->name('all_job_dispatches');
+
 Route::get('all_staff_actions', function (Request $request) {
     return view('all_staff_actions');
 })->middleware(['auth'])->name('all_staff_actions');
 
-Route::get('all_job_dispatches', function (Request $request) {
-    return view('all_job_dispatches');
-})->middleware(['auth'])->name('all_job_dispatches');
+Route::get('all_logs', function (Request $request) {
+    return view('all_logs');
+})->middleware(['auth'])->name('all_logs');
 
 
 require __DIR__.'/auth.php';
