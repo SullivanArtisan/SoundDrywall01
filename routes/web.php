@@ -911,7 +911,7 @@ Route::post('check_new_messages', function (Request $request) {	// Check if ther
 			$staff = Staff::where('id', $association->jobdsp_staff_id)->where('status', '<>', 'DELETED')->first();
 
 			if (!$staff) {
-				Log::Info(Auth::user()->id.' failed to access the Staff object from jobdsp_staff_id '.$association->jobdsp_staff_id.' in function check_new_messages() for ADMINISTRATOR.');
+				// Log::Info(Auth::user()->id.' failed to access the Staff object from jobdsp_staff_id '.$association->jobdsp_staff_id.' in function check_new_messages() for ADMINISTRATOR.');
 			} else {
 				if ($staff->role != 'SUPERINTENDENT') {
 					continue;
@@ -937,7 +937,7 @@ Route::post('check_new_messages', function (Request $request) {	// Check if ther
 			$staff = Staff::where('id', $association->jobdsp_staff_id)->where('status', '<>', 'DELETED')->first();
 
 			if (!$staff) {
-				Log::Info(Auth::user()->id.' failed to access the Staff object from jobdsp_staff_id '.$association->jobdsp_staff_id.' in function check_new_messages() for SUPERINTENDENT.');
+				// Log::Info(Auth::user()->id.' failed to access the Staff object from jobdsp_staff_id '.$association->jobdsp_staff_id.' in function check_new_messages() for SUPERINTENDENT.');
 			} else {
 				if ($staff->role == 'SUPERINTENDENT') {
 					if ($association->jobdsp_msg_from_admin_old != $association->jobdsp_msg_from_admin) {
@@ -952,7 +952,7 @@ Route::post('check_new_messages', function (Request $request) {	// Check if ther
 							$staff = Staff::where('id', $association_2->jobdsp_staff_id)->where('status', '<>', 'DELETED')->first();
 				
 							if (!$staff) {
-								Log::Info(Auth::user()->id.' failed to access the Staff object from jobdsp_staff_id '.$association_2->jobdsp_staff_id.' in function check_new_messages() for othe staffs.');
+								// Log::Info(Auth::user()->id.' failed to access the Staff object from jobdsp_staff_id '.$association_2->jobdsp_staff_id.' in function check_new_messages() for othe staffs.');
 							} else {
 								if ($staff->role == 'ASSISTANT' || $staff->role == 'INSPECTOR') {
 									if ($association_2->jobdsp_msg_from_staff_old != $association_2->jobdsp_msg_from_staff) {
