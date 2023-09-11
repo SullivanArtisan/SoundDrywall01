@@ -8,7 +8,7 @@
     <div>
         <div class="row m-4">
             <div>
-				<h2 class="text-muted pl-2">Material Providers</h2>
+				<h2 class="text-muted pl-2">Material Suppliers</h2>
             </div>
             <div class="col my-auto ml-5">
 				<button class="btn btn-success mr-4" type="button"><a href="{{route('provider_add')}}">Add</a></button>
@@ -19,9 +19,9 @@
 				  <div class="input-group-append">
 					<button class="btn btn-info ml-2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Search</button>
 					<div class="dropdown-menu">
-					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('id')\" style=\"cursor: pointer;\">by Provider Id</button>");</script>
-					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('name')\" style=\"cursor: pointer;\">by Provider Name</button>");</script>
-					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('email')\" style=\"cursor: pointer;\">by Provider Phone</button>");</script>
+					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('id')\" style=\"cursor: pointer;\">by Supplier Id</button>");</script>
+					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('name')\" style=\"cursor: pointer;\">by Supplier Name</button>");</script>
+					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('email')\" style=\"cursor: pointer;\">by Supplier Phone</button>");</script>
 					</div>
 				  </div>
 				</div>			
@@ -65,7 +65,7 @@
 			$outContents .= "<div class=\"col-2 align-middle\">";
 				$sortParms = "?sort_key_provider=pvdr_name&sort_time=".time();
 				$outContents .= "<a href=\"provider_main".$sortParms."\">";
-				$outContents .= "Provider Name";
+				$outContents .= "Supplier Name";
 				if ($sort_icon == 'asc') {
 					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-up-square\"></a></i>";
 				} else {

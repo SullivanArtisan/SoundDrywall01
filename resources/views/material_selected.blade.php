@@ -77,7 +77,7 @@
 					<form method="post" action="{{url('material_update')}}">
 						@csrf
 						<div class="row">
-							<div class="col"><label class="col-form-label">Name:&nbsp;</label><span class="text-danger">*</span></div>
+							<div class="col"><label class="col-form-label">Material Name:&nbsp;</label><span class="text-danger">*</span></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" id="mtrl_name" name="mtrl_name" value="{{$material->mtrl_name}}"></div>
 							<div class="col"><label class="col-form-label">Type:&nbsp;</label><span class="text-danger">*</span></div>
 							<div class="col">
@@ -157,7 +157,7 @@
 							</div>
 						</div>
 						<div class="row">
-							<div class="col"><label class="col-form-label">Provider:&nbsp;</label></div>
+							<div class="col"><label class="col-form-label">Supplier:&nbsp;</label></div>
 							<div class="col">
 								<?php
 									$tagHead = "<input list=\"mtrl_source\" name=\"mtrl_source\" id=\"mtrlsourceinput\" onfocus=\"this.value='';\" onblur=\"if (this.value=='') this.value='".$material->mtrl_source."';\" class=\"form-control mt-1 my-text-height\" ";

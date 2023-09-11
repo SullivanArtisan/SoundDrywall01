@@ -17,7 +17,7 @@ class ProviderController extends Controller
 			'pvdr_city' => 'required',
 		]);
 
-		MyHelper::LogStaffAction(Auth::user()->id, 'Added provider '.$request->pvdr_name.' '.$request->l_name.' (city= '.$request->pvdr_city.').', '');
+		MyHelper::LogStaffAction(Auth::user()->id, 'Added supplier '.$request->pvdr_name.' '.$request->l_name.' (city= '.$request->pvdr_city.').', '');
 		
         $provider = new Provider;
 		if ($provider) {
@@ -34,15 +34,15 @@ class ProviderController extends Controller
 			$saved = $provider->save();
 			
 			if(!$saved) {
-				Log::Info('Staff '.Auth::user()->id.' failed to add the new provider'.$request->pvdr_name);
+				Log::Info('Staff '.Auth::user()->id.' failed to add the new supplier'.$request->pvdr_name);
 				return redirect()->route('op_result.provider')->with('status', ' <span style="color:red">Data Has NOT Been inserted!</span>');
 			} else {
-				MyHelper::LogStaffActionResult(Auth::user()->id, 'Added provider OK.', '');
-				return redirect()->route('op_result.provider')->with('status', 'The new provider,  <span style="font-weight:bold;font-style:italic;color:blue">'.$provider->pvdr_name.'</span>, has been inserted successfully.');
+				MyHelper::LogStaffActionResult(Auth::user()->id, 'Added supplier OK.', '');
+				return redirect()->route('op_result.provider')->with('status', 'The new supplier,  <span style="font-weight:bold;font-style:italic;color:blue">'.$provider->pvdr_name.'</span>, has been inserted successfully.');
 			}
 		} else {
-			Log::Info('Staff '.Auth::user()->id.' tried to add a new provider, but the provider object cannot be created');
-			return redirect()->route('op_result.provider')->with('status', ' <span style="color:red">The provider object cannot be created!</span>');
+			Log::Info('Staff '.Auth::user()->id.' tried to add a new supplier, but the supplier object cannot be created');
+			return redirect()->route('op_result.provider')->with('status', ' <span style="color:red">The supplier object cannot be created!</span>');
 		}
 	}
 	
@@ -54,7 +54,7 @@ class ProviderController extends Controller
 			'pvdr_city' => 'required',
 		]);
 
-		MyHelper::LogStaffAction(Auth::user()->id, 'Updated provider '.$request->id.' (name= '.$request->pvdr_name.').', '');
+		MyHelper::LogStaffAction(Auth::user()->id, 'Updated supplier '.$request->id.' (name= '.$request->pvdr_name.').', '');
 		
 		$provider = Provider::where('id', $request->id)->first();
 		if ($provider) {
@@ -71,15 +71,15 @@ class ProviderController extends Controller
 			$saved = $provider->save();
 			
 			if(!$saved) {
-				Log::Info('Staff '.Auth::user()->id.' failed to update the provider'.$request->id);
+				Log::Info('Staff '.Auth::user()->id.' failed to update the supplier'.$request->id);
 				return redirect()->route('op_result.provider')->with('status', ' <span style="color:red">Data Has NOT Been updated!</span>');
 			} else {
-                MyHelper::LogStaffActionResult(Auth::user()->id, 'Updated provider '.$request->id.' OK.', '');
-				return redirect()->route('op_result.provider')->with('status', 'The provider,  <span style="font-weight:bold;font-style:italic;color:blue">'.$provider->pvdr_name.'</span>, has been updated successfully.');
+                MyHelper::LogStaffActionResult(Auth::user()->id, 'Updated supplier '.$request->id.' OK.', '');
+				return redirect()->route('op_result.provider')->with('status', 'The supplier,  <span style="font-weight:bold;font-style:italic;color:blue">'.$provider->pvdr_name.'</span>, has been updated successfully.');
 			}
 		} else {
-			Log::Info('Staff '.Auth::user()->id.' tried to update a provider, but the provider object cannot be accessed');
-			return redirect()->route('op_result.provider')->with('status', ' <span style="color:red">The provider object cannot be accessed!</span>');
+			Log::Info('Staff '.Auth::user()->id.' tried to update a supplier, but the supplier object cannot be accessed');
+			return redirect()->route('op_result.provider')->with('status', ' <span style="color:red">The supplier object cannot be accessed!</span>');
 		}
     }
 
@@ -96,16 +96,16 @@ class ProviderController extends Controller
                 $provider->pvdr_deleted = "Y";
 				$res = $provider->save();
 				if (!$res) {
-                    $err_msg = "Provider ".$id." cannot be deleted.";
+                    $err_msg = "Supplier ".$id." cannot be deleted.";
                     Log::Info($err_msg);
-					return redirect()->route('op_result.provider')->with('status', 'The provider, <span style="font-weight:bold;font-style:italic;color:red">'.$providerName.'</span>, cannot be deleted for some reason.');	
+					return redirect()->route('op_result.provider')->with('status', 'The supplier, <span style="font-weight:bold;font-style:italic;color:red">'.$providerName.'</span>, cannot be deleted for some reason.');	
                 } else {
-                    MyHelper::LogStaffActionResult(Auth::user()->id, 'Deleted provider '.$id.' OK.', '');
-					return redirect()->route('op_result.provider')->with('status', 'The provider, <span style="font-weight:bold;font-style:italic;color:blue">'.$providerName.'</span>, has been deleted successfully.');	
+                    MyHelper::LogStaffActionResult(Auth::user()->id, 'Deleted supplier '.$id.' OK.', '');
+					return redirect()->route('op_result.provider')->with('status', 'The supplier, <span style="font-weight:bold;font-style:italic;color:blue">'.$providerName.'</span>, has been deleted successfully.');	
                 }
             } else {
-                Log::Info('Staff '.Auth::user()->id.' tried to delete a provider, but the provider '.$id.' object cannot be accessed');
-                return redirect()->route('op_result.provider')->with('status', ' <span style="color:red">The provider object cannot be accessed!</span>');
+                Log::Info('Staff '.Auth::user()->id.' tried to delete a supplier, but the supplier '.$id.' object cannot be accessed');
+                return redirect()->route('op_result.provider')->with('status', ' <span style="color:red">The supplier object cannot be accessed!</span>');
             }
         } catch (Exception $e) {
             echo 'Message: ' .$e->getMessage();

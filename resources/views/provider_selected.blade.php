@@ -27,7 +27,7 @@
 		<div>
 			<div class="row">
 				<div class="col col-sm-auto">
-					<h2 class="text-muted pl-2">Result of the Provider Operation (by Provider Id)</h2>
+					<h2 class="text-muted pl-2">Result of the Supplier Operation (by Supplier Id)</h2>
 				</div>
 				<div class="col"></div>
 			</div>
@@ -53,7 +53,7 @@
 		<div>
 			<div class="row m-4">
 				<div>
-					<h2 class="text-muted pl-2">Provider: {{$provider->pvdr_name}}</h2>
+					<h2 class="text-muted pl-2">Supplier: {{$provider->pvdr_name}}</h2>
 				</div>
 				<div class="col my-auto ml-5">
 					<button class="btn btn-danger me-2" type="button"><a href="provider_delete?id={{$provider->id}}" onclick="return myConfirmation();">Delete</a></button>
@@ -76,7 +76,7 @@
 					<form method="post" action="{{url('provider_update')}}">
 						@csrf
 						<div class="row">
-							<div class="col"><label class="col-form-label">Provider Name:&nbsp;</label><span class="text-danger">*</span></div>
+							<div class="col"><label class="col-form-label">Supplier Name:&nbsp;</label><span class="text-danger">*</span></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" id="pvdr_name" name="pvdr_name" value="{{$provider->pvdr_name}}"></div>
 							<div class="col"><label class="col-form-label">Address:&nbsp;</label><span class="text-danger">*</span></div>
 							<div class="col"><input class="form-control mt-1 my-text-height" type="text" name="pvdr_address" value="{{$provider->pvdr_address}}"></div>
@@ -132,7 +132,7 @@
 		
 		<script>
 			function myConfirmation() {
-				if(!confirm("Continue to delete this provider?"))
+				if(!confirm("Continue to delete this supplier?"))
 				event.preventDefault();
 			}
 			

@@ -137,7 +137,7 @@
                         <div class="col-9"><input class="form-control mt-1 my-text-height" type="text" readonly id="mtrl_amount_unit" name="mtrl_amount_unit" value="{{$material->mtrl_amount_unit}}"></div>
                     </div>
                     <div class="row" style="max-height: 400px;">
-                        <div class="col-3"><label class="col-form-label">Provider:&nbsp;</label></div>
+                        <div class="col-3"><label class="col-form-label">Supplier:&nbsp;</label></div>
                         <div class="col-9"><input class="form-control mt-1 my-text-height" type="text" readonly id="mtrl_source" name="mtrl_source" value="{{$material->mtrl_source}}"></div>
                     </div>
                     <div class="row" style="max-height: 400px;">

@@ -16,13 +16,13 @@
         <div class="row m-4">
             <div>
 				<?php
-					$page_head = "<h2 class=\"text-muted pl-2\">Providers Searched Results (by ";
+					$page_head = "<h2 class=\"text-muted pl-2\">Suppliers Searched Results (by ";
 					if ($key == 'id') {
-						$page_head .= "Provider Id)</h2>";
+						$page_head .= "Supplier Id)</h2>";
 					} else if ($key == 'name') {
-						$page_head .= "Provider Name)</h2>";
+						$page_head .= "Supplier Name)</h2>";
 					} else if ($key == 'phone') {
-						$page_head .= "Provider Phone)</h2>";
+						$page_head .= "Supplier Phone)</h2>";
 					}
 					echo $page_head;
 				?>
@@ -33,9 +33,9 @@
 				  <div class="input-group-append">
 					<button class="btn btn-info ml-2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Search</button>
 					<div class="dropdown-menu">
-					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('id')\" style=\"cursor: pointer;\">by Provider Id</button>");</script>
-					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('name')\" style=\"cursor: pointer;\">by Provider Name</button>");</script>
-					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('email')\" style=\"cursor: pointer;\">by Provider Phone</button>");</script>
+					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('id')\" style=\"cursor: pointer;\">by Supplier Id</button>");</script>
+					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('name')\" style=\"cursor: pointer;\">by Supplier Name</button>");</script>
+					  <script>document.write("<button class=\"dropdown-item\" onclick=\"GetSearchResult('email')\" style=\"cursor: pointer;\">by Supplier Phone</button>");</script>
 					</div>
 				  </div>
 				</div>			
@@ -49,7 +49,7 @@
 		$outContents = "<div class=\"container mw-100\">";
         $outContents .= "<div class=\"row bg-info text-white fw-bold\">";
             $outContents .= "<div class=\"col-3 align-middle\">";
-                $outContents .= "Provider Name";
+                $outContents .= "Supplier Name";
             $outContents .= "</div>";
 			$outContents .= "<div class=\"col-3 align-middle\">";
 				$outContents .= "City";

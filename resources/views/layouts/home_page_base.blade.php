@@ -106,7 +106,7 @@
                     <a href="#adminSubmenu" data-toggle="" aria-expanded="false" class="" style="color:lime">DB Mgmnt</a>
                     <ul class=" list-unstyled" id="adminSubmenu">
                         <li> <a href="{{route('client_main')}}">&#9055;&nbsp;Clients</a> </li>
-                        <li> <a href="{{route('provider_main')}}">&#9055;&nbsp;Providers</a> </li>
+                        <li> <a href="{{route('provider_main')}}">&#9055;&nbsp;Suppliers</a> </li>
                         @if (Auth::user()->role == 'ADMINISTRATOR')
                         <li> <a href="{{route('staff_main')}}">&#9055;&nbsp;Staffs</a> </li>
                         @endif

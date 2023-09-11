@@ -18,7 +18,7 @@
 		Session::forget(['uploadPath']);
 	?>
 	<div>
-		<h2 class="text-muted pl-2 mb-2">Add a New Provider</h2>
+		<h2 class="text-muted pl-2 mb-2">Add a New Supplier</h2>
 	</div>
     <div>
 		@if ($errors->any())
@@ -35,7 +35,7 @@
                 <form method="post" action="{{route('op_result.provider_add')}}">
 					@csrf
                     <div class="row">
-                        <div class="col"><label class="col-form-label">Provider Name:&nbsp;</label><span class="text-danger">*</span></div>
+                        <div class="col"><label class="col-form-label">Supplier Name:&nbsp;</label><span class="text-danger">*</span></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="pvdr_name" name="pvdr_name"></div>
                         <div class="col"><label class="col-form-label">Address:&nbsp;</label><span class="text-danger">*</span></div>
                         <div class="col"><input class="form-control mt-1 my-text-height" type="text" id="pvdr_address" name="pvdr_address"></div>
