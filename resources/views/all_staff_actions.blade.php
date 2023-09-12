@@ -30,7 +30,7 @@
 			
 		// Get data ordered by the user's intent
 		$sort_icon = $sortOrder = session('sort_order', 'asc');
-		$sortKey = session('sort_key_staffAction', 'id');
+		$sortKey = session('sort_key_staffAction', 'created_at');
 		if ($needResort == true) {
 			if ($sortOrder == 'asc') {
 				session(['sort_order' => 'desc']);
@@ -40,7 +40,7 @@
 				$sort_icon = 'asc';
 			}
 			$actions = \App\Models\StaffAction::orderBy($_GET['sort_key_staffAction'], session('sort_order', 'asc'))->paginate(50)->withQueryString();
-			session(['sort_key_staffAction' => 'id']);
+			session(['sort_key_staffAction' => 'created_at']);
 		} else {
             $actions = \App\Models\StaffAction::orderBy($sortKey, $sortOrder)->paginate(50)->withQueryString();
 		}
@@ -48,10 +48,10 @@
 		// Title Line
 		$outContents = "<div class=\"container mw-100\">";
         $outContents .= "<div class=\"row bg-info text-white fw-bold\">";
-			$outContents .= "<div class=\"col-1\">";
-				$sortParms = "?sort_key_staffAction=id&sort_time=".time();
+			$outContents .= "<div class=\"col-2\">";
+				$sortParms = "?sort_key_staffAction=created_at&sort_time=".time();
 				$outContents .= "<a href=\"all_staff_actions".$sortParms."\">";
-				$outContents .= "ID";
+				$outContents .= "Timestamp";
 				if ($sort_icon == 'asc') {
 					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-up-square\"></a></i>";
 				} else {
@@ -71,7 +71,7 @@
 			$outContents .= "<div class=\"col-2\">";
 				$outContents .= "Staff Name";
 			$outContents .= "</div>";
-			$outContents .= "<div class=\"col-2\">";
+			$outContents .= "<div class=\"col-3\">";
 				$outContents .= "Action";
 			$outContents .= "</div>";
 			$outContents .= "<div class=\"col-3\">";
@@ -87,9 +87,6 @@
 					$outContents .= "<span class=\"ml-2\"></span><i class=\"bi bi-caret-down-square\"></a></i>";
 				}
 			$outContents .= "</div>";
-			$outContents .= "<div class=\"col-2\">";
-				$outContents .= "Timestamp";
-			$outContents .= "</div>";
 		$outContents .= "</div><hr class=\"m-1\"/>";
 		{{echo $outContents;}}
 		
@@ -103,8 +100,8 @@
                     $bg_color = "darkseagreen";
                 }
                 $outContents = "<div class=\"row\" style=\"background-color:".$bg_color."\">";
-				$outContents .= "<div class=\"col-1\">";
-					$outContents .= $action->id;
+				$outContents .= "<div class=\"col-2\">";
+				$outContents .= $action->created_at;
 				$outContents .= "</div>";
 				$outContents .= "<div class=\"col-1\">";
 					$outContents .= $action->staff_id;
@@ -115,7 +112,7 @@
                         $outContents .= $staff->f_name.' '.$staff->l_name;
                     }
 				$outContents .= "</div>";
-                $outContents .= "<div class=\"col-2\">";
+                $outContents .= "<div class=\"col-3\">";
 					$outContents .= $action->staff_action;
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-3\">";
@@ -123,9 +120,6 @@
 				$outContents .= "</div>";
                 $outContents .= "<div class=\"col-1\">";
 					$outContents .= $action->staff_action_severity;
-				$outContents .= "</div>";
-                $outContents .= "<div class=\"col-2\">";
-					$outContents .= $action->created_at;
 				$outContents .= "</div>";
 			$outContents .= "</div><hr class=\"m-1\"/>";
 			{{ 					
