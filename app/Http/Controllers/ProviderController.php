@@ -88,7 +88,7 @@ class ProviderController extends Controller
         try {
             $id = $_GET['id'];
 
-            MyHelper::LogStaffAction(Auth::user()->id, 'Deleted staff of ID '.$id, '');
+            MyHelper::LogStaffAction(Auth::user()->id, 'Deleted supplier of ID '.$id, '');
 
 			$provider = Provider::where('id', $id)->first();
             if ($provider) {
