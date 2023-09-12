@@ -92,20 +92,59 @@ class MaterialController extends Controller
                 //         MyHelper::LogStaffActionResult(Auth::user()->id, 'Failed to access job object for job '.$request->job_name.' while update material '.$request->mtrl_id, '900');
                 //     }
                 // }
+                if ($material->mtrl_name != $request->mtrl_name) {
+                    Log::Info(Auth::user()->id.' will update mtrl_name from '.$material->mtrl_name.' to '.$request->mtrl_name.' for material ID= '.$material->id);
+                }
                 $material->mtrl_name        = $request->mtrl_name;
                 // $material->mtrl_status      = $request->mtrl_status;
+                if ($material->mtrl_model != $request->mtrl_model) {
+                    Log::Info(Auth::user()->id.' will update mtrl_model from '.$material->mtrl_model.' to '.$request->mtrl_model.' for material ID= '.$material->id);
+                }
                 $material->mtrl_model       = $request->mtrl_model;
+                if ($material->mtrl_type != $request->mtrl_type) {
+                    Log::Info(Auth::user()->id.' will update mtrl_type from '.$material->mtrl_type.' to '.$request->mtrl_type.' for material ID= '.$material->id);
+                }
                 $material->mtrl_type        = $request->mtrl_type;
+                if ($material->mtrl_size != $request->mtrl_size) {
+                    Log::Info(Auth::user()->id.' will update mtrl_size from '.$material->mtrl_size.' to '.$request->mtrl_size.' for material ID= '.$material->id);
+                }
                 $material->mtrl_size        = $request->mtrl_size;
+                if ($material->mtrl_size_unit != $request->mtrl_size_unit) {
+                    Log::Info(Auth::user()->id.' will update mtrl_size_unit from '.$material->mtrl_size_unit.' to '.$request->mtrl_size_unit.' for material ID= '.$material->id);
+                }
                 $material->mtrl_size_unit   = $request->mtrl_size_unit;
+                if ($material->mtrl_source != $request->mtrl_source) {
+                    Log::Info(Auth::user()->id.' will update mtrl_source from '.$material->mtrl_source.' to '.$request->mtrl_source.' for material ID= '.$material->id);
+                }
                 $material->mtrl_source      = $request->mtrl_source;
+                if ($material->mtrl_shipped_by != $request->mtrl_shipped_by) {
+                    Log::Info(Auth::user()->id.' will update mtrl_shipped_by from '.$material->mtrl_shipped_by.' to '.$request->mtrl_shipped_by.' for material ID= '.$material->id);
+                }
                 $material->mtrl_shipped_by  = $request->mtrl_shipped_by;
+                if ($material->mtrl_amount != $request->mtrl_amount) {
+                    Log::Info(Auth::user()->id.' will update mtrl_amount from '.$material->mtrl_amount.' to '.$request->mtrl_amount.' for material ID= '.$material->id);
+                }
                 $material->mtrl_amount      = $request->mtrl_amount;
+                if ($material->mtrl_amount_unit != $request->mtrl_amount_unit) {
+                    Log::Info(Auth::user()->id.' will update mtrl_amount_unit from '.$material->mtrl_amount_unit.' to '.$request->mtrl_amount_unit.' for material ID= '.$material->id);
+                }
                 $material->mtrl_amount_unit = $request->mtrl_amount_unit;
+                if ($material->mtrl_amount_left != $request->mtrl_amount_left) {
+                    Log::Info(Auth::user()->id.' will update mtrl_amount_left from '.$material->mtrl_amount_left.' to '.$request->mtrl_amount_left.' for material ID= '.$material->id);
+                }
                 $material->mtrl_amount_left = $request->mtrl_amount_left;
+                if ($material->mtrl_unit_price != $request->mtrl_unit_price) {
+                    Log::Info(Auth::user()->id.' will update mtrl_unit_price from '.$material->mtrl_unit_price.' to '.$request->mtrl_unit_price.' for material ID= '.$material->id);
+                }
                 $material->mtrl_unit_price  = $request->mtrl_unit_price;
+                if ($material->mtrl_total_price != $request->mtrl_total_price) {
+                    Log::Info(Auth::user()->id.' will update mtrl_total_price from '.$material->mtrl_total_price.' to '.$request->mtrl_total_price.' for material ID= '.$material->id);
+                }
                 $material->mtrl_total_price = $request->mtrl_total_price;
-                $material->mtrl_notes       = $request->mtrl_notes;
+                if ($material->mtrl_notes != $request->mtrl_notes) {
+                    Log::Info(Auth::user()->id.' will update mtrl_notes from '.$material->mtrl_notes.' to '.$request->mtrl_notes.' for material ID= '.$material->id);
+                }
+               $material->mtrl_notes       = $request->mtrl_notes;
                 $saved = $material->save();
             } else {
                 $err_msg = "Material cannot be accessed while updating a material.";

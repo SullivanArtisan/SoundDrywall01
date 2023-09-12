@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Helper\MyHelper;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Provider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class ProviderController extends Controller
 {
@@ -58,15 +59,41 @@ class ProviderController extends Controller
 		
 		$provider = Provider::where('id', $request->id)->first();
 		if ($provider) {
+			if ($provider->pvdr_name != $request->pvdr_name) {
+				Log::Info(Auth::user()->id.' will update pvdr_name from '.$provider->pvdr_name.' to '.$request->pvdr_name.' for provider ID= '.$provider->id);
+			}
 			$provider->pvdr_name        = $request->pvdr_name;
+			if ($provider->pvdr_address != $request->pvdr_address) {
+				Log::Info(Auth::user()->id.' will update pvdr_address from '.$provider->pvdr_address.' to '.$request->pvdr_address.' for provider ID= '.$provider->id);
+			}
 			$provider->pvdr_address     = $request->pvdr_address;
+			if ($provider->pvdr_city != $request->pvdr_city) {
+				Log::Info(Auth::user()->id.' will update pvdr_city from '.$provider->pvdr_city.' to '.$request->pvdr_city.' for provider ID= '.$provider->id);
+			}
 			$provider->pvdr_city        = $request->pvdr_city;
+			if ($provider->pvdr_province != $request->pvdr_province) {
+				Log::Info(Auth::user()->id.' will update pvdr_province from '.$provider->pvdr_province.' to '.$request->pvdr_province.' for provider ID= '.$provider->id);
+			}
 			$provider->pvdr_province    = $request->pvdr_province;
+			if ($provider->pvdr_postcode != $request->pvdr_postcode) {
+				Log::Info(Auth::user()->id.' will update pvdr_postcode from '.$provider->pvdr_postcode.' to '.$request->pvdr_postcode.' for provider ID= '.$provider->id);
+			}
 			$provider->pvdr_postcode    = $request->pvdr_postcode;
+			if ($provider->pvdr_country != $request->pvdr_country) {
+				Log::Info(Auth::user()->id.' will update pvdr_country from '.$provider->pvdr_country.' to '.$request->pvdr_country.' for provider ID= '.$provider->id);
+			}
 			$provider->pvdr_country     = $request->pvdr_country;
+			if ($provider->pvdr_contact != $request->pvdr_contact) {
+				Log::Info(Auth::user()->id.' will update pvdr_contact from '.$provider->pvdr_contact.' to '.$request->pvdr_contact.' for provider ID= '.$provider->id);
+			}
 			$provider->pvdr_contact     = $request->pvdr_contact;
+			if ($provider->pvdr_phone != $request->pvdr_phone) {
+				Log::Info(Auth::user()->id.' will update pvdr_phone from '.$provider->pvdr_phone.' to '.$request->pvdr_phone.' for provider ID= '.$provider->id);
+			}
 			$provider->pvdr_phone       = $request->pvdr_phone;
-			$provider->pvdr_email       = $request->pvdr_email;
+			if ($provider->pvdr_email != $request->pvdr_email) {
+				Log::Info(Auth::user()->id.' will update pvdr_email from '.$provider->pvdr_email.' to '.$request->pvdr_email.' for provider ID= '.$provider->id);
+			}
 			$provider->pvdr_email       = $request->pvdr_email;
 			$saved = $provider->save();
 			
