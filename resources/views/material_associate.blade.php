@@ -15,7 +15,7 @@
         $from_project = 'true';
     } else {
         $from_project = '';
-        Log::Info('Failed get the input jobId parameter while doing job_dispatch_by_adding');
+        // Log::Info('Failed get the input jobId parameter while doing job_dispatch_by_adding');
     }
     $materials = Material::where('mtrl_status', '<>', 'DELETED')->where('mtrl_job_id', '0')->orderBy('mtrl_name', 'asc')->get();
     $jobs = Job::all()->where('job_assistants_complete', '=', '0')->where('job_assistants_complete', '<', 'job_total_active_assistants')->where('job_status', '<>', 'DELETED')->where('job_status', '<>', 'CANCELED');
