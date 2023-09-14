@@ -21,7 +21,11 @@
         use App\Helper\MyHelper;
         use Illuminate\Support\Facades\Log;
         use Illuminate\Support\Facades\Auth;
+        use Illuminate\Support\Facades\Session;
 
+        $config_lifetime = config('session.lifetime') * 60;
+        $login_time = Session::get('login_time');
+    
         $client_name = "";
         $role = "";
         $inspector_sig = "";
@@ -396,31 +400,52 @@
             alert(msgToShow);
         }
 
-        setTimeout(ReloadPageForJobMsg, 7500);
+        var globalTimeout = setTimeout(ReloadPageForJobMsg, 7500);
 
         function ReloadPageForJobMsg() {
-            $.ajax({
-                url: '/reload_page_for_job_msg_from_admin',
-                type: 'POST',
-                data: {
-                    _token:"{{ csrf_token() }}", 
-                    job_id:jobId,
-                    staff_id:staffId,
-                },    // the _token:token is for Laravel
-                success: function(dataRetFromPHP) {
-                    setTimeout(ReloadPageForJobMsg, 7500);
-                    if (document.getElementById('msg_from_admin').value != dataRetFromPHP) {
-                        document.getElementById('msg_from_admin').value = dataRetFromPHP;
-                        document.getElementById('msg_from_admin').style.color = 'red';
-                    } else {
-                        document.getElementById('msg_from_admin').value = dataRetFromPHP;
-                        document.getElementById('msg_from_admin').style.color = 'white';
+            var configLifetime = {!!json_encode($config_lifetime)!!};
+            var loginTime      = {!!json_encode($login_time)!!};
+            var secondsNow     = Date.now()/1000;
+
+            if (secondsNow > loginTime + configLifetime) {
+                clearTimeout(globalTimeout);
+                $.ajax({
+                    url: 'process_lifetime_expires',
+                    type: 'POST',
+                    data: {
+                        _token:"{{ csrf_token() }}", 
+                        from_role: 'ASSISTANT',
+                    },    // the _token:token is for Laravel
+                    success: function(dataRetFromPHP) {
+                        document.getElementById('form_assistant_logout').submit();
+                    },
+                    error: function(err) {
+                        document.getElementById('form_assistant_logout').submit();
                     }
-                },
-                error: function(err) {
-                    setTimeout(ReloadPageForJobMsg, 7500);
-                }
-            });
+                });
+            } else {
+                $.ajax({
+                    url: '/reload_page_for_job_msg_from_admin',
+                    type: 'POST',
+                    data: {
+                        _token:"{{ csrf_token() }}", 
+                        job_id:jobId,
+                        staff_id:staffId,
+                    },    // the _token:token is for Laravel
+                    success: function(dataRetFromPHP) {
+                        if (document.getElementById('msg_from_admin').value != dataRetFromPHP) {
+                            document.getElementById('msg_from_admin').value = dataRetFromPHP;
+                            document.getElementById('msg_from_admin').style.color = 'red';
+                        } else {
+                            document.getElementById('msg_from_admin').value = dataRetFromPHP;
+                            document.getElementById('msg_from_admin').style.color = 'white';
+                        }
+                    },
+                    error: function(err) {
+                    }
+                });
+                globalTimeout = setTimeout(ReloadPageForJobMsg, 7500);
+            }
         }
 
         function doSendMsgToAdmin() {

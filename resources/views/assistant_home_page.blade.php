@@ -15,6 +15,8 @@
         use App\Models\JobDispatch;
         use Illuminate\Support\Facades\Log;
 
+        $config_lifetime = config('session.lifetime') * 60;
+        $login_time = Session::get('login_time');
         $todays_working_hours_saved = 'true';
 
         $staff = Staff::where('id', Auth::user()->id)->first();
@@ -144,9 +146,38 @@
         </div>
     </div>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-        
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+       
     <script>
         var todaysWorkingHoursSaved = {!!json_encode($todays_working_hours_saved)!!};
+
+        var globalTimeout = setTimeout(CheckLifetimeExpires, 7500);
+
+        function CheckLifetimeExpires() {
+            var configLifetime = {!!json_encode($config_lifetime)!!};
+            var loginTime      = {!!json_encode($login_time)!!};
+            var secondsNow     = Date.now()/1000;
+
+            if (secondsNow > loginTime + configLifetime) {
+                clearTimeout(globalTimeout);
+                $.ajax({
+                    url: 'process_lifetime_expires',
+                    type: 'POST',
+                    data: {
+                        _token:"{{ csrf_token() }}", 
+                        from_role: 'ASSISTANT',
+                    },    // the _token:token is for Laravel
+                    success: function(dataRetFromPHP) {
+                        document.getElementById('form_assistant_logout').submit();
+                    },
+                    error: function(err) {
+                        document.getElementById('form_assistant_logout').submit();
+                    }
+                });
+            } else {
+                globalTimeout = setTimeout(CheckLifetimeExpires, 7500);
+            }
+        }
 
         function doLogout() {
             if(todaysWorkingHoursSaved == 'false') {

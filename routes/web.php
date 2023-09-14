@@ -451,6 +451,7 @@ Route::post('job_combination_material_remove', function (Request $request) {
 Route::get('job_dispatch', function (Request $request) {
 		return view('job_dispatch');
 })->middleware(['auth'])->name('job_dispatch');
+//})->middleware(['auth'])->middleware(['ato_logout'])->name('job_dispatch');
 
 Route::get('job_dispatch_by_adding', function (Request $request) {
     return view('job_dispatch_by_adding');
@@ -984,6 +985,20 @@ Route::post('check_new_messages', function (Request $request) {	// Check if ther
 
 	return ('');
 })->middleware(['auth'])->name('check_new_messages');
+
+Route::post('process_lifetime_expires', function (Request $request) {	
+	$from_role 	= "";
+	if (isset($_POST['from_role'])) {
+		$from_role = $_POST['from_role'];
+	}
+
+	if ($from_role 	== "") {
+		MyHelper::LogStaffActionResult(Auth::user()->id, 'Logged out OK -- management tier lifetime expired!', '');
+	} else {
+		MyHelper::LogStaffActionResult(Auth::user()->id, 'Logged out OK -- assistants tier lifetime expired!', '');
+	}
+	return;				
+})->middleware(['auth'])->name('process_lifetime_expires');
 
 Route::get('to_process_new_msg', function (Request $request) {
 	$jobdsp_id = "";

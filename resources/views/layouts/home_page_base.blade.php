@@ -60,7 +60,10 @@
     use App\Models\Staff;
     use App\Models\JobDispatch;
     use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\Session;
 
+    $config_lifetime = config('session.lifetime') * 60;
+    $login_time = Session::get('login_time');
     $todays_working_hours_saved = 'true';
     $jobs = JobDispatch::all()->where('jobdsp_staff_id', Auth::user()->id)->where('jobdsp_status', '<>', 'DELETED')->where('jobdsp_status', '<>', 'COMPLETED')->where('jobdsp_status', '<>', 'CANCELED');
     foreach($jobs as $job) {
@@ -285,35 +288,57 @@
                 document.getElementById('form_logout').submit();
             }
         }
-        setTimeout(ReloadAllJobMsgs, 1500);
+        var globalTimeout = setTimeout(ReloadAllJobMsgs, 1500);
 
         function ReloadAllJobMsgs() {
             // alert('NAME = '+document.getElementById('btn_check_new_msg').name);
+            var configLifetime = {!!json_encode($config_lifetime)!!};
+            var loginTime      = {!!json_encode($login_time)!!};
+            var secondsNow     = Date.now()/1000;
 
-            var thisUserRole = {!!json_encode(Auth::user()->role)!!};
-            // alert(window.location.href);
-            $.ajax({
-                url: 'check_new_messages',
-                type: 'POST',
-                data: {
-                    _token:"{{ csrf_token() }}", 
-                    for_whom: thisUserRole,
-                    staff_id: '0',
-                },    // the _token:token is for Laravel
-                success: function(dataRetFromPHP) {
-                    if (dataRetFromPHP.length > 0) {
-                        if ((window.location.href.indexOf("job_selected") >= 0) || window.location.href.indexOf("job_combination_staff_selected") >= 0) {
-                            // Those pages can handle by themselves, so no need to do anything here
-                        } else {
-                            document.getElementById('btn_check_new_msg').removeAttribute("hidden");
-                            document.getElementById('btn_check_new_msg').name = dataRetFromPHP;
-                        }
+            if (secondsNow > loginTime + configLifetime) {
+                clearTimeout(globalTimeout);
+                $.ajax({
+                    url: 'process_lifetime_expires',
+                    type: 'POST',
+                    data: {
+                        _token:"{{ csrf_token() }}", 
+                        from_role: '',
+                    },    // the _token:token is for Laravel
+                    success: function(dataRetFromPHP) {
+                        document.getElementById('form_logout').submit();
+                    },
+                    error: function(err) {
+                        document.getElementById('form_logout').submit();
                     }
-                },
-                error: function(err) {
-                }
-            });
-            setTimeout(ReloadAllJobMsgs, 7500);
+                });
+            } else {
+                var thisUserRole = {!!json_encode(Auth::user()->role)!!};
+                // alert(window.location.href);
+                $.ajax({
+                    url: 'check_new_messages',
+                    type: 'POST',
+                    data: {
+                        _token:"{{ csrf_token() }}", 
+                        for_whom: thisUserRole,
+                        staff_id: '0',
+                    },    // the _token:token is for Laravel
+                    success: function(dataRetFromPHP) {
+                        if (dataRetFromPHP.length > 0) {
+                            if ((window.location.href.indexOf("job_selected") >= 0) || window.location.href.indexOf("job_combination_staff_selected") >= 0) {
+                                // Those pages can handle by themselves, so no need to do anything here
+                            } else {
+                                document.getElementById('btn_check_new_msg').removeAttribute("hidden");
+                                document.getElementById('btn_check_new_msg').name = dataRetFromPHP;
+                            }
+                        }
+                    },
+                    error: function(err) {
+                    }
+                });
+                globalTimeout = setTimeout(ReloadAllJobMsgs, 7500);
+            }
+
         }
 
     function ProcessNewMessage() {

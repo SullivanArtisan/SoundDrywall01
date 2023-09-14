@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use App\Helper\MyHelper;
 
 class AuthenticatedSessionController extends Controller
@@ -33,6 +34,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        Session::put('login_time', time());
 		MyHelper::LogStaffActionResult(Auth::user()->id, 'Logged in OK.', '');
         return redirect()->intended(RouteServiceProvider::HOME);
     }
